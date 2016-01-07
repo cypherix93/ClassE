@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularApp">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{AppName}} | {{ PageName }}</title>
+        <base href="/">
+
+        <!-- Main Theme -->
+        <link rel="stylesheet" href="css/main.min.css" />
+
+        <!-- Additional Styles -->
+        <link rel="stylesheet" href="lib/fontawesome/css/font-awesome.min.css" />
+
+        <!-- JQuery Libraries -->
+        <script src="lib/jquery/js/jquery.min.js"></script>
+
+        <!-- Bootstrap Libraries -->
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- Angular Libraries -->
+        <script src="lib/angular/js/angular.min.js"></script>
+        <script src="lib/angular/js/angular-sanitize.min.js"></script>
+        <script src="lib/angular/js/angular-route.min.js"></script>
+        <script src="lib/angular/js/angular-animate.min.js"></script>
+        <script src="lib/angular/js/angular-messages.min.js"></script>
+        <script src="lib/angular/js/ui-bootstrap-tpls.min.js"></script>
+
+        <!-- Angular Runtime Libraries -->
+        <script src="angular/angular-bundle.js"></script>
+    </head>
+    <body ng-cloak>
+        <ng-include src="'views/_shared/navigation.html'"></ng-include>
+
+        <div id="content-container" class="container-fluid">
+            <div ng-view></div>
+        </div>
+
+        <ng-include src="'views/_shared/footer.html'"></ng-include>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+<div id="footer-container" class="container text-center">
+
+    <h4 style="margin: 0;">
+        <b>
+            <a ng-href="http://www.github.com/{{AppAuthors.split(',')[0]}}/{{AppName}}">
+                <span class="fa fa-github"></span>
+                {{AppName}}
+            </a>
+
+            &nbsp;&ndash;&nbsp;
+            {{AppVersion}}
+        </b>
+    </h4>
+
+    Maintained by
+    <span ng-repeat="author in AppAuthors.split(',') track by $index">
+        <a ng-href="http://www.github.com/{{author.trim()}}">{{author.trim()}}</a>{{$last ? "" : ", "}}
+    </span>
+
+    <br>
+    {{AppCopyright}}
+</div>
