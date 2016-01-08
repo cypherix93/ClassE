@@ -1,8 +1,9 @@
+var feathers = require("feathers");
 
-
-var routes = function(app)
+var routes = function(app, config)
 {
-    // routes go here
+    // Server public files
+    app.use("/", feathers.static(config.rootPath + "/public"));
 };
 
 module.exports = routes;

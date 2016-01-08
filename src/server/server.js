@@ -9,10 +9,6 @@ var config = require("./config/config")[env];
 // Bootstrap the application and couple the middlewares
 require("./config/bootstrap")(app, config);
 
-// Setup routes
-require("./config/routes")(app);
-
-
 
 // Start up the server
 app.listen(config.port);

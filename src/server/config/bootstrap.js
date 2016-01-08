@@ -3,21 +3,16 @@ var bodyParser = require("body-parser");
 
 var bootstrap = function(app, config)
 {
-    app.configure(function()
-    {
-        // Configure REST and SocketIO endpointss
-        app.configure(feathers.rest());
-        app.configure(feathers.socketio());
-
-        // Parse JSON and form HTTP bodies
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({ extended: true }));
-
-        // Server public files
-        app.set(feathers.static(config.rootPath + "/public"));
-    });
-
+    // Configure REST and SocketIO endpoints
     app.configure(feathers.rest());
+    app.configure(feathers.socketio());
+
+    // Parse JSON and form HTTP bodies
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+
+    // Setup routes
+    require("./routes")(app, config);
 };
 
 module.exports = bootstrap;
