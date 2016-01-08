@@ -17,7 +17,7 @@ var buildDir = "./build/";
 var deployDir = "./deploy/";
 var projectDir = "./src/";
 var publicDir = projectDir + "public/";
-var contentDir = projectDir + "content/";
+var privateDir = projectDir + "private/";
 
 //<editor-fold desc="Build Tasks">
 // Deploy App
@@ -173,7 +173,7 @@ gulp.task("bower-install", ["bower-restore"], function ()
 
     // Bootstrap SASS files
     var bootstrapSass = gulp.src("./bower_components/bootstrap-sass-official/assets/stylesheets/**/*.scss")
-        .pipe(gulp.dest(contentDir + "sass/bootstrap/"));
+        .pipe(gulp.dest(privateDir + "sass/bootstrap/"));
 
     // Return merged stream
     return merge(mainBower, bootstrapSass);
@@ -184,7 +184,7 @@ gulp.task("bower-install", ["bower-restore"], function ()
 // Bundle AngularJS files
 gulp.task("bundle-ng-files", function ()
 {
-    var scripts = gulp.src(contentDir + "angular-app/**/*.js")
+    var scripts = gulp.src(privateDir + "angular-app/**/*.js")
         .pipe(plugins.debug({ title: "angular app:" }))
         .pipe(plugins.concat("angular-bundle.js"))
         .pipe(plugins.ngAnnotate())
@@ -195,7 +195,7 @@ gulp.task("bundle-ng-files", function ()
         }))
         .pipe(gulp.dest(publicDir + "angular/"));
 
-    var templates = gulp.src(contentDir + "angular-app/templates/**/*.html")
+    var templates = gulp.src(privateDir + "angular-app/templates/**/*.html")
         .pipe(plugins.minifyHtml())
         .pipe(gulp.dest(publicDir + "angular/templates/"));
 
@@ -207,7 +207,7 @@ gulp.task("compile-sass", function ()
 {
     var cssDir = publicDir + "css/";
 
-    return gulp.src(contentDir + "sass/main.scss")
+    return gulp.src(privateDir + "sass/main.scss")
         .pipe(plugins.debug({ title: "compiling sass:" }))
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.sassGlob())
