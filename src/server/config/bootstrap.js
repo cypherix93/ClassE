@@ -1,4 +1,3 @@
-var feathers = require("feathers");
 var bodyParser = require("body-parser");
 
 var bootstrap = function(app, config)
@@ -8,11 +7,7 @@ var bootstrap = function(app, config)
     // Connect to MongoDB
     require("./mongodb")(config);
 
-    // Configure REST and SocketIO endpoints
-    app.configure(feathers.rest());
-    app.configure(feathers.socketio());
-
-    // Parse JSON and form HTTP bodies
+    // Configure express middlewares
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 

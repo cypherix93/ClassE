@@ -1,6 +1,6 @@
 "use strict";
 
-var feathers = require("feathers");
+var express = require("express");
 var path = require("path");
 var recursiveReaddirSync = require("recursive-readdir-sync");
 
@@ -9,7 +9,7 @@ var routes = function (app, config)
     console.log("=> Setting up Routes...");
 
     // Serve public files
-    app.use("/", feathers.static(path.join(config.rootPath, "public")));
+    app.use("/", express.static(path.join(config.rootPath, "public")));
 
     // Dynamically load controllers
     var files = recursiveReaddirSync("./src/server/controllers");
@@ -22,16 +22,7 @@ var routes = function (app, config)
 
         let controller = require("../controllers" + controllerPath);
 
-        for (let prop in controller)
-        {
-            if (!controller.hasOwnProperty(prop))
-                continue;
-
-            let url = controllerPath + "/" + prop;
-            let action = controller[prop];
-
-            app.use(url, action);
-        }
+        app.use(controllerPath, controller);
     }
 
     // Setup error pages

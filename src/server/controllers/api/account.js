@@ -1,17 +1,15 @@
-var account = {};
+var express = require("express");
 
-account.login = {
-    find: function (params, callback)
-    {
-        try
-        {
-            callback(null, "Hello there big boy!");
-        }
-        catch (error)
-        {
-            callback(error);
-        }
-    }
-};
+var account = express.Router();
+
+account.get("/", function(req, res)
+{
+    res.send("Hello there from Index!");
+});
+
+account.get("/login", function(req, res)
+{
+    res.send("Hello there from Login!");
+});
 
 module.exports = account;
