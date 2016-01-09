@@ -229,10 +229,10 @@ gulp.task("compile-sass", function ()
 gulp.task("watch", function ()
 {
     gulp.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
-        gulp.parallel("bundle-ng-files"));
+        ["bundle-ng-files"]);
 
     gulp.watch(paths.sass + "sass/main.scss",
-        gulp.parallel("compile-sass"));
+        ["compile-sass"]);
 });
 //</editor-fold>
 
