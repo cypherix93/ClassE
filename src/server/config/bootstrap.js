@@ -3,6 +3,11 @@ var bodyParser = require("body-parser");
 
 var bootstrap = function(app, config)
 {
+    console.log("=> Bootstrapping application...");
+
+    // Connect to MongoDB
+    require("./mongodb")(config);
+
     // Configure REST and SocketIO endpoints
     app.configure(feathers.rest());
     app.configure(feathers.socketio());

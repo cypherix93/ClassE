@@ -10,9 +10,10 @@ var config = require("./config/config")[env];
 require("./config/bootstrap")(app, config);
 
 
+console.log("=> Starting Server...")
 
 // Start up the server
 app.listen(config.port, function()
 {
-    console.log("Magic is happening at http://localhost:" + config.port);
+    console.log("\nMagic is happening at http://localhost:" + config.port);
 });
