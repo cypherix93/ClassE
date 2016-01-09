@@ -14,7 +14,7 @@ AngularApp
     .run(["$rootScope", "ConfigSvc", function ($rootScope, ConfigSvc)
     {
         ConfigSvc.GetAppMeta()
-            .then(function(response)
+            .then(function (response)
             {
                 $rootScope.AppMeta = {
                     Name: response.data.name,
@@ -30,8 +30,23 @@ AngularApp
 
 // Configure Angular App Preferences
 AngularApp
-    .config(["$routeProvider", function ($routeProvider)
+    .config(["$httpProvider", function ($httpProvider)
     {
+        $httpProvider.interceptors.push(["$location", function ($location)
+        {
+            return {
+                "responseError": function (error)
+                {
+                    if (error.status === 404)
+                        $location.path("/error/404");
+                }
+            };
+        }]);
+    }])
+    .config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider)
+    {
+        $locationProvider.html5Mode(false);
+
         $routeProvider
         // route for the home page
             .when("/",
@@ -53,10 +68,6 @@ AngularApp
                         return "views/" + urlattr.base + "/index.html";
                     }
                 });
-    }])
-    .config(["$locationProvider", function ($locationProvider)
-    {
-        $locationProvider.html5Mode(false);
     }]);
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
