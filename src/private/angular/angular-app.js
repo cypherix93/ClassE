@@ -11,16 +11,18 @@ var AngularApp = angular.module("AngularApp",
 
 // Configure Angular App Initialization
 AngularApp
-    .run(function ($rootScope, $http)
+    .run(function ($rootScope, ConfigSvc)
     {
-        $http.get("angular/meta.json")
-            .success(function(response)
+        ConfigSvc.GetAppMeta()
+            .then(function(response)
             {
-                $rootScope.AppName = response.name;
-                $rootScope.AppVersion = response.version;
-                $rootScope.AppDescription = response.description;
-                $rootScope.AppCopyright = response.copyright;
-                $rootScope.AppAuthors = response.authors;
+                $rootScope.AppMeta = {
+                    Name: response.data.name,
+                    Version: response.data.version,
+                    Description: response.data.description,
+                    Copyright: response.data.copyright,
+                    Authors: response.data.authors
+                };
             });
 
         $rootScope.PageName = "Home";

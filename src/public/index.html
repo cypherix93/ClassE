@@ -2,7 +2,7 @@
 <html lang="en" ng-app="AngularApp">
     <head>
         <meta charset="UTF-8">
-        <title>{{AppName}} | {{ PageName }}</title>
+        <title>{{AppMeta.Name}} | {{ PageName }}</title>
         <base href="/">
 
         <!-- Main Theme -->
@@ -29,12 +29,14 @@
         <script src="angular/angular-bundle.js"></script>
     </head>
     <body ng-cloak>
-        <ng-include src="'views/_shared/navigation.html'"></ng-include>
+        <div ng-include="'views/_shared/navigation.html'"></div>
 
         <div id="content-container" class="container-fluid">
             <div ng-view></div>
         </div>
 
-        <ng-include src="'views/_shared/footer.html'"></ng-include>
+        {{AppMeta}}
+
+        <div ng-include="'views/_shared/footer.html'"></div>
     </body>
 </html>

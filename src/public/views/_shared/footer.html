@@ -2,21 +2,21 @@
 
     <h4 style="margin: 0;">
         <b>
-            <a ng-href="http://www.github.com/{{AppAuthors.split(',')[0]}}/{{AppName}}" title="{{AppName}} on GitHub">
+            <a ng-href="http://www.github.com/{{AppMeta.Authors.split(',')[0]}}/{{AppMeta.Name}}" title="{{AppMeta.Name}} on GitHub">
                 <span class="fa fa-github"></span>
-                {{AppName}}
+                {{AppMeta.Name}}
             </a>
 
             &nbsp;&ndash;&nbsp;
-            {{AppVersion}}
+            {{AppMeta.Version}}
         </b>
     </h4>
 
     Maintained by
-    <span ng-repeat="author in AppAuthors.split(',') track by $index">
+    <span ng-repeat="author in AppMeta.Authors.split(',') track by $index">
         <a ng-href="http://www.github.com/{{author.trim()}}">{{author.trim()}}</a>{{$last ? "" : ", "}}
     </span>
 
     <br>
-    {{AppCopyright}}
+    {{AppMeta.Copyright}}
 </div>
