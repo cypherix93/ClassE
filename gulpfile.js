@@ -13,11 +13,14 @@ var del = require("del");
 var mainBowerFiles = require("main-bower-files");
 
 // Directories
-var buildDir = "./build/";
-var deployDir = "./deploy/";
-var projectDir = "./src/";
-var publicDir = projectDir + "public/";
-var privateDir = projectDir + "private/";
+var paths = {};
+paths.build = "./build/";
+paths.deploy = "./deploy/";
+paths.project = "./src/";
+paths.public = paths.project + "public/";
+paths.private = paths.project + "private/";
+paths.angular = paths.private + "angular/";
+paths.sass = paths.private + "sass/";
 
 //<editor-fold desc="Build Tasks">
 // Deploy App
@@ -36,8 +39,8 @@ gulp.task("default", function (callback)
 gulp.task("clean-dirs", function (callback)
 {
     return del([
-            buildDir + "**",
-            deployDir + "**"
+            paths.build + "**",
+            paths.deploy + "**"
         ],
         { force: true }, callback);
 });
@@ -67,7 +70,7 @@ gulp.task("update-assembly-info", function ()
         .pipe(gulp.dest("."));
 
     // Update meta.json Info
-    var metaJson = gulp.src(publicDir + "angular/meta.json")
+    var metaJson = gulp.src(paths.public + "angular/meta.json")
         .pipe(plugins.debug({ title: "meta.json:" }))
         .pipe(plugins.jsonEditor({
             name: meta.name,
@@ -76,7 +79,7 @@ gulp.task("update-assembly-info", function ()
             copyright: meta.copyright,
             authors: meta.authors
         }))
-        .pipe(gulp.dest(publicDir + "angular/"));
+        .pipe(gulp.dest(paths.public + "angular/"));
 
     return merge(bowerJson, packageJson, metaJson);
 });
@@ -97,7 +100,7 @@ gulp.task("bower-restore", function (callback)
 // Install Bower Packages
 gulp.task("bower-install", ["bower-restore"], function ()
 {
-    var libDir = publicDir + "lib/";
+    var libDir = paths.public + "lib/";
 
     var jsFilter = plugins.filter(["**/*.js", "!**/*.min.js"], { restore: true });
     var cssFilter = plugins.filter(["**/*.css", "!**/*.min.css"], { restore: true });
@@ -173,7 +176,7 @@ gulp.task("bower-install", ["bower-restore"], function ()
 
     // Bootstrap SASS files
     var bootstrapSass = gulp.src("./bower_components/bootstrap-sass-official/assets/stylesheets/**/*.scss")
-        .pipe(gulp.dest(privateDir + "sass/bootstrap/"));
+        .pipe(gulp.dest(paths.private + "sass/bootstrap/"));
 
     // Return merged stream
     return merge(mainBower, bootstrapSass);
@@ -184,20 +187,20 @@ gulp.task("bower-install", ["bower-restore"], function ()
 // Bundle AngularJS files
 gulp.task("bundle-ng-files", function ()
 {
-    var scripts = gulp.src(privateDir + "angular-app/**/*.js")
+    var scripts = gulp.src(paths.angular + "**/*.js")
         .pipe(plugins.debug({ title: "angular app:" }))
         .pipe(plugins.concat("angular-bundle.js"))
         .pipe(plugins.ngAnnotate())
-        .pipe(gulp.dest(publicDir + "angular/"))
+        .pipe(gulp.dest(paths.public + "angular/"))
         .pipe(plugins.uglify())
         .pipe(plugins.rename({
             suffix: ".min"
         }))
-        .pipe(gulp.dest(publicDir + "angular/"));
+        .pipe(gulp.dest(paths.public + "angular/"));
 
-    var templates = gulp.src(privateDir + "angular-app/templates/**/*.html")
+    var templates = gulp.src(paths.angular + "templates/**/*.html")
         .pipe(plugins.minifyHtml())
-        .pipe(gulp.dest(publicDir + "angular/templates/"));
+        .pipe(gulp.dest(paths.public + "angular/templates/"));
 
     return merge(scripts, templates);
 });
@@ -205,9 +208,9 @@ gulp.task("bundle-ng-files", function ()
 // Compile SASS files
 gulp.task("compile-sass", function ()
 {
-    var cssDir = publicDir + "css/";
+    var cssDir = paths.public + "css/";
 
-    return gulp.src(privateDir + "sass/main.scss")
+    return gulp.src(paths.sass + "main.scss")
         .pipe(plugins.debug({ title: "compiling sass:" }))
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.sassGlob())
@@ -220,3 +223,16 @@ gulp.task("compile-sass", function ()
         .pipe(gulp.dest(cssDir));
 });
 //</editor-fold>
+
+//<editor-fold desc="Watch Tasks">
+// Watch client files for changes
+gulp.task("watch", function ()
+{
+    gulp.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
+        gulp.parallel("bundle-ng-files"));
+
+    gulp.watch(paths.sass + "sass/main.scss",
+        gulp.parallel("compile-sass"));
+});
+//</editor-fold>
+
