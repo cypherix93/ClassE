@@ -56,7 +56,7 @@ AngularApp
     }])
     .config(["$locationProvider", function ($locationProvider)
     {
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(false);
     }]);
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
