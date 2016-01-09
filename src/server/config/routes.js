@@ -27,11 +27,15 @@ var routes = function (app, config)
             if (!controller.hasOwnProperty(prop))
                 continue;
 
-            var action = controller[prop];
+            let url = controllerPath + "/" + prop;
+            let action = controller[prop];
 
-            app.use(controllerPath + "/" + prop, action);
+            app.use(url, action);
         }
     }
+
+    // Setup error pages
+    require("./errors")(app);
 };
 
 module.exports = routes;
