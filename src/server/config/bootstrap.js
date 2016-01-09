@@ -11,6 +11,9 @@ var bootstrap = function(app, config)
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
+    // Setup authentication
+    require("./auth")(app);
+
     // Setup routes
     require("./routes")(app, config);
 };

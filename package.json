@@ -5,8 +5,12 @@
   "keywords": [],
   "dependencies": {
     "body-parser": "^1.14.2",
+    "cookie-parser": "^1.4.0",
     "express": "^4.13.3",
+    "express-session": "^1.12.1",
     "mongorito": "^1.4.6",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "recursive-readdir-sync": "^1.0.6"
   },
   "devDependencies": {
