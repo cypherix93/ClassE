@@ -12,7 +12,7 @@ var auth = function (app)
     }));
 
     // Setup Passport
-    require("./passport/passport")(app);
+    require("./passport")(app);
 };
 
 module.exports = auth;

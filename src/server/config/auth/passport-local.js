@@ -8,7 +8,7 @@ var passportLocalConfig = function(passport)
     },
     function(username, password, callback)
     {
-        
+
     }));
 };
 

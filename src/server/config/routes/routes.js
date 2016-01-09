@@ -21,7 +21,7 @@ var routes = function (app, config)
             .replace("src/server/controllers", "")
             .replace(/\.js/g, "");
 
-        let controller = require("../controllers" + controllerPath);
+        let controller = require(path.join(config.rootPath,"/server/controllers", controllerPath));
 
         app.use(controllerPath, controller);
     }
