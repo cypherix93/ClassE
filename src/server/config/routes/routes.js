@@ -4,7 +4,9 @@ var express = require("express");
 var path = require("path");
 var recursiveReaddirSync = require("recursive-readdir-sync");
 
-var routes = function (app, config)
+var config = ClassE.config;
+
+var routes = function (app)
 {
     console.log("=> Setting up Routes...");
 

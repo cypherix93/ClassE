@@ -3,7 +3,9 @@
 var path = require("path");
 var recursiveReaddirSync = require("recursive-readdir-sync");
 
-var modelsConfig = function(config)
+var config = ClassE.config;
+
+var modelsConfig = function()
 {
     // Dynamically load models and attach them to global 'models' namespace
     global.ClassE.models = {};

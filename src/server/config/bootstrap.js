@@ -17,14 +17,14 @@ var bootstrap = function(app, config)
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    // Connect to MongoDB
-    require("./db/db")(config);
+    // Connect to RethinkDB
+    require("./db/db")();
 
     // Setup authentication
     require("./auth/auth")(app);
 
     // Setup routes
-    require("./routes/routes")(app, config);
+    require("./routes/routes")(app);
 };
 
 module.exports = bootstrap;
