@@ -7,17 +7,19 @@ var Passport = models.Passport;
 authHelper.isValidNewUser = async(function (user)
 {
     if (!user.username || !user.password)
-        return false;
+        return { error: "Username and Password must be specified." };
 
     var userExists = await(User.count(x => x("username").eq(user.username)).execute()) > 0;
 
     if (userExists)
-        return false;
+        return { error: "A User with the same username already exists." };
 
-    if (user.password.length < Passport.getPasswordMinLength())
-        return false;
+    var passwordMinLength = Passport.getPasswordMinLength();
 
-    return true;
+    if (user.password.length < passwordMinLength)
+        return { error: "Password must be at least " + passwordMinLength + " characters long." };
+
+    return { success: true };
 });
 
 module.exports = authHelper;
