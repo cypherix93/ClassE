@@ -12,6 +12,9 @@ var User = thinky.createModel("User",
         roles: [type.string()]
     });
 
+User.ensureIndex("username");
+User.ensureIndex("email");
+
 User.hasMany(models.Passport, "passports", "id", "userId");
 
 module.exports = User;
