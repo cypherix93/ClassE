@@ -9,7 +9,7 @@ var bootstrap = function(app, config)
     app.use(bodyParser.urlencoded({ extended: true }));
 
     // Connect to MongoDB
-    require("./db/mongodb")(config);
+    require("./db/db")(config);
 
     // Setup authentication
     require("./auth/auth")(app);
