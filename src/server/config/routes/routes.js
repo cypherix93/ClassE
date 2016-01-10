@@ -16,14 +16,14 @@ var routes = function (app, config)
     var files = recursiveReaddirSync("./src/server/controllers");
     for (let file of files)
     {
-        let controllerPath = file
+        let controllerUrl = file
             .replace(/\\/g, "/")
             .replace("src/server/controllers", "")
             .replace(/\.js/g, "");
 
-        let controller = require(path.join(config.rootPath,"/server/controllers", controllerPath));
+        let controller = require(path.join(config.rootPath,"/server/controllers", controllerUrl));
 
-        app.use(controllerPath, controller);
+        app.use(controllerUrl, controller);
     }
 
     // Setup error pages
