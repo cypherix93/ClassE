@@ -18,6 +18,7 @@ authRouter.route("/register")
                         success: false,
                         error: response.error
                     });
+                    return;
                 }
 
                 res.json({success: true});
