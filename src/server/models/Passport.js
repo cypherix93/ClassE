@@ -6,13 +6,15 @@ var thinky = ClassE.thinky;
 var type = thinky.type;
 var models = ClassE.models;
 
+var passwordMinLength = 8;
+
 // Don't touch anything here because this is used for Authentication.
 var Passport = thinky.createModel("Passport",
     {
         // Required field: Protocol (e.g. 'oauth', 'oauth2', 'openid').
         protocol: type.string().alphanum().required(),
 
-        password: type.string().min(8),
+        password: type.string().min(passwordMinLength),
         accessToken: type.string(),
 
         provider: type.string(),
@@ -22,6 +24,12 @@ var Passport = thinky.createModel("Passport",
         // Associations
         userId: type.string().required()
     });
+
+// Get password min length allowed
+Passport.defineStatic("getPasswordMinLength", function()
+{
+    return passwordMinLength;
+});
 
 // Validate password function
 Passport.define("validatePassword", function (password)
