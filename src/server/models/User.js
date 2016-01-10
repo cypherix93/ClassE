@@ -4,17 +4,12 @@ var type = thinky.type;
 
 var User = thinky.createModel("User",
     {
-        Id: type.string(),
+        username: type.string(),
+        email: type.string(),
 
-        Username: type.string(),
-        Email: type.string(),
-
-        Roles: [type.string()]
-    },
-    {
-        pk: "Id" // Set Id as the primary key
+        roles: [type.string()]
     });
 
-User.hasMany(models.Passport, "Passports", "Id", "UserId");
+User.hasMany(models.Passport, "passports", "id", "userId");
 
 module.exports = User;
