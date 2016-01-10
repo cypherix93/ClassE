@@ -1,5 +1,4 @@
 # ClassE
----
 
 ####*The classy way to plan your college courses.*
 
@@ -32,5 +31,3 @@ Now, there are several parts of the app. Specific instructions to run each part 
 #### Mobile Client
 
 *Coming soon*
-
----
