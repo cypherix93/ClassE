@@ -8,10 +8,6 @@ var routes = function (app, config)
 {
     console.log("=> Setting up Routes...");
 
-    // Serve public files
-    var publicDir = path.join(config.rootPath, "public");
-    app.use("/", express.static(publicDir));
-
     // Dynamically load controllers
     var files = recursiveReaddirSync("./src/server/controllers");
     for (let file of files)
