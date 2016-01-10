@@ -27,6 +27,8 @@ Now, there are several parts of the app. Specific instructions to run each part 
 - Run `http-server -p 3970 ./src/public/` at the root of your repo.
 - The client should now be running at [http://localhost:3970](http://localhost:3970).
 - You can use any port you want, just provide it the to the `-p` flag of the `http-server` command.
+- Any change you make in the `/src/public` directory will be auto-updated.
+- If you want changes in the `/src/private` directory to be auto-updated as well, run `gulp watch` at the root of your repo.
 
 #### Mobile Client
 
