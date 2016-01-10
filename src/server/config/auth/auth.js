@@ -3,6 +3,8 @@ var session = require("express-session");
 
 var auth = function (app)
 {
+    console.log("=> Setting up Auth...");
+
     //Hook up the auth related middlewares
     app.use(cookieParser());
     app.use(session({
