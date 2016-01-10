@@ -1,5 +1,7 @@
 "use strict";
 
+var models = ClassE.models;
+
 var seedConfig = async(function ()
 {
     var User = models.User;

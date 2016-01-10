@@ -6,7 +6,7 @@ var recursiveReaddirSync = require("recursive-readdir-sync");
 var modelsConfig = function(config)
 {
     // Dynamically load models and attach them to global 'models' namespace
-    global.models = {};
+    global.ClassE.models = {};
 
     var files = recursiveReaddirSync("./src/server/models");
     for (let file of files)
@@ -16,9 +16,9 @@ var modelsConfig = function(config)
             .replace("src/server/models/", "")
             .replace(/\.js/g, "");
 
-        let model = require(path.join(config.rootPath, "/server/models/", modelFile));
+        let model = require(path.join(config.rootPath, "/models/", modelFile));
 
-        global.models[modelFile] = model;
+        global.ClassE.models[modelFile] = model;
     }
 };
 

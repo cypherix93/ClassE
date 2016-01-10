@@ -4,6 +4,11 @@ var bootstrap = function(app, config)
 {
     console.log("=> Bootstrapping application...");
 
+    // Setup app global variables
+    global.ClassE = {
+        config: config
+    };
+
     // Setup async/await
     global.async = require("asyncawait/async");
     global.await = require("asyncawait/await");

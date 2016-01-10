@@ -2,7 +2,9 @@
 
 var bcrypt = require("bcryptjs");
 
+var thinky = ClassE.thinky;
 var type = thinky.type;
+var models = ClassE.models;
 
 // Don't touch anything here because this is used for Authentication.
 var Passport = thinky.createModel("Passport",
