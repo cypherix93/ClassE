@@ -25,9 +25,9 @@ class AuthHelper
             return {error: "Password must be at least " + passwordMinLength + " characters long."};
 
         // Check if user already exists
-        var userExists = (await User.count(x => x("email").eq(user.email)).execute()) > 0;
+        var userCount = await User.count(x => x("email").eq(user.email)).execute();
 
-        if (userExists)
+        if (userCount > 0)
             return {error: "A user with the same email already exists."};
 
         // All checks passed

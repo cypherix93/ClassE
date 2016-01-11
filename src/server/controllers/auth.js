@@ -5,7 +5,7 @@ var AuthHelper = require(ClassE.config.rootPath + "/data/auth");
 var authRouter = express.Router();
 
 authRouter.route("/register")
-    .post(async function (req, res)
+    .post(async function (req, res, next)
     {
         var user = req.body;
 
