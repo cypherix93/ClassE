@@ -1,25 +1,39 @@
-var authHelper = {};
+"use strict";
+
+var validator = require("validator");
 
 var models = ClassE.models;
 var User = models.User;
 var Passport = models.Passport;
 
-authHelper.validateNewUser = async function (user)
+class AuthHelper
 {
-    if (!user.username || !user.password)
-        return { error: "Username and Password must be specified." };
+    static async validateNewUser(user)
+    {
+        // Check for empty email and password
+        if (!user.email || !user.password)
+            return {error: "Email and Password must be specified."};
 
-    var userExists = (await User.count(x => x("username").eq(user.username)).execute()) > 0;
+        // Validate email address
+        if (!validator.isEmail(user.email))
+            return {error: "Entered email is not a valid email address."};
 
-    if (userExists)
-        return { error: "A User with the same username already exists." };
+        // Validate password constraints
+        var passwordMinLength = Passport.getPasswordMinLength();
 
-    var passwordMinLength = Passport.getPasswordMinLength();
+        if (user.password.length < passwordMinLength)
+            return {error: "Password must be at least " + passwordMinLength + " characters long."};
 
-    if (user.password.length < passwordMinLength)
-        return { error: "Password must be at least " + passwordMinLength + " characters long." };
+        // Check if user already exists
+        var userExists = (await User.count(x => x("email").eq(user.email)).execute()) > 0;
 
-    return { success: true };
-};
+        if (userExists)
+            return {error: "A user with the same email already exists."};
 
-module.exports = authHelper;
+        // All checks passed
+        return {success: true};
+    };
+
+}
+
+module.exports = AuthHelper;
