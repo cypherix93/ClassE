@@ -18,8 +18,6 @@ var modelsConfig = function()
         let modelFile = path.basename(file)
             .replace(/\.js/g, "");
 
-        console.log(modelsDir, modelFile);
-
         let model = require(path.join(modelsDir, modelFile));
 
         global.ClassE.models[modelFile] = model;

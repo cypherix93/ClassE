@@ -19,8 +19,6 @@ var routes = function (app)
         let ctrlFile = path.basename(file)
             .replace(/\.js/g, "");
 
-        console.log(ctrlDir, ctrlFile);
-
         let controller = require(path.join(ctrlDir, ctrlFile));
 
         app.use("/" + ctrlFile, controller);
