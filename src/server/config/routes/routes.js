@@ -1,31 +1,30 @@
 "use strict";
 
-var express = require("express");
-var path = require("path");
-var recursiveReaddirSync = require("recursive-readdir-sync");
-
-var config = ClassE.config;
-
 var routes = function (app)
 {
     console.log("=> Setting up Routes...");
 
-    var ctrlDir = path.join(config.rootPath, "/controllers");
-
-    // Dynamically load controllers
-    var files = recursiveReaddirSync(ctrlDir);
-    for (let file of files)
+    // Handle async errors
+    app.use(function (req, res, next)
     {
-        let ctrlFile = path.basename(file)
-            .replace(/\.js/g, "");
+        process.on("unhandledRejection", function (err)
+        {
+            next(err);
+        });
 
-        let controller = require(path.join(ctrlDir, ctrlFile));
+        next();
+    });
 
-        app.use("/" + ctrlFile, controller);
-    }
+    // Dynamically setup controller routes
+    require("./controllers")(app);
 
-    // Setup error pages
-    require("./errors")(app);
+    // Handle all other application errors
+    app.use(function (err, req, res, next)
+    {
+        //TODO: Send err.stack to elmah
+
+        return res.status(err.status || 500).send(err.message);
+    });
 };
 
 module.exports = routes;
