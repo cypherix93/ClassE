@@ -28,16 +28,15 @@ gulp.task("default", function (callback)
 {
     runSequence(
         "clean-dirs",
-        "update-assembly-info",
+        "update-package-info",
         "bower-install",
-        ["bundle-ng-files", "compile-sass"],
         "build",
         callback
     );
 });
 
 // Build App
-gulp.task("build", function()
+gulp.task("build", ["bundle-ng-files", "compile-sass"], function ()
 {
     return gulp.src(paths.project + "server/**/*")
         .pipe(plugins.babel())
@@ -51,15 +50,15 @@ gulp.task("clean-dirs", function (callback)
             paths.build + "**",
             paths.deploy + "**"
         ],
-        { force: true }, callback);
+        {force: true}, callback);
 });
 
 // Update Assembly Info
-gulp.task("update-assembly-info", function ()
+gulp.task("update-package-info", function ()
 {
     // Update bower.json Info
     var bowerJson = gulp.src("./bower.json")
-        .pipe(plugins.debug({ title: "bower.json:" }))
+        .pipe(plugins.debug({title: "bower.json:"}))
         .pipe(plugins.jsonEditor({
             name: meta.name,
             version: meta.version
@@ -68,7 +67,7 @@ gulp.task("update-assembly-info", function ()
 
     // Update package.json Info
     var packageJson = gulp.src("./package.json")
-        .pipe(plugins.debug({ title: "package.json:" }))
+        .pipe(plugins.debug({title: "package.json:"}))
         .pipe(plugins.jsonEditor({
             name: meta.name,
             version: meta.version,
@@ -87,7 +86,7 @@ gulp.task("update-assembly-info", function ()
 // Restore NPM and Bower packages
 gulp.task("bower-restore", function (callback)
 {
-    bower.commands.install([], { save: true }, {})
+    bower.commands.install([], {save: true}, {})
         .on("end", function (installed)
         {
             callback(); // notify gulp that this task is finished
@@ -99,10 +98,10 @@ gulp.task("bower-install", ["bower-restore"], function ()
 {
     var libDir = paths.public + "lib/";
 
-    var jsFilter = plugins.filter(["**/*.js", "!**/*.min.js"], { restore: true });
-    var cssFilter = plugins.filter(["**/*.css", "!**/*.min.css"], { restore: true });
-    var fontFilter = plugins.filter(["**/*.eot", "**/*.woff", "**/*.woff2", "**/*.svg", "**/*.ttf"], { restore: true });
-    var imageFilter = plugins.filter(["**/*.jpg", "**/*.png", "**/*.gif"], { restore: true });
+    var jsFilter = plugins.filter(["**/*.js", "!**/*.min.js"], {restore: true});
+    var cssFilter = plugins.filter(["**/*.css", "!**/*.min.css"], {restore: true});
+    var fontFilter = plugins.filter(["**/*.eot", "**/*.woff", "**/*.woff2", "**/*.svg", "**/*.ttf"], {restore: true});
+    var imageFilter = plugins.filter(["**/*.jpg", "**/*.png", "**/*.gif"], {restore: true});
 
     function generatePath(path)
     {
@@ -132,10 +131,10 @@ gulp.task("bower-install", ["bower-restore"], function ()
     }
 
     // The main bower dependencies with only JS and CSS and fonts
-    var mainBower = gulp.src(mainBowerFiles(), { base: "./bower_components" })
+    var mainBower = gulp.src(mainBowerFiles(), {base: "./bower_components"})
         // Install and Minify JS Files
         .pipe(jsFilter)
-        .pipe(plugins.debug({ title: "js:" }))
+        .pipe(plugins.debug({title: "js:"}))
         .pipe(plugins.rename(generatePath))
         .pipe(gulp.dest(libDir))
         .pipe(plugins.uglify())
@@ -147,10 +146,10 @@ gulp.task("bower-install", ["bower-restore"], function ()
 
         // Install and Minify CSS Files
         .pipe(cssFilter)
-        .pipe(plugins.debug({ title: "css:" }))
+        .pipe(plugins.debug({title: "css:"}))
         .pipe(plugins.rename(generatePath))
         .pipe(gulp.dest(libDir))
-        .pipe(plugins.minifyCss())
+        .pipe(plugins.cssnano())
         .pipe(plugins.rename({
             suffix: ".min"
         }))
@@ -159,14 +158,14 @@ gulp.task("bower-install", ["bower-restore"], function ()
 
         // Install Font Files
         .pipe(fontFilter)
-        .pipe(plugins.debug({ title: "fonts:" }))
+        .pipe(plugins.debug({title: "fonts:"}))
         .pipe(plugins.rename(generatePath))
         .pipe(gulp.dest(libDir))
         .pipe(fontFilter.restore)
 
         // Install Image Files
         .pipe(imageFilter)
-        .pipe(plugins.debug({ title: "images:" }))
+        .pipe(plugins.debug({title: "images:"}))
         .pipe(plugins.rename(generatePath))
         .pipe(gulp.dest(libDir))
         .pipe(imageFilter.restore);
@@ -185,7 +184,7 @@ gulp.task("bower-install", ["bower-restore"], function ()
 gulp.task("bundle-ng-files", function ()
 {
     var scripts = gulp.src(paths.angular + "**/*.js")
-        .pipe(plugins.debug({ title: "angular app:" }))
+        .pipe(plugins.debug({title: "angular app:"}))
         .pipe(plugins.concat("angular-bundle.js"))
         .pipe(plugins.ngAnnotate())
         .pipe(gulp.dest(paths.public + "angular/"))
@@ -196,7 +195,7 @@ gulp.task("bundle-ng-files", function ()
         .pipe(gulp.dest(paths.public + "angular/"));
 
     var templates = gulp.src(paths.angular + "templates/**/*.html")
-        .pipe(plugins.minifyHtml())
+        .pipe(plugins.htmlmin())
         .pipe(gulp.dest(paths.public + "angular/templates/"));
 
     return merge(scripts, templates);
@@ -208,14 +207,14 @@ gulp.task("compile-sass", function ()
     var cssDir = paths.public + "css/";
 
     return gulp.src(paths.sass + "main.scss")
-        .pipe(plugins.debug({ title: "compiling sass:" }))
+        .pipe(plugins.debug({title: "compiling sass:"}))
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.sassGlob())
         .pipe(plugins.sass())
         .pipe(gulp.dest(cssDir))
 
-        .pipe(plugins.minifyCss({ roundingPrecision: -1 }))
-        .pipe(plugins.rename({ suffix: ".min" }))
+        .pipe(plugins.cssnano())
+        .pipe(plugins.rename({suffix: ".min"}))
         .pipe(plugins.sourcemaps.write("./"))
         .pipe(gulp.dest(cssDir));
 });
