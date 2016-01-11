@@ -10,18 +10,20 @@ var routes = function (app)
 {
     console.log("=> Setting up Routes...");
 
+    var ctrlDir = path.join(config.rootPath, "/controllers");
+
     // Dynamically load controllers
-    var files = recursiveReaddirSync("./src/server/controllers");
+    var files = recursiveReaddirSync(ctrlDir);
     for (let file of files)
     {
-        let controllerUrl = file
-            .replace(/\\/g, "/")
-            .replace("src/server/controllers", "")
+        let ctrlFile = path.basename(file)
             .replace(/\.js/g, "");
 
-        let controller = require(path.join(config.rootPath,"/controllers", controllerUrl));
+        console.log(ctrlDir, ctrlFile);
 
-        app.use(controllerUrl, controller);
+        let controller = require(path.join(ctrlDir, ctrlFile));
+
+        app.use("/" + ctrlFile, controller);
     }
 
     // Setup error pages

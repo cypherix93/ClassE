@@ -35,6 +35,14 @@ gulp.task("default", function (callback)
     );
 });
 
+// Build App
+gulp.task("build", function()
+{
+    return gulp.src(paths.project + "server/**/*")
+        .pipe(plugins.babel())
+        .pipe(gulp.dest(paths.build + "server/"));
+});
+
 // Clean Directories
 gulp.task("clean-dirs", function (callback)
 {
@@ -69,19 +77,7 @@ gulp.task("update-assembly-info", function ()
         }))
         .pipe(gulp.dest("."));
 
-    // Update meta.json Info
-    var metaJson = gulp.src(paths.public + "angular/meta.json")
-        .pipe(plugins.debug({ title: "meta.json:" }))
-        .pipe(plugins.jsonEditor({
-            name: meta.name,
-            version: meta.version,
-            description: meta.description,
-            copyright: meta.copyright,
-            authors: meta.authors
-        }))
-        .pipe(gulp.dest(paths.public + "angular/"));
-
-    return merge(bowerJson, packageJson, metaJson);
+    return merge(bowerJson, packageJson);
 });
 
 //</editor-fold>
