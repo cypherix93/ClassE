@@ -2,9 +2,11 @@
   "name": "ClassE",
   "private": true,
   "version": "0.0.1",
+  "description": "",
+  "copyright": "Copyright © 2016",
+  "authors": "cypherix93, benjaminstrumeyer",
   "keywords": [],
   "dependencies": {
-    "asyncawait": "^1.0.2",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.0",
@@ -16,6 +18,7 @@
     "thinky": "^2.2.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.4.0",
     "bower": "^1.7.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
@@ -37,8 +40,5 @@
     "main-bower-files": "^2.11.1",
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5"
-  },
-  "description": "",
-  "copyright": "Copyright © 2016",
-  "authors": "cypherix93, benjaminstrumeyer"
+  }
 }

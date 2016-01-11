@@ -2,11 +2,11 @@
 
 var models = ClassE.models;
 
-var seedConfig = async(function ()
+var seedConfig = async function ()
 {
     var User = models.User;
 
-    var usersCount = await(User.count().execute());
+    var usersCount = await User.count().execute();
 
     // If database has users, do nothing
     if (usersCount > 0)
@@ -24,6 +24,6 @@ var seedConfig = async(function ()
     {
         user.save();
     }
-});
+};
 
 module.exports = seedConfig;
