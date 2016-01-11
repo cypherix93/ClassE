@@ -11,7 +11,8 @@ More description shall go here.
 - Go ahead and install Node on your machine (npm should come with).
 - Then clone the repository into a directory.
 - Now open a terminal and run `npm install -g nodemon gulp http-server`. This will install those 3 packages globally on your machine.
-- Now at the root directory of your repo, run `gulp`. This will build the app and get it ready for running.
+- Now at the root directory of your repo, run `npm install`. This will download all the dependencies that the app needs to run.
+- Now, run `gulp`. This will build the app and get it ready for running.
 
 Now, there are several parts of the app. Specific instructions to run each part are as follows:
 
