@@ -5,24 +5,22 @@ var authHelper = require(ClassE.config.rootPath + "/data/auth");
 var authRouter = express.Router();
 
 authRouter.route("/register")
-    .post(function (req, res)
+    .post(async function (req, res)
     {
         var user = req.body;
 
-        authHelper.isValidNewUser(user)
-            .then(function (response)
-            {
-                if (response.error)
-                {
-                    res.json({
-                        success: false,
-                        error: response.error
-                    });
-                    return;
-                }
+        var validateUser = await authHelper.validateNewUser(user);
 
-                res.json({success: true});
+        if (validateUser.error)
+        {
+            res.json({
+                success: false,
+                error: validateUser.error
             });
+            return;
+        }
+
+        res.json({success: true});
     });
 
 module.exports = authRouter;

@@ -4,7 +4,7 @@ var models = ClassE.models;
 var User = models.User;
 var Passport = models.Passport;
 
-authHelper.isValidNewUser = async function (user)
+authHelper.validateNewUser = async function (user)
 {
     if (!user.username || !user.password)
         return { error: "Username and Password must be specified." };
