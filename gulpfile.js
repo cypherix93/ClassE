@@ -31,6 +31,7 @@ gulp.task("default", function (callback)
         "update-assembly-info",
         "bower-install",
         ["bundle-ng-files", "compile-sass"],
+        "build",
         callback
     );
 });

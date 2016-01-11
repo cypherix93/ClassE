@@ -18,7 +18,7 @@ Now, there are several parts of the app. Specific instructions to run each part 
 
 #### Server
 
-- Run `nodemon --watch "./src/server/" "./src/server/server.js"` at the root of your repo.
+- Run `nodemon --watch "./src/server/" --exec "./node_modules/.bin/babel-node" "./src/server/server.js"` at the root of your repo.
 - Server should now be running at [http://localhost:3960](http://localhost:3960).
 - The server is a REST api so you won't see a page or anything if you open it in browser.
 - Use a REST client like [Postman](https://www.getpostman.com/) to test the endpoints.
