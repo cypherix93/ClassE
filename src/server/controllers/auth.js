@@ -1,4 +1,5 @@
 var express = require("express");
+var passport = require("passport");
 
 var AuthHelper = require(ClassE.config.rootPath + "/data/auth");
 
@@ -43,23 +44,36 @@ authRouter.route("/register")
     });
 
 authRouter.route("/login")
-    .post(async function (req, res, next)
+    .post(function (req, res, next)
     {
-        var input = req.body;
+        if (req.user)
+            return res.json({success: true, user: req.user});
 
-        // Let's check if the user input was valid
-        var validateLogin = await AuthHelper.validateLogin(input);
-        if (validateLogin.error)
+        // Do authentication against passport
+        passport.authenticate("local", function (err, user, info)
         {
-            return res.json({
-                success: false,
-                error: validateLogin.error
+            // If internal error occured
+            if (err)
+                return next(err);
+
+            // If authentication error occured
+            if (!user)
+            {
+                return res.json({
+                    success: false,
+                    error: info.message
+                });
+            }
+
+            // Set user to session
+            req.login(user, function (err)
+            {
+                if (err)
+                    return next(err);
+
+                return res.json({success: true, user: req.user});
             });
-        }
-
-        //TODO: Login the user here and give them a session
-
-        return res.json({success: true});
+        })(req, res, next);
     });
 
 module.exports = authRouter;

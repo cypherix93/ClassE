@@ -30,13 +30,13 @@ Passport.defineStatic("getPasswordMinLength", function()
     return passwordMinLength;
 });
 
-// Generate password function
+// Generate password hash function
 Passport.defineStatic("hashPassword", function (password)
 {
     return bcrypt.hashSync(password, 10);
 });
 
-// Generate password function
+// Generate access token function
 Passport.defineStatic("generateAccessToken", function ()
 {
     return require("crypto").randomBytes(48).toString("base64");

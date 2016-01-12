@@ -31,18 +31,18 @@ class AuthHelper {
             return {error: "A user with the same email already exists."};
 
         // All checks passed
-        return {success: true};
+        return {};
     };
 
-    static async validateLogin(input)
+    static async doLogin(email, password)
     {
         // Check for empty email and password
-        if (!input.email || !input.password)
+        if (!email || !password)
             return {error: "Email and Password must be specified."};
 
         // Check if user exists
         var dbUser = await User
-            .filter({email: input.email})
+            .filter({email: email})
             .run();
 
         dbUser = dbUser[0];
@@ -60,13 +60,19 @@ class AuthHelper {
         if (!dbPassport)
             return {error: "Password has not been set for this account."};
 
-        var passwordValid = dbPassport.validatePassword(input.password);
+        var passwordValid = dbPassport.validatePassword(password);
 
         if (!passwordValid)
             return {error: "Email or Password is not valid."};
 
         // All checks passed
-        return {success: true};
+        return {
+            data: {
+                id: dbUser.id,
+                identity: dbUser.email,
+                name: dbUser.fullName
+            }
+        };
     };
 }
 

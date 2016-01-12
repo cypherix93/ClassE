@@ -6,13 +6,15 @@ var models = ClassE.models;
 
 var User = thinky.createModel("User",
     {
-        email: type.string().email()
+        email: type.string()
+            .email()
             .required(),
 
         createdAt: type.date()
             .default(thinky.r.now()),
 
-        roles: type.array().schema(type.string())
+        roles: type.array()
+            .schema(type.string())
             .default(["User"])
     });
 
