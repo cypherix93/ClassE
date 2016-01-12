@@ -48,26 +48,33 @@ gulp.task("deploy", ["build"],
             .pipe(plugins.zip("client-web.zip", {compress: true}))
             .pipe(gulp.dest(paths.deploy));
 
-        var clientMobile = gulp.src(paths.build + "client-mobile/**")
-            .pipe(plugins.zip("client-mobile.zip", {compress: true}))
-            .pipe(gulp.dest(paths.deploy));
-
-        merge(server, clientWeb, clientMobile);
+        merge(server, clientWeb);
     });
 
 // Build App
-gulp.task("build", ["clean-dirs", "bundle-ng-files", "compile-sass"],
+gulp.task("build", ["clean", "bundle-ng-files", "compile-sass"],
     function ()
     {
-        return gulp.src(paths.project + "server/**")
+        var server =  gulp.src(paths.project + "server/**")
             .pipe(plugins.babel({
                 presets: ["stage-0"]
             }))
+            .pipe(plugins.debug({title: "[server] copied:"}))
             .pipe(gulp.dest(paths.build + "server/"));
+
+        var publicFilter = plugins.filter("**/+(!(*.js|*.css|*.map)|*(*.json|*.min.js|*.min.css))", {restore: true});
+
+        var clientWeb = gulp.src(paths.public + "**")
+            .pipe(publicFilter)
+            .pipe(plugins.debug({title: "[web] copied:"}))
+            .pipe(gulp.dest(paths.build + "client-web/"))
+            .pipe(publicFilter.restore);
+
+        return merge(server, clientWeb);
     });
 
 // Clean Directories
-gulp.task("clean-dirs",
+gulp.task("clean",
     function (callback)
     {
         return del([
