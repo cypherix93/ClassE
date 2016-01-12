@@ -6,8 +6,6 @@ var models = ClassE.models;
 
 var User = thinky.createModel("User",
     {
-        username: type.string(),
-
         email: type.string().email()
             .required(),
 

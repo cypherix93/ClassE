@@ -4,7 +4,6 @@ var bcrypt = require("bcryptjs");
 
 var thinky = ClassE.thinky;
 var type = thinky.type;
-var models = ClassE.models;
 
 var passwordMinLength = 8;
 
@@ -31,10 +30,22 @@ Passport.defineStatic("getPasswordMinLength", function()
     return passwordMinLength;
 });
 
+// Generate password function
+Passport.defineStatic("hashPassword", function (password)
+{
+    return bcrypt.hashSync(password, 10);
+});
+
+// Generate password function
+Passport.defineStatic("generateAccessToken", function ()
+{
+    return require("crypto").randomBytes(48).toString("base64");
+});
+
 // Validate password function
 Passport.define("validatePassword", function (password)
 {
-    return bcrypt.compareSync(password, this.Password);
+    return bcrypt.compareSync(password, this.password);
 });
 
 module.exports = Passport;

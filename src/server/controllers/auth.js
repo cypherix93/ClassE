@@ -24,7 +24,6 @@ authRouter.route("/register")
 
         // User input was valid, so let's create an account for them
         var newUser = new User({
-            username: input.username,
             email: input.email
         });
 
@@ -33,12 +32,32 @@ authRouter.route("/register")
         // Make new passport for the new user
         var userPassport = new Passport({
             protocol: "local",
-            password: require("bcryptjs").hashSync(input.password, 10),
-            accessToken: require("crypto").randomBytes(48).toString("base64"),
+            password: Passport.hashPassword(input.password),
+            accessToken: Passport.generateAccessToken(),
             userId: newUser.id
         });
 
         await userPassport.save();
+
+        return res.json({success: true});
+    });
+
+authRouter.route("/login")
+    .post(async function (req, res, next)
+    {
+        var input = req.body;
+
+        // Let's check if the user input was valid
+        var validateLogin = await AuthHelper.validateLogin(input);
+        if (validateLogin.error)
+        {
+            return res.json({
+                success: false,
+                error: validateLogin.error
+            });
+        }
+
+        //TODO: Login the user here and give them a session
 
         return res.json({success: true});
     });
