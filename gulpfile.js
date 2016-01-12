@@ -51,14 +51,18 @@ gulp.task("deploy", ["build"],
         var clientMobile = gulp.src(paths.build + "client-mobile/**")
             .pipe(plugins.zip("client-mobile.zip", {compress: true}))
             .pipe(gulp.dest(paths.deploy));
+
+        merge(server, clientWeb, clientMobile);
     });
 
 // Build App
 gulp.task("build", ["clean-dirs", "bundle-ng-files", "compile-sass"],
     function ()
     {
-        return gulp.src(paths.project + "server/**/*")
-            .pipe(plugins.babel())
+        return gulp.src(paths.project + "server/**")
+            .pipe(plugins.babel({
+                presets: ["stage-0"]
+            }))
             .pipe(gulp.dest(paths.build + "server/"));
     });
 
