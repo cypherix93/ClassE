@@ -2,9 +2,8 @@
 
 var validator = require("validator");
 
-var models = ClassE.models;
-var User = models.User;
-var Passport = models.Passport;
+var User = ClassE.models.User;
+var Passport = ClassE.models.Passport;
 
 class AuthHelper
 {

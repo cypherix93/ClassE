@@ -7,9 +7,15 @@ var models = ClassE.models;
 var User = thinky.createModel("User",
     {
         username: type.string(),
-        email: type.string(),
 
-        roles: [type.string()]
+        email: type.string().email()
+            .required(),
+
+        createdAt: type.date()
+            .default(thinky.r.now()),
+
+        roles: type.array().schema(type.string())
+            .default(["User"])
     });
 
 User.ensureIndex("username");
