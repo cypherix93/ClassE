@@ -10,9 +10,6 @@ var dbConfig = function ()
 
     // Hook up models
     require("./models")();
-
-    // Seed database
-    require("./seed")();
 };
 
 module.exports = dbConfig;
