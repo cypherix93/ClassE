@@ -6,6 +6,8 @@ var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;
 
 class AuthHelper {
+
+    // New User validation on Register
     static async validateNewUser(input)
     {
         // Check for empty email and password
@@ -34,6 +36,7 @@ class AuthHelper {
         return {};
     };
 
+    // Login helper
     static async doLogin(email, password)
     {
         // Check for empty email and password
@@ -43,9 +46,8 @@ class AuthHelper {
         // Check if user exists
         var dbUser = await User
             .filter({email: email})
+            .nth(0)
             .run();
-
-        dbUser = dbUser[0];
 
         if (!dbUser)
             return {error: "Email or Password is not valid."};
@@ -53,9 +55,8 @@ class AuthHelper {
         // Now check password if it matches the user's associated Passport
         var dbPassport = await Passport
             .filter({userId: dbUser.id, protocol: "local"})
+            .nth(0)
             .run();
-
-        dbPassport = dbPassport[0];
 
         if (!dbPassport)
             return {error: "Password has not been set for this account."};
@@ -73,6 +74,15 @@ class AuthHelper {
                 name: dbUser.fullName
             }
         };
+    };
+
+    // Use this to make routes require authorization
+    static authorize(req, res, next)
+    {
+        if (!req.user)
+            return res.status(401).end();
+
+        return next();
     };
 }
 

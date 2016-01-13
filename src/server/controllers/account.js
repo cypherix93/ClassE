@@ -1,20 +1,14 @@
 var express = require("express");
 
+var AuthHelper = require(ClassE.config.rootPath + "/data/auth");
+
 var accountRouter = express.Router();
 
 accountRouter.route("/")
-    .get(function (req, res)
+    .all(AuthHelper.authorize)
+    .get(function (req, res, next)
     {
-        if(!req.user)
-            res.send("Not authenticated brah.");
-
-        res.json(req.user);
-    });
-
-accountRouter.route("/login")
-    .get(function (req, res)
-    {
-        res.send("Hello there from Login!");
+        return res.json(req.user);
     });
 
 module.exports = accountRouter;

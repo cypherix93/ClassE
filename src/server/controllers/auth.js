@@ -8,6 +8,15 @@ var Passport = ClassE.models.Passport;
 
 var authRouter = express.Router();
 
+authRouter.route("/isAuthenticated")
+    .get(function (req, res, next)
+    {
+        if (req.user)
+            return res.json({success: true});
+
+        return res.json({success: false});
+    });
+
 authRouter.route("/register")
     .post(async function (req, res, next)
     {
