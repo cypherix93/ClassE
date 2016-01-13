@@ -111,8 +111,21 @@ gulp.task("update-package-info",
                 authors: meta.authors
             }))
             .pipe(gulp.dest("."));
+        
+        // Update meta.json Info
+        var metaJson = gulp.src(paths.public + "angular/meta.json")
+            .pipe(plugins.debug({ title: "meta.json:" }))
+            .pipe(plugins.jsonEditor({
+                name: meta.name,
+                version: meta.version,
+                description: meta.description,
+                copyright: meta.copyright,
+                authors: meta.authors
+            }))
+            .pipe(gulp.dest(paths.public + "angular/"));
 
-        return merge(bowerJson, packageJson);
+        return merge(bowerJson, packageJson, metaJson);
+
     });
 
 // Restore NPM and Bower packages
