@@ -26,7 +26,8 @@ class AuthHelper {
 
         // Check if user already exists
         var userCount = await User
-            .count({email: input.email})
+            .filter({email: input.email})
+            .count()
             .execute();
 
         if (userCount > 0)

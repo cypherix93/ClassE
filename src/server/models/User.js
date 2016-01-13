@@ -18,7 +18,6 @@ var User = thinky.createModel("User",
             .default(["User"])
     });
 
-User.ensureIndex("username");
 User.ensureIndex("email");
 
 User.hasMany(models.Passport, "passports", "id", "userId");
