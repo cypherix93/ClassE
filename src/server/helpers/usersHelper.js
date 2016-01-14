@@ -5,14 +5,14 @@ var User = ClassE.models.User;
 class UsersHelper {
     static async getAllUsers()
     {
-        return await User.getAll().execute();
+        return await User.getAll().run();
     }
 
     static async getUser(userId, isCurrentUser)
     {
         try
         {
-            return await User.get(userId).execute();
+            return await User.get(userId).run();
         }
         catch (e)
         {
