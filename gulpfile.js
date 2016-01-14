@@ -232,7 +232,16 @@ gulp.task("bower-install", ["bower-restore"],
 gulp.task("bundle-ng-files",
     function ()
     {
-        var scripts = gulp.src(paths.angular + "**/*.js")
+        var angularScripts = [
+            paths.angular + "angular-app.js",
+            paths.angular + "config.js",
+            paths.angular + "run.js",
+            paths.angular + "services/**/*.js",
+            paths.angular + "directives/**/*.js",
+            paths.angular + "controllers/**/*.js"
+        ];
+
+        var scripts = gulp.src(angularScripts)
             .pipe(plugins.debug({title: "angular app:"}))
             .pipe(plugins.concat("angular-bundle.js"))
             .pipe(plugins.ngAnnotate())

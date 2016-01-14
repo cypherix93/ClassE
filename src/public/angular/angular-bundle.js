@@ -1,5 +1,4 @@
-/* Global Angular App Declaration */
-
+// Global Angular App Declaration
 var AngularApp = angular.module("AngularApp",
     [
         "ngSanitize",
@@ -8,7 +7,47 @@ var AngularApp = angular.module("AngularApp",
         "ngMessages",
         "ui.bootstrap"
     ]);
+// Configure Angular App Preferences
+AngularApp
+    .config(["$httpProvider", function ($httpProvider)
+    {
+        $httpProvider.interceptors.push(["$location", function ($location)
+        {
+            return {
+                "responseError": function (error)
+                {
+                    if (error.status === 404)
+                        $location.path("/error/404");
+                }
+            };
+        }]);
+    }])
+    .config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider)
+    {
+        $locationProvider.html5Mode(false);
 
+        $routeProvider
+        // route for the home page
+            .when("/",
+                {
+                    templateUrl: "views/home/index.html"
+                })
+            // route patterns for the other pages
+            .when("/:base/:sub",
+                {
+                    templateUrl: function (urlattr)
+                    {
+                        return "views/" + urlattr.base + "/" + urlattr.sub + ".html";
+                    }
+                })
+            .when("/:base",
+                {
+                    templateUrl: function (urlattr)
+                    {
+                        return "views/" + urlattr.base + "/index.html";
+                    }
+                });
+    }]);
 // Configure Angular App Initialization
 AngularApp
     .run(["$rootScope", "ConfigSvc", function ($rootScope, ConfigSvc)
