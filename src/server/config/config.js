@@ -2,7 +2,7 @@ var path = require("path");
 
 var rootPath = path.normalize(__dirname + "/..");
 
-var config = {
+var appConfig = {
     development: {
         rootPath: rootPath,
         port: process.env.PORT || 3960,
@@ -23,4 +23,4 @@ var config = {
     }
 };
 
-module.exports = config;
+module.exports = appConfig;

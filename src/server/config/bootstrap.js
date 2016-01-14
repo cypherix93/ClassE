@@ -1,6 +1,6 @@
 var bodyParser = require("body-parser");
 
-var bootstrap = function(app, config)
+var bootstrapConfig = function(app, config)
 {
     console.log("=> Bootstrapping application...");
 
@@ -23,4 +23,4 @@ var bootstrap = function(app, config)
     require("./routes/routes")(app);
 };
 
-module.exports = bootstrap;
+module.exports = bootstrapConfig;

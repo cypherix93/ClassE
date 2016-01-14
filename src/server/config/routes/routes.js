@@ -1,6 +1,6 @@
 "use strict";
 
-var routes = function (app)
+var routesConfig = function (app)
 {
     console.log("=> Setting up Routes...");
 
@@ -27,4 +27,4 @@ var routes = function (app)
     });
 };
 
-module.exports = routes;
+module.exports = routesConfig;

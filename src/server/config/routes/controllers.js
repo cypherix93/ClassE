@@ -5,7 +5,7 @@ var recursiveReaddirSync = require("recursive-readdir-sync");
 
 var config = ClassE.config;
 
-var controllers = function (app)
+var controllersConfig = function (app)
 {
     var ctrlDir = path.join(config.rootPath, "/controllers");
     var files = recursiveReaddirSync(ctrlDir);
@@ -21,4 +21,4 @@ var controllers = function (app)
     }
 };
 
-module.exports = controllers;
+module.exports = controllersConfig;

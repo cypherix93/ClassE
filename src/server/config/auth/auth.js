@@ -1,7 +1,7 @@
 var cookieParser = require("cookie-parser");
 var session = require("express-session");
 
-var auth = function (app)
+var authConfig = function (app)
 {
     console.log("=> Setting up Auth...");
 
@@ -17,4 +17,4 @@ var auth = function (app)
     require("./passport")(app);
 };
 
-module.exports = auth;
+module.exports = authConfig;
