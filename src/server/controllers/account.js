@@ -7,7 +7,7 @@ var User = ClassE.models.User;
 var accountRouter = express.Router();
 
 // Force authorization
-accountRouter.use(AuthHelper.authorize(["Administrator"]));
+accountRouter.use(AuthHelper.authorize());
 
 // Access by ID endpoints
 accountRouter.route("/:userId")
