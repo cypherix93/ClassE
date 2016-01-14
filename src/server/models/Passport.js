@@ -1,6 +1,7 @@
 "use strict";
 
 var bcrypt = require("bcryptjs");
+var shortid = require("shortid");
 
 var thinky = ClassE.thinky;
 var type = thinky.type;
@@ -10,6 +11,9 @@ var passwordMinLength = 8;
 // Don't touch anything here because this is used for Authentication.
 var Passport = thinky.createModel("Passport",
     {
+        id: type.string()
+            .default(shortid.generate),
+
         // Required field: Protocol (e.g. 'oauth', 'oauth2', 'openid').
         protocol: type.string().alphanum().required(),
 
