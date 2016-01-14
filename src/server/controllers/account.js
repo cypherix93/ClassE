@@ -6,10 +6,10 @@ var User = ClassE.models.User;
 
 var accountRouter = express.Router();
 
-// Force authorization for every single endpoint on this controller
-accountRouter.all("/*", AuthHelper.authorize);
+// Force authorization
+accountRouter.use(AuthHelper.authorize(["Administrator"]));
 
-// Get by ID endpoint
+// Access by ID endpoints
 accountRouter.route("/:userId")
 
     .get(async function (req, res, next)

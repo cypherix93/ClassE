@@ -5,6 +5,9 @@ var bootstrapConfig = function(app, config)
     console.log("=> Bootstrapping application...");
 
     // Setup app global variables
+    global._ = require("lodash");
+
+    // Our global app namespace
     global.ClassE = {
         config: config
     };
