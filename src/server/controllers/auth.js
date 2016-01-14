@@ -1,7 +1,7 @@
 var express = require("express");
 var passport = require("passport");
 
-var AuthHelper = require(ClassE.config.rootPath + "/data/auth");
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/auth");
 
 var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;

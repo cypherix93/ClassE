@@ -1,5 +1,5 @@
 var express = require("express");
-var AuthHelper = require(ClassE.config.rootPath + "/data/auth");
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/auth");
 
 var User = ClassE.models.User;
 

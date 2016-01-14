@@ -1,6 +1,6 @@
 var localStrategy = require("passport-local").Strategy;
 
-var AuthHelper = require(ClassE.config.rootPath + "/data/auth");
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/auth");
 
 var passportLocalConfig = function (passport)
 {
