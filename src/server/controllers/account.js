@@ -6,7 +6,7 @@ var User = ClassE.models.User;
 
 var accountRouter = express.Router();
 
-// Force authorization
+// Force authorization across controller
 accountRouter.use(AuthHelper.authorize());
 
 // Access by ID endpoints
@@ -26,6 +26,27 @@ accountRouter.route("/:userId")
             return res.status(404).end();
 
         return res.json(user);
+    })
+
+    .patch(async function (req, res, next)
+    {
+        var userId = req.params.userId;
+
+        // If the user requested is not the current user, send 401
+        if (userId !== req.user.id)
+            return res.status(403).end();
+
+        // User checked out, let's get the data
+        var data = req.body;
+
+        var dbUser = await UsersHelper.getUser(userId, true);
+
+        // Update changes that the user wants to make
+        dbUser.preferences = data.preferences;
+
+        await dbUser.save();
+
+        return res.json({ success: true })
     })
 ;
 

@@ -71,7 +71,7 @@ class AuthHelper {
         return {
             data: {
                 id: dbUser.id,
-                identity: dbUser.email,
+                email: dbUser.email,
                 name: dbUser.fullName,
                 roles: dbUser.roles
             }
