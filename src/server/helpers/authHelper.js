@@ -69,38 +69,18 @@ class AuthHelper {
 
         // All checks passed
         return {
-            data: {
-                id: dbUser.id,
-                email: dbUser.email,
-                name: dbUser.fullName,
-                roles: dbUser.roles
-            }
+            data: this.getUserForSession(dbUser)
         };
     };
 
-    // Use this to make routes require authorization
-    static authorize(roles)
+    // Helper that sets a user to session
+    static getUserForSession(user)
     {
-        return function(req, res, next)
-        {
-            // User hasn't logged in, so send 401
-            if (!req.user)
-                return res.status(401).end();
-
-            // If roles weren't provided, it means we are only checking for authenticated users
-            // Then accept
-            if(!roles)
-                return next();
-
-            // Roles were requested, User has logged in, let's check roles
-            var userRoles = req.user.roles;
-
-            // None of user's roles match the roles requested, send 403
-            if (_.intersection(roles, userRoles).length === 0)
-                return res.status(403).end();
-
-            // Otherwise accept
-            return next();
+        return {
+            id: user.id,
+            email: user.email,
+            name: user.fullName,
+            roles: user.roles
         };
     };
 }

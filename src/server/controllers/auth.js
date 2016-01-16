@@ -52,9 +52,15 @@ var authRouter = function (router)
 
             await userPassport.save();
 
-            //TODO: auto login
+            // Auto login and set user to session
+            var sessionUser = AuthHelper.getUserForSession(newUser);
+            req.login(sessionUser, function (err)
+            {
+                if (err)
+                    return next(err);
 
-            return res.json({success: true});
+                return res.json({success: true, user: req.user});
+            });
         })
     ;
 
