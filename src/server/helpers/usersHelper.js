@@ -19,6 +19,19 @@ class UsersHelper {
             return null;
         }
     }
+
+    static async updateUser(userId, updatedUser)
+    {
+        var dbUser = await UsersHelper.getUser(userId, true);
+
+        // Update changes that the user wants to make
+        dbUser.preferences = updatedUser.preferences;
+
+        await dbUser.save();
+
+        // Everything went smoothly
+        return {};
+    }
 }
 
 module.exports = UsersHelper;

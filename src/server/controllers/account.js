@@ -36,15 +36,15 @@ var accountRouter = function (router)
             if (userId !== req.user.id)
                 return res.status(403).end();
 
-            // User checked out, let's get the data
-            var data = req.body;
-
-            var dbUser = await UsersHelper.getUser(userId, true);
-
-            // Update changes that the user wants to make
-            dbUser.preferences = data.preferences;
-
-            await dbUser.save();
+            // User checked out, let's update the user's data
+            var updateUser = await UsersHelper.updateUser(userId, req.body);
+            if(updateUser.error)
+            {
+                return res.json({
+                    success: false,
+                    error: updateUser.error
+                });
+            }
 
             return res.json({success: true})
         })
