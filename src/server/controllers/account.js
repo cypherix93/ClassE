@@ -1,11 +1,11 @@
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
+var RoutesHelper = require(ClassE.config.rootPath + "/helpers/routesHelper");
 var UsersHelper = require(ClassE.config.rootPath + "/helpers/usersHelper");
 
 // Endpoint "/account"
 var accountRouter = function (router)
 {
     // Force authorization across controller
-    router.use(AuthHelper.authorize());
+    router.use(RoutesHelper.authorize());
 
     // Access by ID endpoints
     router.route("/:userId")
