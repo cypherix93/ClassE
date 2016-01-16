@@ -1,53 +1,54 @@
-var express = require("express");
 var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
 var UsersHelper = require(ClassE.config.rootPath + "/helpers/usersHelper");
 
-var User = ClassE.models.User;
+// Endpoint "/account"
+var accountRouter = function (router)
+{
+    // Force authorization across controller
+    router.use(AuthHelper.authorize());
 
-var accountRouter = express.Router();
+    // Access by ID endpoints
+    router.route("/:userId")
 
-// Force authorization across controller
-accountRouter.use(AuthHelper.authorize());
+        // Get a user by ID
+        .get(async function (req, res, next)
+        {
+            var userId = req.params.userId;
 
-// Access by ID endpoints
-accountRouter.route("/:userId")
+            // Check if the user requested is the current user
+            var isCurrentUser = userId === req.user.id;
 
-    .get(async function (req, res, next)
-    {
-        var userId = req.params.userId;
+            // Get the requested user from the db
+            var user = await UsersHelper.getUser(userId, isCurrentUser);
 
-        // Check if the user requested is the current user
-        var isCurrentUser = userId === req.user.id;
+            if (!user)
+                return res.status(404).end();
 
-        // Get the requested user from the db
-        var user = await UsersHelper.getUser(userId, isCurrentUser);
+            return res.json(user);
+        })
 
-        if(!user)
-            return res.status(404).end();
+        // Update a user's info
+        .patch(async function (req, res, next)
+        {
+            var userId = req.params.userId;
 
-        return res.json(user);
-    })
+            // If the user requested is not the current user, send 401
+            if (userId !== req.user.id)
+                return res.status(403).end();
 
-    .patch(async function (req, res, next)
-    {
-        var userId = req.params.userId;
+            // User checked out, let's get the data
+            var data = req.body;
 
-        // If the user requested is not the current user, send 401
-        if (userId !== req.user.id)
-            return res.status(403).end();
+            var dbUser = await UsersHelper.getUser(userId, true);
 
-        // User checked out, let's get the data
-        var data = req.body;
+            // Update changes that the user wants to make
+            dbUser.preferences = data.preferences;
 
-        var dbUser = await UsersHelper.getUser(userId, true);
+            await dbUser.save();
 
-        // Update changes that the user wants to make
-        dbUser.preferences = data.preferences;
-
-        await dbUser.save();
-
-        return res.json({ success: true })
-    })
-;
+            return res.json({success: true})
+        })
+    ;
+};
 
 module.exports = accountRouter;
