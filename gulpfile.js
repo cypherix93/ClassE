@@ -288,7 +288,7 @@ gulp.task("watch",
         gulp.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
             ["bundle-ng-files"]);
 
-        gulp.watch(paths.sass + "sass/main.scss",
+        gulp.watch(paths.sass + "**/*.scss",
             ["compile-sass"]);
     });
 
