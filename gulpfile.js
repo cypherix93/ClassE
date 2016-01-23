@@ -33,9 +33,10 @@ gulp.task("default", function (callback)
     );
 });
 
-//
-// Build Tasks
-// ------------------------------------------------------------------------------
+/*
+ Build Tasks
+ ------------------------------------------------------------------------------*/
+
 // Deploy App
 gulp.task("deploy", ["build"],
     function ()
@@ -55,7 +56,7 @@ gulp.task("deploy", ["build"],
 gulp.task("build", ["clean", "bundle-ng-files", "compile-sass"],
     function ()
     {
-        var server =  gulp.src(paths.project + "server/**")
+        var server = gulp.src(paths.project + "server/**")
             .pipe(plugins.babel({
                 presets: ["stage-0"]
             }))
@@ -84,9 +85,10 @@ gulp.task("clean",
             {force: true}, callback);
     });
 
-//
-// Bower and NPM Tasks
-// ------------------------------------------------------------------------------
+/*
+ Bower and NPM Tasks
+ ------------------------------------------------------------------------------*/
+
 // Update Assembly Info
 gulp.task("update-package-info",
     function ()
@@ -114,7 +116,7 @@ gulp.task("update-package-info",
         
         // Update meta.json Info
         var metaJson = gulp.src(paths.public + "angular/meta.json")
-            .pipe(plugins.debug({ title: "meta.json:" }))
+            .pipe(plugins.debug({title: "meta.json:"}))
             .pipe(plugins.jsonEditor({
                 name: meta.name,
                 version: meta.version,
@@ -225,9 +227,10 @@ gulp.task("bower-install", ["bower-restore"],
         return merge(mainBower, bootstrapSass);
     });
 
-//
-// Misc Tasks
-// ------------------------------------------------------------------------------
+/*
+ Misc Tasks
+ ------------------------------------------------------------------------------*/
+
 // Bundle AngularJS files
 gulp.task("bundle-ng-files",
     function ()
@@ -278,9 +281,28 @@ gulp.task("compile-sass",
             .pipe(gulp.dest(cssDir));
     });
 
-//
-// Watch Tasks
-// ------------------------------------------------------------------------------
+/*
+ Development Specific Tasks
+ ------------------------------------------------------------------------------*/
+
+// Fire up the REST API server
+gulp.task("serve", ["watch"],
+    function ()
+    {
+        plugins.nodemon({
+            script: "./src/server/server.js",
+            exec: ".\\node_modules\\.bin\\babel-node",
+            watch: "./src/server/"
+        });
+
+        gulp.src("./src/public")
+            .pipe(plugins.webserver({
+                port: 3970,
+                livereload: true,
+                open: true
+            }));
+    });
+
 // Watch client files for changes
 gulp.task("watch",
     function ()
