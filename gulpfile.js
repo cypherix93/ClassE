@@ -247,8 +247,10 @@ gulp.task("bundle-ng-files",
 
         var scripts = gulp.src(angularScripts)
             .pipe(plugins.debug({title: "angular app:"}))
+            .pipe(plugins.plumber())
             .pipe(plugins.concat("angular-bundle.js"))
             .pipe(plugins.ngAnnotate())
+            .pipe(plugins.plumber.close())
             .pipe(gulp.dest(paths.public + "angular/"))
             .pipe(plugins.uglify())
             .pipe(plugins.rename({
@@ -272,8 +274,10 @@ gulp.task("compile-sass",
         return gulp.src(paths.sass + "main.scss")
             .pipe(plugins.debug({title: "compiling sass:"}))
             .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.plumber())
             .pipe(plugins.sassGlob())
             .pipe(plugins.sass())
+            .pipe(plugins.plumber.close())
             .pipe(gulp.dest(cssDir))
 
             .pipe(plugins.cssnano())
