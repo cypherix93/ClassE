@@ -57,9 +57,7 @@ gulp.task("build", ["clean", "bundle-ng-files", "compile-sass"],
     function ()
     {
         var server = gulp.src(paths.project + "server/**")
-            .pipe(plugins.babel({
-                presets: ["stage-0"]
-            }))
+            .pipe(plugins.babel())
             .pipe(plugins.debug({title: "[server] copied:"}))
             .pipe(gulp.dest(paths.build + "server/"));
 
@@ -250,8 +248,8 @@ gulp.task("bundle-ng-files",
             .pipe(plugins.plumber())
             .pipe(plugins.concat("angular-bundle.js"))
             .pipe(plugins.ngAnnotate())
-            .pipe(plugins.plumber.close())
             .pipe(gulp.dest(paths.public + "angular/"))
+
             .pipe(plugins.uglify())
             .pipe(plugins.rename({
                 suffix: ".min"
@@ -277,7 +275,6 @@ gulp.task("compile-sass",
             .pipe(plugins.plumber())
             .pipe(plugins.sassGlob())
             .pipe(plugins.sass())
-            .pipe(plugins.plumber.close())
             .pipe(gulp.dest(cssDir))
 
             .pipe(plugins.cssnano())
@@ -303,8 +300,7 @@ gulp.task("serve", ["watch"],
         gulp.src("./src/public")
             .pipe(plugins.webserver({
                 port: 3970,
-                livereload: true,
-                open: true
+                livereload: true
             }));
     });
 

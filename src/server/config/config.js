@@ -6,8 +6,11 @@ var appConfig = {
     development: {
         rootPath: rootPath,
         port: process.env.PORT || 3960,
+        cors: {
+            origin: "http://localhost:3970"
+        },
         thinky: {
-            host: "192.168.1.108",
+            host: "192.168.1.125",
             port: 28015,
             db: "ClassE"
         }
@@ -15,8 +18,11 @@ var appConfig = {
     production: {
         rootPath: rootPath,
         port: process.env.PORT || 80,
+        cors: {
+            origin: "http://localhost:3970"
+        },
         thinky: {
-            host: "192.168.1.108",
+            host: "192.168.1.125",
             port: 28015,
             db: "ClassE"
         }

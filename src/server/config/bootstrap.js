@@ -1,4 +1,5 @@
 var bodyParser = require("body-parser");
+var cors = require("cors");
 
 var bootstrapConfig = function(app, config)
 {
@@ -13,6 +14,7 @@ var bootstrapConfig = function(app, config)
     };
 
     // Configure express middlewares
+    app.use(cors(config.cors));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
