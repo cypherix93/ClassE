@@ -86,7 +86,7 @@ var authRouter = function (router)
                 {
                     return res.json({
                         success: false,
-                        error: info.message
+                        message: info.message
                     });
                 }
 
