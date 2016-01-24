@@ -245,6 +245,7 @@ gulp.task("bundle-ng-files",
             .pipe(plugins.debug({title: "angular app:"}))
             .pipe(plugins.plumber())
             .pipe(plugins.concat("angular-bundle.js"))
+            .pipe(plugins.sourcemaps.init())
             .pipe(plugins.ngAnnotate())
             .pipe(gulp.dest(paths.public + "angular/"))
 
@@ -252,6 +253,7 @@ gulp.task("bundle-ng-files",
             .pipe(plugins.rename({
                 suffix: ".min"
             }))
+            .pipe(plugins.sourcemaps.write("./"))
             .pipe(gulp.dest(paths.public + "angular/"));
 
         var templates = gulp.src(paths.angular + "templates/**/*.html")
