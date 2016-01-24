@@ -1,5 +1,5 @@
 // Configure Angular App Initialization
-AngularApp.run(function ($rootScope, ConfigSvc, AuthSvc, IdentitySvc)
+AngularApp.run(function ($rootScope, ConfigSvc, IdentitySvc, ModalSvc)
 {
     // App Metadata setup
     ConfigSvc.getAppMeta()
@@ -17,6 +17,9 @@ AngularApp.run(function ($rootScope, ConfigSvc, AuthSvc, IdentitySvc)
     $rootScope.PageName = "Home";
 
     // Global services
-    $rootScope.AuthSvc = AuthSvc;
     $rootScope.IdentitySvc = IdentitySvc;
+    $rootScope.ModalSvc = ModalSvc;
+
+    // Init Global Modals
+    ModalSvc.initGlobalModals();
 });
