@@ -16,6 +16,8 @@
 
         <!-- Bootstrap Libraries -->
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/bootstrap/extensions/bootstrap-modal/js/bootstrap-modal.js"></script>
+        <script src="lib/bootstrap/extensions/bootstrap-modal/js/bootstrap-modalmanager.js"></script>
 
         <!-- Angular Libraries -->
         <script src="lib/angular/js/angular.min.js"></script>
@@ -24,9 +26,10 @@
         <script src="lib/angular/js/angular-animate.min.js"></script>
         <script src="lib/angular/js/angular-messages.min.js"></script>
         <script src="lib/angular/js/ui-bootstrap-tpls.min.js"></script>
+        <script src="lib/angular/js/angular-toastr.tpls.min.js"></script>
 
         <!-- Angular Runtime Libraries -->
-        <script src="angular/angular-bundle.min.js"></script>
+        <script src="angular/angular-bundle.js"></script>
     </head>
     <body ng-cloak>
         <div ng-include="'views/_shared/navigation.html'"></div>
@@ -34,8 +37,6 @@
         <div id="content-container" class="container-fluid">
             <div ng-view></div>
         </div>
-
-        {{AppMeta}}
 
         <div ng-include="'views/_shared/footer.html'"></div>
     </body>

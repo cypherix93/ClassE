@@ -31,6 +31,32 @@
                     </a>
                 </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="IdentitySvc.isAuthenticated()">
+                    <a ng-click="ModalSvc.modals.Login.open()">
+                        <span class="fa fa-sign-in"></span>
+                        Login
+                    </a>
+                </li>
+                <li class="dropdown" ng-show="IdentitySvc.isAuthenticated()">
+                    <a class="dropdown-toggle">
+                        <span class="fa fa-user"></span>
+                        {{IdentitySvc.currentUser.name}} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a>Profile</a>
+                        </li>
+                        <li>
+                            <a>Preferences</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a>Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
