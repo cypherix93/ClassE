@@ -5,16 +5,74 @@ var AngularApp = angular.module("AngularApp",
         "ngRoute",
         "ngAnimate",
         "ngMessages",
-        "ui.bootstrap"
+        "ui.bootstrap",
+        "toastr"
     ]);
-AngularApp.service("ConfigSvc", ["$http", function($http)
+// Configure Angular App Preferences
+AngularApp.config(["$httpProvider", function ($httpProvider)
 {
-    var exports = this;
-
-    exports.GetAppMeta = function()
+    $httpProvider.interceptors.push(["$location", function ($location)
     {
-        return $http.get("angular/meta.json");
-    };
+        return {
+            "responseError": function (error)
+            {
+                if (error.status === 404)
+                    $location.path("/error/404");
+            }
+        };
+    }]);
+}]);
+// Configure Angular App Routes
+AngularApp.config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider)
+{
+    $locationProvider.html5Mode(false);
+
+    $routeProvider
+    // route for the home page
+        .when("/",
+            {
+                templateUrl: "views/home/index.html"
+            })
+        // route patterns for the other pages
+        .when("/:base/:sub",
+            {
+                templateUrl: function (urlattr)
+                {
+                    return "views/" + urlattr.base + "/" + urlattr.sub + ".html";
+                }
+            })
+        .when("/:base",
+            {
+                templateUrl: function (urlattr)
+                {
+                    return "views/" + urlattr.base + "/index.html";
+                }
+            });
+}]);
+// Configure Angular App Initialization
+AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, ModalSvc)
+{
+    // App Metadata setup
+    ConfigSvc.getAppMeta()
+        .then(function (response)
+        {
+            $rootScope.AppMeta = {
+                Name: response.data.name,
+                Version: response.data.version,
+                Description: response.data.description,
+                Copyright: response.data.copyright,
+                Authors: response.data.authors
+            };
+        });
+
+    $rootScope.PageName = "Home";
+
+    // Global services
+    $rootScope.IdentitySvc = IdentitySvc;
+    $rootScope.ModalSvc = ModalSvc;
+
+    // Init Global Modals
+    ModalSvc.initGlobalModals();
 }]);
 AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http, IdentitySvc)
 {
@@ -50,6 +108,94 @@ AngularApp.service("IdentitySvc", function ()
         return !!exports.currentUser;
     };
 });
+AngularApp.service("ConfigSvc", ["$http", function($http)
+{
+    var exports = this;
+
+    exports.getAppMeta = function()
+    {
+        return $http.get("angular/meta.json");
+    };
+}]);
+AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
+{
+    var exports = this;
+
+    var ModalInstance = function (element, options)
+    {
+        var _instance = this;
+
+        // Fields
+        _instance.element = $(element);
+        _instance.state = "Default";
+        _instance.open = function ()
+        {
+            _instance.element.modal("show");
+        };
+        _instance.close = function ()
+        {
+            _instance.element.modal("hide");
+        };
+
+        var dialog = _instance.element;
+
+        // Init the modal
+        dialog.modal({
+            show: false
+        });
+
+        // Width fix
+        dialog.width(options.width);
+
+        // Event Handlers
+        dialog.on("show", function ()
+        {
+            // Margin fix
+            dialog.css("margin-left", -(dialog.width() / 2));
+
+            if (options.onOpen)
+                options.onOpen(dialog);
+        });
+        dialog.on("hidden", function ()
+        {
+            if (options.onClose)
+                options.onClose(dialog);
+        });
+
+        // Finally compile the template with angular
+        _instance.element = $compile(dialog)($rootScope);
+    };
+
+    // Create modal from Template URL
+    exports.createModal = function (templateUrl, options)
+    {
+        var def = $q.defer();
+
+        // Get the template markup from the URL provided
+        $http.get(templateUrl)
+            .success(function (response)
+            {
+                var modalInstance = new ModalInstance(response, options || {width: 600});
+                def.resolve(modalInstance);
+            });
+
+        return def.promise;
+    };
+
+    // Store for all the global modals
+    exports.modals = {};
+
+    // Global modals init function
+    exports.initGlobalModals = function ()
+    {
+        // Login Modal
+        exports.createModal("views/_shared/auth/login.html")
+            .then(function(modalInstance)
+            {
+                exports.modals.Login = modalInstance;
+            });
+    };
+}]);
 AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "toastr", function ($scope, AuthSvc, IdentitySvc, toastr)
 {
     $scope.doLogin = function ()
