@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",
+    "babel-polyfill": "^6.3.14",
     "bower": "^1.7.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
