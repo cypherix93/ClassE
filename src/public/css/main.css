@@ -5974,7 +5974,7 @@ body.modal-open,
   opacity: 0.8; }
 
 .modal .modal-body {
-  padding: 20px 20px 60px; }
+  padding: 20px; }
 
 .modal .modal-body .btn-footer {
   position: absolute;
