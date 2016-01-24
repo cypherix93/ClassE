@@ -5,5 +5,6 @@ var AngularApp = angular.module("AngularApp",
         "ngRoute",
         "ngAnimate",
         "ngMessages",
-        "ui.bootstrap"
+        "ui.bootstrap",
+        "toastr"
     ]);

@@ -2,7 +2,7 @@
 AngularApp.run(function ($rootScope, ConfigSvc, AuthSvc, IdentitySvc)
 {
     // App Metadata setup
-    ConfigSvc.GetAppMeta()
+    ConfigSvc.getAppMeta()
         .then(function (response)
         {
             $rootScope.AppMeta = {

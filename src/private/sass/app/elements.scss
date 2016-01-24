@@ -98,7 +98,8 @@ textarea
 {
     background: transparentize($gray-base, 0.5);
 }
-/* Custom Classes
+/*
+    Custom Classes
 --------------------------------------------------- */
 .border-top-radius-none
 {
@@ -110,45 +111,4 @@ textarea
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-.btn-google
-{
-    $color: #0266C8;
-    $darker: darken($color, 8%);
-    $darkerer: darken($darker, 8%);
 
-    background: $color;
-    border-color: $darker !important;
-
-    &:hover,
-    &:active,
-    &:focus
-    {
-        background: $darker;
-    }
-    &:active:hover,
-    &:active:focus
-    {
-        background: $darkerer;
-    }
-}
-.btn-facebook
-{
-    $color: #3B5998;
-    $darker: darken($color, 8%);
-    $darkerer: darken($darker, 8%);
-
-    background: $color;
-    border-color: $darker !important;
-
-    &:hover,
-    &:active,
-    &:focus
-    {
-        background: $darker;
-    }
-    &:active:hover,
-    &:active:focus
-    {
-        background: $darkerer;
-    }
-}
