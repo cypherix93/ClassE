@@ -269,8 +269,8 @@ gulp.task("compile-sass",
 
         return gulp.src(paths.sass + "main.scss")
             .pipe(plugins.debug({title: "compiling sass:"}))
-            .pipe(plugins.sourcemaps.init())
             .pipe(plugins.plumber())
+            .pipe(plugins.sourcemaps.init())
             .pipe(plugins.sassGlob())
             .pipe(plugins.sass())
             .pipe(gulp.dest(cssDir))
@@ -306,10 +306,16 @@ gulp.task("serve", ["watch"],
 gulp.task("watch",
     function ()
     {
-        gulp.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
-            ["bundle-ng-files"]);
+        plugins.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
+            plugins.batch(function (events, done)
+            {
+                gulp.start("bundle-ng-files", done);
+            }));
 
-        gulp.watch(paths.sass + "**/*.scss",
-            ["compile-sass"]);
+        plugins.watch(paths.sass + "**/*.scss",
+            plugins.batch(function (events, done)
+            {
+                gulp.start("compile-sass", done);
+            }));
     });
 
