@@ -1,6 +1,7 @@
 // Configure Angular App Initialization
-AngularApp.run(function ($rootScope, ConfigSvc)
+AngularApp.run(function ($rootScope, ConfigSvc, AuthSvc, IdentitySvc)
 {
+    // App Metadata setup
     ConfigSvc.GetAppMeta()
         .then(function (response)
         {
@@ -14,4 +15,8 @@ AngularApp.run(function ($rootScope, ConfigSvc)
         });
 
     $rootScope.PageName = "Home";
+
+    // Global services
+    $rootScope.AuthSvc = AuthSvc;
+    $rootScope.IdentitySvc = IdentitySvc;
 });

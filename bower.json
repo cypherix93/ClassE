@@ -1,33 +1,34 @@
 {
-    "name": "ClassE",
-    "version": "0.0.1",
-    "dependencies": {
-        "angular": "1.x.x",
-        "angular-sanitize": "1.x.x",
-        "angular-route": "1.x.x",
-        "angular-animate": "1.x.x",
-        "angular-messages": "1.x.x",
-        "angular-bootstrap": "0.14.x",
-        "bootstrap-sass-official": "3.3.x",
-        "fontawesome": "4.x.x",
-        "jquery": "1.11.2"
+  "name": "ClassE",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "1.x.x",
+    "angular-sanitize": "1.x.x",
+    "angular-route": "1.x.x",
+    "angular-animate": "1.x.x",
+    "angular-messages": "1.x.x",
+    "angular-bootstrap": "1.x.x",
+    "bootstrap-sass-official": "3.3.x",
+    "fontawesome": "4.x.x",
+    "jquery": "1.11.2",
+    "angular-toastr": "~1.6.0"
+  },
+  "overrides": {
+    "bootstrap-sass-official": {
+      "main": [
+        "assets/javascripts/bootstrap.js",
+        "assets/fonts/**/*"
+      ]
     },
-    "overrides": {
-        "bootstrap-sass-official": {
-            "main": [
-                "assets/javascripts/bootstrap.js",
-                "assets/fonts/**/*"
-            ]
-        },
-        "fontawesome": {
-            "main": [
-                "css/*",
-                "fonts/*"
-            ]
-        }
-    },
-    "devDependencies": {},
-    "resolutions": {
-        "angular": "1.4.7"
+    "fontawesome": {
+      "main": [
+        "css/*",
+        "fonts/*"
+      ]
     }
+  },
+  "devDependencies": {},
+  "resolutions": {
+    "angular": "1.4.7"
+  }
 }

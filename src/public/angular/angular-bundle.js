@@ -7,66 +7,6 @@ var AngularApp = angular.module("AngularApp",
         "ngMessages",
         "ui.bootstrap"
     ]);
-// Configure Angular App Preferences
-AngularApp
-    .config(["$httpProvider", function ($httpProvider)
-    {
-        $httpProvider.interceptors.push(["$location", function ($location)
-        {
-            return {
-                "responseError": function (error)
-                {
-                    if (error.status === 404)
-                        $location.path("/error/404");
-                }
-            };
-        }]);
-    }])
-    .config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider)
-    {
-        $locationProvider.html5Mode(false);
-
-        $routeProvider
-        // route for the home page
-            .when("/",
-                {
-                    templateUrl: "views/home/index.html"
-                })
-            // route patterns for the other pages
-            .when("/:base/:sub",
-                {
-                    templateUrl: function (urlattr)
-                    {
-                        return "views/" + urlattr.base + "/" + urlattr.sub + ".html";
-                    }
-                })
-            .when("/:base",
-                {
-                    templateUrl: function (urlattr)
-                    {
-                        return "views/" + urlattr.base + "/index.html";
-                    }
-                });
-    }]);
-// Configure Angular App Initialization
-AngularApp
-    .run(["$rootScope", "ConfigSvc", function ($rootScope, ConfigSvc)
-    {
-        ConfigSvc.GetAppMeta()
-            .then(function (response)
-            {
-                $rootScope.AppMeta = {
-                    Name: response.data.name,
-                    Version: response.data.version,
-                    Description: response.data.description,
-                    Copyright: response.data.copyright,
-                    Authors: response.data.authors
-                };
-            });
-
-        $rootScope.PageName = "Home";
-    }]);
-
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
     var exports = this;
@@ -74,5 +14,56 @@ AngularApp.service("ConfigSvc", ["$http", function($http)
     exports.GetAppMeta = function()
     {
         return $http.get("angular/meta.json");
+    };
+}]);
+AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http, IdentitySvc)
+{
+    var exports = this;
+
+    exports.loginUser = function (email, password)
+    {
+        var def = $q.defer();
+
+        $http.post("http://localhost:3960/auth/login", {email: email, password: password})
+            .success(function (response)
+            {
+                if (!response.success)
+                    def.resolve({success: true, message: response.message});
+
+                IdentitySvc.currentUser = response.data;
+                def.resolve({success: true});
+            });
+
+        return def.promise;
+    };
+}]);
+AngularApp.service("IdentitySvc", function ()
+{
+    var exports = this;
+
+    // Current User Identity
+    exports.currentUser = undefined;
+
+    // Function to check if the current user is authenticated
+    exports.isAuthenticated = function ()
+    {
+        return !!exports.currentUser;
+    };
+});
+AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "toastr", function ($scope, AuthSvc, IdentitySvc, toastr)
+{
+    $scope.doLogin = function ()
+    {
+        if (!$scope.email || !$scope.password)
+            return;
+
+        AuthSvc.loginUser($scope.email, $scope.password)
+            .then(function (response)
+            {
+                if (!response.success)
+                    toastr.error(response.message);
+
+                toastr.success("Welcome back " + IdentitySvc.email);
+            });
     };
 }]);
