@@ -24,7 +24,10 @@ var accountRouter = function (router)
             if (!user)
                 return res.status(404).end();
 
-            return res.json(user);
+            return res.json({
+                success: true,
+                data: user
+            });
         })
 
         // Update a user's info

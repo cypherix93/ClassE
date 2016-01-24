@@ -59,7 +59,7 @@ var authRouter = function (router)
                 if (err)
                     return next(err);
 
-                return res.json({success: true, user: req.user});
+                return res.json({success: true, data: req.user});
             });
         })
     ;
@@ -69,7 +69,10 @@ var authRouter = function (router)
         .post(function (req, res, next)
         {
             if (req.user)
-                return res.json({success: true, user: req.user});
+                return res.json({
+                    success: true,
+                    data: req.user
+                });
 
             // Do authentication against passport
             passport.authenticate("local", function (err, user, info)
@@ -93,7 +96,10 @@ var authRouter = function (router)
                     if (err)
                         return next(err);
 
-                    return res.json({success: true, user: req.user});
+                    return res.json({
+                        success: true,
+                        data: req.user
+                    });
                 });
             })(req, res, next);
         })
