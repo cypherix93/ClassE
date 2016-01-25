@@ -33,13 +33,13 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li ng-hide="IdentitySvc.isAuthenticated()">
-                    <a ng-click="ModalSvc.modals.Login.open()">
+                    <a ng-click="ModalSvc.modals.login.open()">
                         <span class="fa fa-sign-in"></span>
                         Login
                     </a>
                 </li>
                 <li class="dropdown" ng-show="IdentitySvc.isAuthenticated()">
-                    <a class="dropdown-toggle">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
                         <span class="fa fa-user"></span>
                         {{IdentitySvc.currentUser.name}} <span class="caret"></span>
                     </a>

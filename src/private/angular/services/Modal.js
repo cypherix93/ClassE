@@ -73,7 +73,7 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
         exports.createModal("views/_shared/auth/login.html")
             .then(function(modalInstance)
             {
-                exports.modals.Login = modalInstance;
+                exports.modals.login = modalInstance;
             });
     };
 });

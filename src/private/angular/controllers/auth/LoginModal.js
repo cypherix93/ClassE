@@ -1,4 +1,4 @@
-AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, toastr)
+AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     $scope.doLogin = function ()
     {
@@ -9,9 +9,20 @@ AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, 
             .then(function (response)
             {
                 if (!response.success)
+                {
                     toastr.error(response.message);
+                    return;
+                }
 
-                toastr.success("Welcome back " + IdentitySvc.email);
+                // Close the login modal
+                ModalSvc.modals.login.close();
+
+                // Reset the form
+                $scope.email = undefined;
+                $scope.password = undefined;
+
+                // Display toast message
+                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
             });
     };
 });

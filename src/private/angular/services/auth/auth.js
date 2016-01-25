@@ -9,11 +9,10 @@ AngularApp.service("AuthSvc", function ($q, $http, IdentitySvc)
         $http.post("http://localhost:3960/auth/login", {email: email, password: password})
             .success(function (response)
             {
-                if (!response.success)
-                    def.resolve({success: true, message: response.message});
+                if (response.success)
+                    IdentitySvc.currentUser = response.data;
 
-                IdentitySvc.currentUser = response.data;
-                def.resolve({success: true});
+                def.resolve(response);
             });
 
         return def.promise;

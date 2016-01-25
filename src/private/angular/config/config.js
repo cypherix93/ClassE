@@ -12,3 +12,11 @@ AngularApp.config(function ($httpProvider)
         };
     });
 });
+
+AngularApp.config(function (toastrConfig)
+{
+    toastrConfig.autoDismiss = true;
+    toastrConfig.maxOpened = 0;
+    toastrConfig.newestOnTop = true;
+    toastrConfig.positionClass = "toast-bottom-center";
+});
