@@ -9,7 +9,7 @@ class RoutesHelper
         {
             // User hasn't logged in, so send 401
             if (!req.user)
-                return res.status(401).end();
+                return res.sendStatus(401);
 
             // If roles weren't provided, it means we are only checking for authenticated users
             // Then accept
@@ -21,7 +21,7 @@ class RoutesHelper
 
             // None of user's roles match the roles requested, send 403
             if (_.intersection(roles, userRoles).length === 0)
-                return res.status(403).end();
+                return res.sendStatus(403);
 
             // Otherwise accept
             return next();

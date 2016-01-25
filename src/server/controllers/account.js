@@ -22,7 +22,7 @@ var accountRouter = function (router)
             var user = await UsersHelper.getUser(userId, isCurrentUser);
 
             if (!user)
-                return res.status(404).end();
+                return res.sendStatus(404);
 
             return res.json({
                 success: true,
@@ -37,7 +37,7 @@ var accountRouter = function (router)
 
             // If the user requested is not the current user, send 401
             if (userId !== req.user.id)
-                return res.status(403).end();
+                return res.sendStatus(403);
 
             // User checked out, let's update the user's data
             var updateUser = await UsersHelper.updateUser(userId, req.body);
