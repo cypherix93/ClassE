@@ -22,6 +22,13 @@ AngularApp.config(["$httpProvider", function ($httpProvider)
         };
     }]);
 }]);
+
+AngularApp.config(["toastrConfig", function (toastrConfig)
+{
+    toastrConfig.autoDismiss = true;
+    toastrConfig.positionClass = "toast-bottom-center";
+    toastrConfig.preventOpenDuplicates = true;
+}]);
 // Configure Angular App Routes
 AngularApp.config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider)
 {
@@ -85,11 +92,10 @@ AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http
         $http.post("http://localhost:3960/auth/login", {email: email, password: password})
             .success(function (response)
             {
-                if (!response.success)
-                    def.resolve({success: true, message: response.message});
+                if (response.success)
+                    IdentitySvc.currentUser = response.data;
 
-                IdentitySvc.currentUser = response.data;
-                def.resolve({success: true});
+                def.resolve(response);
             });
 
         return def.promise;
@@ -192,24 +198,38 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
         exports.createModal("views/_shared/auth/login.html")
             .then(function(modalInstance)
             {
-                exports.modals.Login = modalInstance;
+                exports.modals.login = modalInstance;
             });
     };
 }]);
-AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "toastr", function ($scope, AuthSvc, IdentitySvc, toastr)
+AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     $scope.doLogin = function ()
     {
         if (!$scope.email || !$scope.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
             return;
+        }
 
         AuthSvc.loginUser($scope.email, $scope.password)
             .then(function (response)
             {
                 if (!response.success)
+                {
                     toastr.error(response.message);
+                    return;
+                }
 
-                toastr.success("Welcome back " + IdentitySvc.email);
+                // Close the login modal
+                ModalSvc.modals.login.close();
+
+                // Reset the form
+                $scope.email = undefined;
+                $scope.password = undefined;
+
+                // Display toast message
+                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
             });
     };
 }]);

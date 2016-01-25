@@ -3,7 +3,10 @@ AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, 
     $scope.doLogin = function ()
     {
         if (!$scope.email || !$scope.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
             return;
+        }
 
         AuthSvc.loginUser($scope.email, $scope.password)
             .then(function (response)
