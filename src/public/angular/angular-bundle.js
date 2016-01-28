@@ -132,8 +132,37 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
         var _instance = this;
 
         // Fields
-        _instance.element = $(element);
-        _instance.state = "Default";
+        _instance.scope = $rootScope.$new(true);
+        _instance.element = element;
+        _instance.state = "default";
+
+        var compileFunc = $compile(_instance.element);
+        _instance.element = compileFunc(_instance.scope);
+
+        // Init the modal
+        _instance.element.modal({
+            show: false
+        });
+
+        // Width fix
+        _instance.element.width(options.width);
+
+        // Event Handlers
+        _instance.element.on("show", function ()
+        {
+            // Margin fix
+            _instance.element.css("margin-left", -(_instance.element.width() / 2));
+
+            if (options.onOpen)
+                options.onOpen(_instance.element);
+        });
+        _instance.element.on("hidden", function ()
+        {
+            if (options.onClose)
+                options.onClose(_instance.element);
+        });
+
+        // Open and Close functions
         _instance.open = function ()
         {
             _instance.element.modal("show");
@@ -142,34 +171,6 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
         {
             _instance.element.modal("hide");
         };
-
-        var dialog = _instance.element;
-
-        // Init the modal
-        dialog.modal({
-            show: false
-        });
-
-        // Width fix
-        dialog.width(options.width);
-
-        // Event Handlers
-        dialog.on("show", function ()
-        {
-            // Margin fix
-            dialog.css("margin-left", -(dialog.width() / 2));
-
-            if (options.onOpen)
-                options.onOpen(dialog);
-        });
-        dialog.on("hidden", function ()
-        {
-            if (options.onClose)
-                options.onClose(dialog);
-        });
-
-        // Finally compile the template with angular
-        _instance.element = $compile(dialog)($rootScope);
     };
 
     // Create modal from Template URL
@@ -181,7 +182,11 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
         $http.get(templateUrl)
             .success(function (response)
             {
-                var modalInstance = new ModalInstance(response, options || {width: 600});
+                var element = angular.element(response);
+                angular.element("body").append(element);
+
+                var modalInstance = new ModalInstance(element, options || {width: 600});
+                console.log(modalInstance);
                 def.resolve(modalInstance);
             });
 
