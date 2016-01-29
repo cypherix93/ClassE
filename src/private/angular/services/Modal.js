@@ -7,12 +7,8 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
         var _instance = this;
 
         // Fields
-        _instance.scope = $rootScope.$new(true);
         _instance.element = element;
         _instance.state = "default";
-
-        var compileFunc = $compile(_instance.element);
-        _instance.element = compileFunc(_instance.scope);
 
         // Init the modal
         _instance.element.modal({
@@ -58,10 +54,14 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
             .success(function (response)
             {
                 var element = angular.element(response);
-                angular.element("body").append(element);
+
+                var scope = $rootScope.$new(true);
+                $compile(element)(scope);
+
+                angular.element("#content-container").append(element);
 
                 var modalInstance = new ModalInstance(element, options || {width: 600});
-                console.log(modalInstance);
+                
                 def.resolve(modalInstance);
             });
 
