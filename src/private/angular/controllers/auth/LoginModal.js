@@ -1,6 +1,6 @@
 AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
-    $scope.doLogin = function ()
+    $scope.login = function ()
     {
         if (!$scope.email || !$scope.password)
         {

@@ -57,7 +57,7 @@ AngularApp.config(["$routeProvider", "$locationProvider", function ($routeProvid
             });
 }]);
 // Configure Angular App Initialization
-AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, ModalSvc)
+AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
 {
     // App Metadata setup
     ConfigSvc.getAppMeta()
@@ -76,6 +76,7 @@ AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "ModalSvc", function (
 
     // Global services
     $rootScope.IdentitySvc = IdentitySvc;
+    $rootScope.AuthSvc = AuthSvc;
     $rootScope.ModalSvc = ModalSvc;
 
     // Init Global Modals
@@ -94,6 +95,22 @@ AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http
             {
                 if (response.success)
                     IdentitySvc.currentUser = response.data;
+
+                def.resolve(response);
+            });
+
+        return def.promise;
+    };
+
+    exports.logoutUser = function ()
+    {
+        var def = $q.defer();
+
+        $http.post("http://localhost:3960/auth/logout", {logout: true})
+            .success(function (response)
+            {
+                if (response.success)
+                    IdentitySvc.currentUser = undefined;
 
                 def.resolve(response);
             });
@@ -186,7 +203,7 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
                 angular.element("#content-container").append(element);
 
                 var modalInstance = new ModalInstance(element, options || {width: 600});
-                
+
                 def.resolve(modalInstance);
             });
 
@@ -209,7 +226,7 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
 }]);
 AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
-    $scope.doLogin = function ()
+    $scope.login = function ()
     {
         if (!$scope.email || !$scope.password)
         {

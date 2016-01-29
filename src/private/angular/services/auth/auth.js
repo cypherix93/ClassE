@@ -17,4 +17,20 @@ AngularApp.service("AuthSvc", function ($q, $http, IdentitySvc)
 
         return def.promise;
     };
+
+    exports.logoutUser = function ()
+    {
+        var def = $q.defer();
+
+        $http.post("http://localhost:3960/auth/logout", {logout: true})
+            .success(function (response)
+            {
+                if (response.success)
+                    IdentitySvc.currentUser = undefined;
+
+                def.resolve(response);
+            });
+
+        return def.promise;
+    };
 });

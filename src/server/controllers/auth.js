@@ -17,7 +17,6 @@ var authRouter = function (router)
 
             return res.json({success: false});
         })
-    ;
 
     // Register endpoint
     router.route("/register")
@@ -62,7 +61,6 @@ var authRouter = function (router)
                 return res.json({success: true, data: req.user});
             });
         })
-    ;
 
     // Login endpoint
     router.route("/login")
@@ -103,7 +101,22 @@ var authRouter = function (router)
                 });
             })(req, res, next);
         })
-    ;
+
+    // Login endpoint
+    router.route("/logout")
+        .post(function (req, res, next)
+        {
+            if (!req.user)
+                return res.json({
+                    success: true
+                });
+
+            req.logout();
+
+            return res.json({
+                success: true
+            });
+        })
 
 };
 

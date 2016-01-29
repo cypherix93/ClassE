@@ -61,7 +61,7 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
                 angular.element("#content-container").append(element);
 
                 var modalInstance = new ModalInstance(element, options || {width: 600});
-                
+
                 def.resolve(modalInstance);
             });
 
