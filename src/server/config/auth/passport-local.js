@@ -12,14 +12,17 @@ var passportLocalConfig = function (passport)
         async function (identifier, password, next)
         {
             // Let's check if the user input was valid
-            var doLogin = await AuthHelper.doLogin(identifier, password);
-            if (doLogin.error)
+            var loginResult = await AuthHelper.doLogin(identifier, password);
+            if (loginResult.error)
             {
-                next(null, null, {message: doLogin.error});
+                next(null, null, {message: loginResult.error});
             }
 
+            // At this point, we are authenticated, so lets generate a JWT for the user
+            loginResult.data.token = AuthHelper.generateJWToken(loginResult.data);
+
             // Login the user and give them a session
-            next(null, doLogin.data);
+            next(null, loginResult.data);
         }));
 };
 

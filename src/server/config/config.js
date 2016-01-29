@@ -6,6 +6,7 @@ var appConfig = {
     development: {
         rootPath: rootPath,
         port: process.env.PORT || 3960,
+        secret: "asdfghjkl",
         cors: {
             origin: "http://localhost:3970"
         },
@@ -17,7 +18,8 @@ var appConfig = {
     },
     production: {
         rootPath: rootPath,
-        port: process.env.PORT || 80,
+        port: 80,
+        secret: process.env.SECRET,
         cors: {
             origin: "http://localhost:3970"
         },

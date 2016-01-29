@@ -1,6 +1,7 @@
 var passport = require("passport");
 
 var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
+var RoutesHelper = require(ClassE.config.rootPath + "/helpers/routesHelper");
 
 var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;
@@ -8,16 +9,6 @@ var Passport = ClassE.models.Passport;
 // Endpoint "/auth"
 var authRouter = function (router)
 {
-    // Check if the current user is authenticated
-    router.route("/isAuthenticated")
-        .get(function (req, res, next)
-        {
-            if (req.user)
-                return res.json({success: true});
-
-            return res.json({success: false});
-        })
-
     // Register endpoint
     router.route("/register")
         .post(async function (req, res, next)
@@ -102,8 +93,20 @@ var authRouter = function (router)
             })(req, res, next);
         })
 
+    // Get the current user in session
+    router.route("/getSessionUser")
+        .all(RoutesHelper.authorize())
+        .get(function (req, res, next)
+        {
+            return res.json({
+                success: true,
+                data: req.user
+            });
+        })
+
     // Login endpoint
     router.route("/logout")
+        .all(RoutesHelper.authorize())
         .post(function (req, res, next)
         {
             if (!req.user)
@@ -117,7 +120,6 @@ var authRouter = function (router)
                 success: true
             });
         })
-
 };
 
 module.exports = authRouter;

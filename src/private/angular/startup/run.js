@@ -21,6 +21,8 @@ AngularApp.run(function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
     $rootScope.AuthSvc = AuthSvc;
     $rootScope.ModalSvc = ModalSvc;
 
+    //
+
     // Init Global Modals
     ModalSvc.initGlobalModals();
 });

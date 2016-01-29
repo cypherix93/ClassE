@@ -1,6 +1,7 @@
 "use strict";
 
 var validator = require("validator");
+var jwt = require("jsonwebtoken");
 
 var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;
@@ -82,6 +83,17 @@ class AuthHelper {
             name: user.fullName,
             roles: user.roles
         };
+    };
+
+    static generateJWToken(user, options)
+    {
+        return jwt.sign(user, ClassE.config.secret, options || {});
+    };
+
+    static verifyJWToken(token, callback)
+    {
+        // Verifies secret and checks expiry
+        jwt.verify(token, ClassE.config.secret, callback);
     };
 }
 

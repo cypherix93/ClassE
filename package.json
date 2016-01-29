@@ -15,11 +15,13 @@
     "express": "^4.13.3",
     "express-enrouten": "^1.2.2",
     "express-session": "^1.12.1",
+    "jsonwebtoken": "^5.5.4",
     "lodash": "^4.0.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "recursive-readdir-sync": "^1.0.6",
     "shortid": "^2.2.4",
+    "socket.io": "^1.4.5",
     "thinky": "^2.2.4",
     "validator": "^4.5.0"
   },
