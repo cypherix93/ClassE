@@ -21,7 +21,8 @@ AngularApp.run(function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
     $rootScope.AuthSvc = AuthSvc;
     $rootScope.ModalSvc = ModalSvc;
 
-    //
+    // Setup user in session if any
+    AuthSvc.bootstrapSessionUser();
 
     // Init Global Modals
     ModalSvc.initGlobalModals();

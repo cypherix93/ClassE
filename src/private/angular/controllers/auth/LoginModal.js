@@ -21,8 +21,8 @@ AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, 
                 ModalSvc.modals.login.close();
 
                 // Reset the form
-                $scope.email = undefined;
-                $scope.password = undefined;
+                delete $scope.email;
+                delete $scope.password;
 
                 // Display toast message
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);

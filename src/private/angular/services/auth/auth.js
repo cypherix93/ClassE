@@ -1,6 +1,16 @@
-AngularApp.service("AuthSvc", function ($q, $http, IdentitySvc)
+AngularApp.service("AuthSvc", function ($q, $http, $window, IdentitySvc)
 {
     var exports = this;
+
+    exports.bootstrapSessionUser = function ()
+    {
+        $http.get("http://localhost:3960/auth/getSessionUser")
+            .success(function (response)
+            {
+                if (response.success)
+                    IdentitySvc.currentUser = response.data;
+            });
+    };
 
     exports.loginUser = function (email, password)
     {
@@ -10,7 +20,15 @@ AngularApp.service("AuthSvc", function ($q, $http, IdentitySvc)
             .success(function (response)
             {
                 if (response.success)
+                {
                     IdentitySvc.currentUser = response.data;
+
+                    $window.sessionStorage.token = IdentitySvc.currentUser.token;
+                }
+                else
+                {
+                    delete $window.sessionStorage.token;
+                }
 
                 def.resolve(response);
             });
@@ -26,7 +44,10 @@ AngularApp.service("AuthSvc", function ($q, $http, IdentitySvc)
             .success(function (response)
             {
                 if (response.success)
-                    IdentitySvc.currentUser = undefined;
+                {
+                    delete IdentitySvc.currentUser;
+                    delete $window.sessionStorage.token;
+                }
 
                 def.resolve(response);
             });

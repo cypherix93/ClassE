@@ -11,6 +11,21 @@ var AngularApp = angular.module("AngularApp",
 // Configure Angular App Preferences
 AngularApp.config(["$httpProvider", function ($httpProvider)
 {
+    $httpProvider.interceptors.push(["$window", function ($window)
+    {
+        return {
+            request: function (req)
+            {
+                req.headers = req.headers || {};
+                if ($window.sessionStorage.token)
+                {
+                    req.headers["x-access-token"] = $window.sessionStorage.token;
+                }
+                return req;
+            }
+        };
+    }]);
+
     $httpProvider.interceptors.push(["$location", function ($location)
     {
         return {
@@ -79,12 +94,25 @@ AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc",
     $rootScope.AuthSvc = AuthSvc;
     $rootScope.ModalSvc = ModalSvc;
 
+    // Setup user in session if any
+    AuthSvc.bootstrapSessionUser();
+
     // Init Global Modals
     ModalSvc.initGlobalModals();
 }]);
-AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http, IdentitySvc)
+AngularApp.service("AuthSvc", ["$q", "$http", "$window", "IdentitySvc", function ($q, $http, $window, IdentitySvc)
 {
     var exports = this;
+
+    exports.bootstrapSessionUser = function ()
+    {
+        $http.get("http://localhost:3960/auth/getSessionUser")
+            .success(function (response)
+            {
+                if (response.success)
+                    IdentitySvc.currentUser = response.data;
+            });
+    };
 
     exports.loginUser = function (email, password)
     {
@@ -94,7 +122,15 @@ AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http
             .success(function (response)
             {
                 if (response.success)
+                {
                     IdentitySvc.currentUser = response.data;
+
+                    $window.sessionStorage.token = IdentitySvc.currentUser.token;
+                }
+                else
+                {
+                    delete $window.sessionStorage.token;
+                }
 
                 def.resolve(response);
             });
@@ -110,7 +146,10 @@ AngularApp.service("AuthSvc", ["$q", "$http", "IdentitySvc", function ($q, $http
             .success(function (response)
             {
                 if (response.success)
-                    IdentitySvc.currentUser = undefined;
+                {
+                    delete IdentitySvc.currentUser;
+                    delete $window.sessionStorage.token;
+                }
 
                 def.resolve(response);
             });
@@ -247,8 +286,8 @@ AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "Mo
                 ModalSvc.modals.login.close();
 
                 // Reset the form
-                $scope.email = undefined;
-                $scope.password = undefined;
+                delete $scope.email;
+                delete $scope.password;
 
                 // Display toast message
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);
