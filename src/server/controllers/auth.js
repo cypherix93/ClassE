@@ -95,7 +95,6 @@ var authRouter = function (router)
 
     // Get the current user in session
     router.route("/getSessionUser")
-        .all(RoutesHelper.authorize())
         .get(function (req, res, next)
         {
             return res.json({
@@ -109,11 +108,6 @@ var authRouter = function (router)
         .all(RoutesHelper.authorize())
         .post(function (req, res, next)
         {
-            if (!req.user)
-                return res.json({
-                    success: true
-                });
-
             req.logout();
 
             return res.json({
