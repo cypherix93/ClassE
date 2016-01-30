@@ -8,7 +8,8 @@ var appConfig = {
         port: process.env.PORT || 3960,
         secret: "asdfghjkl",
         cors: {
-            origin: "http://localhost:3970"
+            origin: "http://localhost:3970",
+            credentials: true
         },
         thinky: {
             host: "192.168.1.125",
@@ -21,7 +22,8 @@ var appConfig = {
         port: 80,
         secret: process.env.SECRET,
         cors: {
-            origin: "http://localhost:3970"
+            origin: "http://localhost:3970",
+            credentials: true
         },
         thinky: {
             host: "192.168.1.125",

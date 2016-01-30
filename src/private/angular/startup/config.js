@@ -1,20 +1,9 @@
 // Configure Angular App Preferences
+
+// HTTP Configuration, like cookie, JWT and error handling
 AngularApp.config(function ($httpProvider)
 {
-    $httpProvider.interceptors.push(function ($window)
-    {
-        return {
-            request: function (req)
-            {
-                req.headers = req.headers || {};
-                if ($window.sessionStorage.token)
-                {
-                    req.headers["x-access-token"] = $window.sessionStorage.token;
-                }
-                return req;
-            }
-        };
-    });
+    $httpProvider.defaults.withCredentials = true;
 
     $httpProvider.interceptors.push(function ($location)
     {
