@@ -59,6 +59,11 @@ class AuthHelper {
         // Verifies secret and checks expiry
         jwt.verify(token, ClassE.config.secret, callback);
     }
+
+    static setAuthCookie(token, res)
+    {
+        return res.cookie(ClassE.config.cookie.name, token, ClassE.config.cookie.options);
+    }
 }
 
 module.exports = AuthHelper;

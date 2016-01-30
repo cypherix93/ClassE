@@ -85,7 +85,7 @@ var authRouter = function (router)
                     if (err)
                         return next(err);
 
-                    res.append("Set-Cookie", "accessToken="+ req.user.token +"; Secure; HttpOnly;");
+                    AuthHelper.setAuthCookie(req.user.token, res);
 
                     return res.json({
                         success: true,
