@@ -2,11 +2,96 @@
 
 var validator = require("validator");
 var jwt = require("jsonwebtoken");
+var passport = require("passport");
 
 var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;
 
 class AuthHelper {
+
+    static doLogin(req, res, next)
+    {
+        var def = Q.defer();
+
+        // Do authentication against passport
+        passport.authenticate("local", function (err, user, info)
+        {
+            // If internal error occured
+            if (err)
+                return next(err);
+
+            // If authentication error occured
+            if (!user)
+            {
+                def.resolve({
+                    success: false,
+                    message: info.message
+                });
+            }
+
+            // Set user to session
+            req.login(user, function (err)
+            {
+                if (err)
+                    return next(err);
+
+                AuthHelper.setAuthCookie(req.user.token, res);
+
+                def.resolve({
+                    success: true,
+                    data: req.user
+                });
+            });
+        })(req, res, next);
+
+        return def.promise;
+    }
+
+    static async doRegister(req, res, next)
+    {
+        var def = Q.defer();
+
+        var input = req.body;
+
+        // Let's check if the user input was valid
+        var validateUser = await AuthHelper.validateNewUser(input);
+        if (validateUser.error)
+        {
+            return {
+                success: false,
+                error: validateUser.error
+            };
+        }
+
+        // User input was valid, so let's create an account for them
+        var newUser = new User({
+            email: input.email
+        });
+
+        newUser = await newUser.save();
+
+        // Make new passport for the new user
+        var userPassport = new Passport({
+            protocol: "local",
+            password: Passport.hashPassword(input.password),
+            accessToken: Passport.generateAccessToken(),
+            userId: newUser.id
+        });
+
+        await userPassport.save();
+
+        // Auto login and set user to session
+        var sessionUser = AuthHelper.getUserForSession(newUser);
+        req.login(sessionUser, function (err)
+        {
+            if (err)
+                return next(err);
+
+            return def.resolve({success: true, data: req.user});
+        });
+
+        return await def.promise;
+    }
 
     // New User validation on Register
     static async validateNewUser(input)

@@ -13,49 +13,14 @@ var authRouter = function (router)
     router.route("/register")
         .post(async function (req, res, next)
         {
-            var input = req.body;
+            var registerData = await AuthHelper.doRegister(req, res, next);
 
-            // Let's check if the user input was valid
-            var validateUser = await AuthHelper.validateNewUser(input);
-            if (validateUser.error)
-            {
-                return res.json({
-                    success: false,
-                    error: validateUser.error
-                });
-            }
-
-            // User input was valid, so let's create an account for them
-            var newUser = new User({
-                email: input.email
-            });
-
-            newUser = await newUser.save();
-
-            // Make new passport for the new user
-            var userPassport = new Passport({
-                protocol: "local",
-                password: Passport.hashPassword(input.password),
-                accessToken: Passport.generateAccessToken(),
-                userId: newUser.id
-            });
-
-            await userPassport.save();
-
-            // Auto login and set user to session
-            var sessionUser = AuthHelper.getUserForSession(newUser);
-            req.login(sessionUser, function (err)
-            {
-                if (err)
-                    return next(err);
-
-                return res.json({success: true, data: req.user});
-            });
+            return res.json(registerData);
         })
 
     // Login endpoint
     router.route("/login")
-        .post(function (req, res, next)
+        .post(async function (req, res, next)
         {
             if (req.user)
                 return res.json({
@@ -63,36 +28,9 @@ var authRouter = function (router)
                     data: req.user
                 });
 
-            // Do authentication against passport
-            passport.authenticate("local", function (err, user, info)
-            {
-                // If internal error occured
-                if (err)
-                    return next(err);
+            var loginResult = await AuthHelper.doLogin(req, res, next);
 
-                // If authentication error occured
-                if (!user)
-                {
-                    return res.json({
-                        success: false,
-                        message: info.message
-                    });
-                }
-
-                // Set user to session
-                req.login(user, function (err)
-                {
-                    if (err)
-                        return next(err);
-
-                    AuthHelper.setAuthCookie(req.user.token, res);
-
-                    return res.json({
-                        success: true,
-                        data: req.user
-                    });
-                });
-            })(req, res, next);
+            return res.json(loginResult);
         })
 
     // Login endpoint
