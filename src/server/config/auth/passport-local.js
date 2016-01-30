@@ -22,10 +22,15 @@ var passportLocalConfig = function (passport)
             }
 
             // At this point, we are authenticated, so lets generate a JWT for the user
-            loginResult.data.token = AuthHelper.generateJWToken(loginResult.data);
+            var token = AuthHelper.generateJWToken(loginResult.data);
+
+            var user = {
+                user: loginResult.data,
+                token: token
+            }
 
             // Login the user and give them a session
-            next(null, loginResult.data);
+            next(null, user);
         }));
 
     // Login helper

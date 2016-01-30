@@ -9,16 +9,19 @@ var appConfig = {
     development: {
         rootPath: rootPath,
         port: process.env.PORT || 3960,
-        secret: appSecret,
         cors: {
             origin: "http://localhost:3970",
             credentials: true
         },
-        cookie: {
-            name: authCookieName,
-            options: {
-                httpOnly: true,
-                secure: false
+        jwt: {
+            secret: appSecret,
+            expiry: 30,
+            cookie: {
+                name: authCookieName,
+                options: {
+                    httpOnly: true,
+                    secure: false
+                }
             }
         },
         thinky: {
@@ -30,15 +33,20 @@ var appConfig = {
     production: {
         rootPath: rootPath,
         port: 80,
-        secret: appSecret,
         cors: {
             origin: "http://localhost:3970",
             credentials: true
         },
-        cookie: {
-            name: authCookieName,
-            httpOnly: true,
-            secure: true
+        jwt: {
+            secret: appSecret,
+            expiry: 30,
+            cookie: {
+                name: authCookieName,
+                options: {
+                    httpOnly: true,
+                    secure: true
+                }
+            }
         },
         thinky: {
             host: "192.168.1.125",

@@ -35,11 +35,11 @@ class AuthHelper {
                 if (err)
                     return next(err);
 
-                AuthHelper.setAuthCookie(req.user.token, res);
+                AuthHelper.setAuthCookie(user.token, res);
 
                 def.resolve({
                     success: true,
-                    data: req.user
+                    data: user.user
                 });
             });
         })(req, res, next);
@@ -136,23 +136,23 @@ class AuthHelper {
 
     static generateJWToken(user, options)
     {
-        return jwt.sign(user, ClassE.config.secret, options || {});
+        return jwt.sign(user, ClassE.config.jwt.secret, options || {});
     }
 
     static verifyJWToken(token, callback)
     {
         // Verifies secret and checks expiry
-        jwt.verify(token, ClassE.config.secret, callback);
+        jwt.verify(token, ClassE.config.jwt.secret, callback);
     }
 
     static setAuthCookie(token, res)
     {
-        return res.cookie(ClassE.config.cookie.name, token, ClassE.config.cookie.options);
+        return res.cookie(ClassE.config.jwt.cookie.name, token, ClassE.config.jwt.cookie.options);
     }
 
     static clearAuthCookie(res)
     {
-        return res.clearCookie(ClassE.config.cookie.name);
+        return res.clearCookie(ClassE.config.jwt.cookie.name);
     }
 }
 
