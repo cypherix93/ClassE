@@ -1,10 +1,10 @@
-AngularApp.service("AuthSvc", function ($q, $http, $window, IdentitySvc)
+AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
 {
     var exports = this;
 
     exports.bootstrapSessionUser = function ()
     {
-        $http.get("http://localhost:3960/auth/getSessionUser")
+        ApiSvc.get("/auth/me")
             .success(function (response)
             {
                 if (response.success)
@@ -16,7 +16,7 @@ AngularApp.service("AuthSvc", function ($q, $http, $window, IdentitySvc)
     {
         var def = $q.defer();
 
-        $http.post("http://localhost:3960/auth/login", {email: email, password: password})
+        ApiSvc.post("/auth/login", {email: email, password: password})
             .success(function (response)
             {
                 if (response.success)
@@ -40,7 +40,7 @@ AngularApp.service("AuthSvc", function ($q, $http, $window, IdentitySvc)
     {
         var def = $q.defer();
 
-        $http.post("http://localhost:3960/auth/logout", {logout: true})
+        ApiSvc.post("/auth/logout", {logout: true})
             .success(function (response)
             {
                 if (response.success)

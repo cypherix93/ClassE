@@ -48,7 +48,7 @@ var authRouter = function (router)
         })
 
     // Get the current user in session
-    router.route("/getSessionUser")
+    router.route("/me")
         .get(function (req, res, next)
         {
             return res.json({

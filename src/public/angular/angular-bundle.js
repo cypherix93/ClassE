@@ -89,13 +89,54 @@ AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc",
     // Init Global Modals
     ModalSvc.initGlobalModals();
 }]);
-AngularApp.service("AuthSvc", ["$q", "$http", "$window", "IdentitySvc", function ($q, $http, $window, IdentitySvc)
+AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
+{
+    var exports = this;
+
+    var baseUrl = ConstantsSvc.apiBaseUrl;
+
+    var createMethods = function ()
+    {
+        for (var i = 0; i < arguments.length; i++)
+        {
+            var arg = arguments[i];
+
+            exports[arg] = (function(method)
+            {
+                return function (apiUrl, config)
+                {
+                    return $http[method](baseUrl + apiUrl, config);
+                }
+            })(arg);
+        }
+    };
+
+    var createMethodsWithData = function ()
+    {
+        for (var i = 0; i < arguments.length; i++)
+        {
+            var arg = arguments[i];
+
+            exports[arg] = (function(method)
+            {
+                return function (apiUrl, data, config)
+                {
+                    return $http[method](baseUrl + apiUrl, data, config);
+                }
+            })(arg);
+        }
+    };
+
+    createMethods("get", "delete", "head", "jsonp");
+    createMethodsWithData("post", "put", "patch");
+}]);
+AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", function ($q, $window, ApiSvc, IdentitySvc)
 {
     var exports = this;
 
     exports.bootstrapSessionUser = function ()
     {
-        $http.get("http://localhost:3960/auth/getSessionUser")
+        ApiSvc.get("/auth/me")
             .success(function (response)
             {
                 if (response.success)
@@ -107,7 +148,7 @@ AngularApp.service("AuthSvc", ["$q", "$http", "$window", "IdentitySvc", function
     {
         var def = $q.defer();
 
-        $http.post("http://localhost:3960/auth/login", {email: email, password: password})
+        ApiSvc.post("/auth/login", {email: email, password: password})
             .success(function (response)
             {
                 if (response.success)
@@ -131,7 +172,7 @@ AngularApp.service("AuthSvc", ["$q", "$http", "$window", "IdentitySvc", function
     {
         var def = $q.defer();
 
-        $http.post("http://localhost:3960/auth/logout", {logout: true})
+        ApiSvc.post("/auth/logout", {logout: true})
             .success(function (response)
             {
                 if (response.success)
@@ -159,15 +200,6 @@ AngularApp.service("IdentitySvc", function ()
         return !!exports.currentUser;
     };
 });
-AngularApp.service("ConfigSvc", ["$http", function($http)
-{
-    var exports = this;
-
-    exports.getAppMeta = function()
-    {
-        return $http.get("angular/meta.json");
-    };
-}]);
 AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
@@ -252,6 +284,21 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
             });
     };
 }]);
+AngularApp.service("ConfigSvc", ["$http", function($http)
+{
+    var exports = this;
+
+    exports.getAppMeta = function()
+    {
+        return $http.get("angular/meta.json");
+    };
+}]);
+AngularApp.service("ConstantsSvc", function ()
+{
+    var exports = this;
+
+    exports.apiBaseUrl = "http://localhost:3960";
+});
 AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     $scope.login = function ()
