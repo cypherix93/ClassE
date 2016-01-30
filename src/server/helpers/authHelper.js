@@ -36,43 +36,7 @@ class AuthHelper {
 
         // All checks passed
         return {};
-    };
-
-    // Login helper
-    static async doLogin(email, password)
-    {
-        // Check for empty email and password
-        if (!email || !password)
-            return {error: "Email and Password must be specified."};
-
-        // Check if user exists
-        var dbUser = await User
-            .filter({email: email})
-            .nth(0)
-            .run();
-
-        if (!dbUser)
-            return {error: "Email or Password is not valid."};
-
-        // Now check password if it matches the user's associated Passport
-        var dbPassport = await Passport
-            .filter({userId: dbUser.id, protocol: "local"})
-            .nth(0)
-            .run();
-
-        if (!dbPassport)
-            return {error: "Password has not been set for this account."};
-
-        var passwordValid = dbPassport.validatePassword(password);
-
-        if (!passwordValid)
-            return {error: "Email or Password is not valid."};
-
-        // All checks passed
-        return {
-            data: this.getUserForSession(dbUser)
-        };
-    };
+    }
 
     // Helper that sets a user to session
     static getUserForSession(user)
@@ -83,18 +47,18 @@ class AuthHelper {
             name: user.fullName,
             roles: user.roles
         };
-    };
+    }
 
     static generateJWToken(user, options)
     {
         return jwt.sign(user, ClassE.config.secret, options || {});
-    };
+    }
 
     static verifyJWToken(token, callback)
     {
         // Verifies secret and checks expiry
         jwt.verify(token, ClassE.config.secret, callback);
-    };
+    }
 }
 
 module.exports = AuthHelper;
