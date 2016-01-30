@@ -95,16 +95,6 @@ var authRouter = function (router)
             })(req, res, next);
         })
 
-    // Get the current user in session
-    router.route("/getSessionUser")
-        .get(function (req, res, next)
-        {
-            return res.json({
-                success: true,
-                data: req.user
-            });
-        })
-
     // Login endpoint
     router.route("/logout")
         .all(RoutesHelper.authorize())
@@ -112,8 +102,20 @@ var authRouter = function (router)
         {
             req.logout();
 
+            AuthHelper.clearAuthCookie(res);
+
             return res.json({
                 success: true
+            });
+        })
+
+    // Get the current user in session
+    router.route("/getSessionUser")
+        .get(function (req, res, next)
+        {
+            return res.json({
+                success: true,
+                data: req.user
             });
         })
 };

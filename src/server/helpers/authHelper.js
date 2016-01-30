@@ -64,6 +64,11 @@ class AuthHelper {
     {
         return res.cookie(ClassE.config.cookie.name, token, ClassE.config.cookie.options);
     }
+
+    static clearAuthCookie(res)
+    {
+        return res.clearCookie(ClassE.config.cookie.name);
+    }
 }
 
 module.exports = AuthHelper;
