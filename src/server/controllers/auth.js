@@ -1,5 +1,6 @@
 var passport = require("passport");
 
+var AuthWorker = require(ClassE.config.rootPath + "/workers/authWorker");
 var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
 var RoutesHelper = require(ClassE.config.rootPath + "/helpers/routesHelper");
 
@@ -13,7 +14,7 @@ var authRouter = function (router)
     router.route("/register")
         .post(async function (req, res, next)
         {
-            var registerData = await AuthHelper.doRegister(req, res, next);
+            var registerData = await AuthWorker.doRegister(req, res, next);
 
             return res.json(registerData);
         })
@@ -28,12 +29,12 @@ var authRouter = function (router)
                     data: req.user
                 });
 
-            var loginResult = await AuthHelper.doLogin(req, res, next);
+            var loginResult = await AuthWorker.doLogin(req, res, next);
 
             return res.json(loginResult);
         })
 
-    // Login endpoint
+    // Logout endpoint
     router.route("/logout")
         .all(RoutesHelper.authorize())
         .post(function (req, res, next)
