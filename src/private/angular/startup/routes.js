@@ -1,27 +1,22 @@
 // Configure Angular App Routes
-AngularApp.config(function ($routeProvider, $locationProvider)
+AngularApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider)
 {
     $locationProvider.html5Mode(false);
 
-    $routeProvider
-    // route for the home page
-        .when("/",
+    // Home page routes
+    $stateProvider.state("home",
+        {
+            url: "/",
+            templateUrl: "views/home/index.html"
+        });
+
+    // Error routes
+    $stateProvider.state("error",
+        {
+            url: "/error/:status",
+            templateUrl: function (urlattr)
             {
-                templateUrl: "views/home/index.html"
-            })
-        // route patterns for the other pages
-        .when("/:base/:sub",
-            {
-                templateUrl: function (urlattr)
-                {
-                    return "views/" + urlattr.base + "/" + urlattr.sub + ".html";
-                }
-            })
-        .when("/:base",
-            {
-                templateUrl: function (urlattr)
-                {
-                    return "views/" + urlattr.base + "/index.html";
-                }
-            });
+                return "views/error/" + urlattr.status + ".html";
+            }
+        });
 });

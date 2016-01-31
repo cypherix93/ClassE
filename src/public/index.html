@@ -23,7 +23,7 @@
         <!-- Angular Libraries -->
         <script src="lib/angular/js/angular.min.js"></script>
         <script src="lib/angular/js/angular-sanitize.min.js"></script>
-        <script src="lib/angular/js/angular-route.min.js"></script>
+        <script src="lib/angular/js/angular-ui-router.min.js"></script>
         <script src="lib/angular/js/angular-animate.min.js"></script>
         <script src="lib/angular/js/angular-messages.min.js"></script>
         <script src="lib/angular/js/ui-bootstrap-tpls.min.js"></script>
@@ -36,7 +36,7 @@
         <div ng-include="'views/_shared/navigation.html'"></div>
 
         <div id="content-container" class="container-fluid">
-            <div ng-view></div>
+            <div ui-view></div>
         </div>
 
         <div ng-include="'views/_shared/footer.html'"></div>

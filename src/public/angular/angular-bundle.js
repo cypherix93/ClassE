@@ -2,9 +2,9 @@
 var AngularApp = angular.module("AngularApp",
     [
         "ngSanitize",
-        "ngRoute",
         "ngAnimate",
         "ngMessages",
+        "ui.router",
         "ui.bootstrap",
         "toastr"
     ]);
@@ -34,31 +34,26 @@ AngularApp.config(["toastrConfig", function (toastrConfig)
     toastrConfig.preventOpenDuplicates = true;
 }]);
 // Configure Angular App Routes
-AngularApp.config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider)
+AngularApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $locationProvider)
 {
     $locationProvider.html5Mode(false);
 
-    $routeProvider
-    // route for the home page
-        .when("/",
+    // Home page routes
+    $stateProvider.state("home",
+        {
+            url: "/",
+            templateUrl: "views/home/index.html"
+        });
+
+    // Error routes
+    $stateProvider.state("error",
+        {
+            url: "/error/:status",
+            templateUrl: function (urlattr)
             {
-                templateUrl: "views/home/index.html"
-            })
-        // route patterns for the other pages
-        .when("/:base/:sub",
-            {
-                templateUrl: function (urlattr)
-                {
-                    return "views/" + urlattr.base + "/" + urlattr.sub + ".html";
-                }
-            })
-        .when("/:base",
-            {
-                templateUrl: function (urlattr)
-                {
-                    return "views/" + urlattr.base + "/index.html";
-                }
-            });
+                return "views/error/" + urlattr.status + ".html";
+            }
+        });
 }]);
 // Configure Angular App Initialization
 AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
@@ -88,47 +83,6 @@ AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc",
 
     // Init Global Modals
     ModalSvc.initGlobalModals();
-}]);
-AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
-{
-    var exports = this;
-
-    var baseUrl = ConstantsSvc.apiBaseUrl;
-
-    var bindMethods = function ()
-    {
-        for (var i = 0; i < arguments.length; i++)
-        {
-            var arg = arguments[i];
-
-            exports[arg] = (function(method)
-            {
-                return function (apiUrl, config)
-                {
-                    return $http[method](baseUrl + apiUrl, config);
-                }
-            })(arg);
-        }
-    };
-
-    var bindMethodsWithData = function ()
-    {
-        for (var i = 0; i < arguments.length; i++)
-        {
-            var arg = arguments[i];
-
-            exports[arg] = (function(method)
-            {
-                return function (apiUrl, data, config)
-                {
-                    return $http[method](baseUrl + apiUrl, data, config);
-                }
-            })(arg);
-        }
-    };
-
-    bindMethods("get", "delete", "head", "jsonp");
-    bindMethodsWithData("post", "put", "patch");
 }]);
 AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", function ($q, $window, ApiSvc, IdentitySvc)
 {
@@ -200,6 +154,47 @@ AngularApp.service("IdentitySvc", function ()
         return !!exports.currentUser;
     };
 });
+AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
+{
+    var exports = this;
+
+    var baseUrl = ConstantsSvc.apiBaseUrl;
+
+    var bindMethods = function ()
+    {
+        for (var i = 0; i < arguments.length; i++)
+        {
+            var arg = arguments[i];
+
+            exports[arg] = (function(method)
+            {
+                return function (apiUrl, config)
+                {
+                    return $http[method](baseUrl + apiUrl, config);
+                }
+            })(arg);
+        }
+    };
+
+    var bindMethodsWithData = function ()
+    {
+        for (var i = 0; i < arguments.length; i++)
+        {
+            var arg = arguments[i];
+
+            exports[arg] = (function(method)
+            {
+                return function (apiUrl, data, config)
+                {
+                    return $http[method](baseUrl + apiUrl, data, config);
+                }
+            })(arg);
+        }
+    };
+
+    bindMethods("get", "delete", "head", "jsonp");
+    bindMethodsWithData("post", "put", "patch");
+}]);
 AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
