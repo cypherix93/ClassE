@@ -1,6 +1,8 @@
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
+
 var authConfig = function (app)
 {
     console.log("=> Setting up Auth...");
@@ -13,7 +15,7 @@ var authConfig = function (app)
     require("./passport")(app);
 
     // Setup JSON Web Token auth flow
-    require("./jwt")(app);
+    app.use(AuthHelper.initJWTokenMiddleware);
 };
 
 module.exports = authConfig;
