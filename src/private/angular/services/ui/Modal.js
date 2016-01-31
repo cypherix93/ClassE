@@ -10,6 +10,9 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
         _instance.element = element;
         _instance.state = "default";
 
+        _instance.onOpen = options.onOpen;
+        _instance.onClose = options.onClose;
+
         // Init the modal
         _instance.element.modal({
             show: false
@@ -24,13 +27,13 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
             // Margin fix
             _instance.element.css("margin-left", -(_instance.element.width() / 2));
 
-            if (options.onOpen)
-                options.onOpen(_instance.element);
+            if (_instance.onOpen)
+                _instance.onOpen();
         });
         _instance.element.on("hidden", function ()
         {
-            if (options.onClose)
-                options.onClose(_instance.element);
+            if (_instance.onClose)
+                _instance.onClose();
         });
 
         // Open and Close functions
@@ -71,12 +74,28 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
     // Store for all the global modals
     exports.modals = {};
 
+    exports.waitUntilReady = function (modalName)
+    {
+        var def = $q.defer();
+
+        var watch = $rootScope.$watch(function()
+        {
+            return !!exports.modals[modalName];
+        }, function()
+        {
+            def.resolve(exports.modals[modalName]);
+            watch();
+        });
+
+        return def.promise;
+    };
+
     // Global modals init function
     exports.initGlobalModals = function ()
     {
         // Login Modal
         exports.createModal("views/_shared/auth/login.html")
-            .then(function(modalInstance)
+            .then(function (modalInstance)
             {
                 exports.modals.login = modalInstance;
             });

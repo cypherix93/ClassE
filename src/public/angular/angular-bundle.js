@@ -154,6 +154,109 @@ AngularApp.service("IdentitySvc", function ()
         return !!exports.currentUser;
     };
 });
+AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
+{
+    var exports = this;
+
+    var ModalInstance = function (element, options)
+    {
+        var _instance = this;
+
+        // Fields
+        _instance.element = element;
+        _instance.state = "default";
+
+        _instance.onOpen = options.onOpen;
+        _instance.onClose = options.onClose;
+
+        // Init the modal
+        _instance.element.modal({
+            show: false
+        });
+
+        // Width fix
+        _instance.element.width(options.width);
+
+        // Event Handlers
+        _instance.element.on("show", function ()
+        {
+            // Margin fix
+            _instance.element.css("margin-left", -(_instance.element.width() / 2));
+
+            if (_instance.onOpen)
+                _instance.onOpen();
+        });
+        _instance.element.on("hidden", function ()
+        {
+            if (_instance.onClose)
+                _instance.onClose();
+        });
+
+        // Open and Close functions
+        _instance.open = function ()
+        {
+            _instance.element.modal("show");
+        };
+        _instance.close = function ()
+        {
+            _instance.element.modal("hide");
+        };
+    };
+
+    // Create modal from Template URL
+    exports.createModal = function (templateUrl, options)
+    {
+        var def = $q.defer();
+
+        // Get the template markup from the URL provided
+        $http.get(templateUrl)
+            .success(function (response)
+            {
+                var element = angular.element(response);
+
+                var scope = $rootScope.$new(true);
+                $compile(element)(scope);
+
+                angular.element("#content-container").append(element);
+
+                var modalInstance = new ModalInstance(element, options || {width: 600});
+
+                def.resolve(modalInstance);
+            });
+
+        return def.promise;
+    };
+
+    // Store for all the global modals
+    exports.modals = {};
+
+    exports.waitUntilReady = function (modalName)
+    {
+        var def = $q.defer();
+
+        var watch = $rootScope.$watch(function()
+        {
+            return !!exports.modals[modalName];
+        }, function()
+        {
+            def.resolve(exports.modals[modalName]);
+            watch();
+        });
+
+        return def.promise;
+    };
+
+    // Global modals init function
+    exports.initGlobalModals = function ()
+    {
+        // Login Modal
+        exports.createModal("views/_shared/auth/login.html")
+            .then(function (modalInstance)
+            {
+                exports.modals.login = modalInstance;
+            });
+    };
+}]);
 AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
 {
     var exports = this;
@@ -195,90 +298,6 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
     bindMethods("get", "delete", "head", "jsonp");
     bindMethodsWithData("post", "put", "patch");
 }]);
-AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
-{
-    var exports = this;
-
-    var ModalInstance = function (element, options)
-    {
-        var _instance = this;
-
-        // Fields
-        _instance.element = element;
-        _instance.state = "default";
-
-        // Init the modal
-        _instance.element.modal({
-            show: false
-        });
-
-        // Width fix
-        _instance.element.width(options.width);
-
-        // Event Handlers
-        _instance.element.on("show", function ()
-        {
-            // Margin fix
-            _instance.element.css("margin-left", -(_instance.element.width() / 2));
-
-            if (options.onOpen)
-                options.onOpen(_instance.element);
-        });
-        _instance.element.on("hidden", function ()
-        {
-            if (options.onClose)
-                options.onClose(_instance.element);
-        });
-
-        // Open and Close functions
-        _instance.open = function ()
-        {
-            _instance.element.modal("show");
-        };
-        _instance.close = function ()
-        {
-            _instance.element.modal("hide");
-        };
-    };
-
-    // Create modal from Template URL
-    exports.createModal = function (templateUrl, options)
-    {
-        var def = $q.defer();
-
-        // Get the template markup from the URL provided
-        $http.get(templateUrl)
-            .success(function (response)
-            {
-                var element = angular.element(response);
-
-                var scope = $rootScope.$new(true);
-                $compile(element)(scope);
-
-                angular.element("#content-container").append(element);
-
-                var modalInstance = new ModalInstance(element, options || {width: 600});
-
-                def.resolve(modalInstance);
-            });
-
-        return def.promise;
-    };
-
-    // Store for all the global modals
-    exports.modals = {};
-
-    // Global modals init function
-    exports.initGlobalModals = function ()
-    {
-        // Login Modal
-        exports.createModal("views/_shared/auth/login.html")
-            .then(function(modalInstance)
-            {
-                exports.modals.login = modalInstance;
-            });
-    };
-}]);
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
     var exports = this;
@@ -296,6 +315,21 @@ AngularApp.service("ConstantsSvc", function ()
 });
 AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
+    var loginModal;
+
+    ModalSvc.waitUntilReady("login")
+        .then(function(modal)
+        {
+            loginModal = modal;
+
+            // Reset the form when the modal closes
+            loginModal.onClose = function()
+            {
+                delete $scope.email;
+                delete $scope.password;
+            };
+        })
+
     $scope.login = function ()
     {
         if (!$scope.email || !$scope.password)
@@ -314,11 +348,7 @@ AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "Mo
                 }
 
                 // Close the login modal
-                ModalSvc.modals.login.close();
-
-                // Reset the form
-                delete $scope.email;
-                delete $scope.password;
+                loginModal.close();
 
                 // Display toast message
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);

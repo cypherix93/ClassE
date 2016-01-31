@@ -1,5 +1,20 @@
 AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
+    var loginModal;
+
+    ModalSvc.waitUntilReady("login")
+        .then(function(modal)
+        {
+            loginModal = modal;
+
+            // Reset the form when the modal closes
+            loginModal.onClose = function()
+            {
+                delete $scope.email;
+                delete $scope.password;
+            };
+        })
+
     $scope.login = function ()
     {
         if (!$scope.email || !$scope.password)
@@ -18,11 +33,7 @@ AngularApp.controller("LoginModalCtrl", function ($scope, AuthSvc, IdentitySvc, 
                 }
 
                 // Close the login modal
-                ModalSvc.modals.login.close();
-
-                // Reset the form
-                delete $scope.email;
-                delete $scope.password;
+                loginModal.close();
 
                 // Display toast message
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);
