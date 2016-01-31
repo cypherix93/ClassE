@@ -80,7 +80,7 @@ class AuthHelper {
         // Otherwise, let's recheck the database and make sure User claims the correct stuff
         var dbUser = await UsersHelper.getUser(decoded.id);
 
-        // If user does not exist anmymore, invalidate the session user
+        // If user does not exist anymore, invalidate the session user
         if (!dbUser)
             return {decoded: null};
 
@@ -99,7 +99,9 @@ class AuthHelper {
 
     static setAuthCookie(token, res)
     {
-        return res.cookie(ClassE.config.jwt.cookie.name, token, ClassE.config.jwt.cookie.options);
+        var cookieConfig = ClassE.config.jwt.cookie;
+
+        return res.cookie(cookieConfig.name, token, cookieConfig.options);
     }
 
     static clearAuthCookie(res)
