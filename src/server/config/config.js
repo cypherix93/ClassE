@@ -15,7 +15,7 @@ var appConfig = {
         },
         jwt: {
             secret: appSecret,
-            expiry: 30,
+            expiryInMinutes: 60,
             cookie: {
                 name: authCookieName,
                 options: {
@@ -39,7 +39,7 @@ var appConfig = {
         },
         jwt: {
             secret: appSecret,
-            expiry: 30,
+            expiryInMinutes: 30,
             cookie: {
                 name: authCookieName,
                 options: {

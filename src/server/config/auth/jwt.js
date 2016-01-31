@@ -38,8 +38,10 @@ var jwtConfig = function (app)
         var issuedAt = decoded.iat;
         var now = moment().unix().valueOf();
 
+        var expiryDuration = ClassE.config.jwt.expiryInMinutes * 60;
+
         // If expired, refresh token
-        if ((now - issuedAt) > ClassE.config.jwt.expiry)
+        if ((now - issuedAt) > expiryDuration)
         {
             // Set the issued at time to NOW
             decoded.iat = now;
