@@ -4,7 +4,7 @@ AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
 
     var baseUrl = ConstantsSvc.apiBaseUrl;
 
-    var createMethods = function ()
+    var bindMethods = function ()
     {
         for (var i = 0; i < arguments.length; i++)
         {
@@ -20,7 +20,7 @@ AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
         }
     };
 
-    var createMethodsWithData = function ()
+    var bindMethodsWithData = function ()
     {
         for (var i = 0; i < arguments.length; i++)
         {
@@ -36,6 +36,6 @@ AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
         }
     };
 
-    createMethods("get", "delete", "head", "jsonp");
-    createMethodsWithData("post", "put", "patch");
+    bindMethods("get", "delete", "head", "jsonp");
+    bindMethodsWithData("post", "put", "patch");
 });

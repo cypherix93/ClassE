@@ -95,7 +95,7 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
 
     var baseUrl = ConstantsSvc.apiBaseUrl;
 
-    var createMethods = function ()
+    var bindMethods = function ()
     {
         for (var i = 0; i < arguments.length; i++)
         {
@@ -111,7 +111,7 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
         }
     };
 
-    var createMethodsWithData = function ()
+    var bindMethodsWithData = function ()
     {
         for (var i = 0; i < arguments.length; i++)
         {
@@ -127,8 +127,8 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
         }
     };
 
-    createMethods("get", "delete", "head", "jsonp");
-    createMethodsWithData("post", "put", "patch");
+    bindMethods("get", "delete", "head", "jsonp");
+    bindMethodsWithData("post", "put", "patch");
 }]);
 AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", function ($q, $window, ApiSvc, IdentitySvc)
 {
