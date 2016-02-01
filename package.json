@@ -32,6 +32,7 @@
     "babel-cli": "^6.4.0",
     "babel-polyfill": "^6.3.14",
     "bower": "^1.7.2",
+    "chai": "^3.5.0",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
@@ -58,6 +59,8 @@
     "http-server": "^0.8.5",
     "main-bower-files": "^2.11.1",
     "merge-stream": "^1.0.0",
-    "run-sequence": "^1.1.5"
+    "mocha": "^2.4.5",
+    "run-sequence": "^1.1.5",
+    "sinon": "^1.17.3"
   }
 }
