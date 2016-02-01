@@ -25,7 +25,7 @@ var appConfig = {
             }
         },
         thinky: {
-            host: "192.168.1.125",
+            host: "localhost",
             port: 28015,
             db: "ClassE"
         }
@@ -49,7 +49,7 @@ var appConfig = {
             }
         },
         thinky: {
-            host: "192.168.1.125",
+            host: "localhost",
             port: 28015,
             db: "ClassE"
         }
