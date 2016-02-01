@@ -287,23 +287,6 @@ gulp.task("compile-sass",
  Development Specific Tasks
  ------------------------------------------------------------------------------*/
 
-// Fire up the REST API server
-gulp.task("serve", ["watch"],
-    function ()
-    {
-        plugins.nodemon({
-            script: "./src/server/server.js",
-            exec: ".\\node_modules\\.bin\\babel-node",
-            watch: "./src/server/"
-        });
-
-        gulp.src("./src/public")
-            .pipe(plugins.webserver({
-                port: 3970,
-                livereload: true
-            }));
-    });
-
 // Watch client files for changes
 gulp.task("watch",
     function ()
