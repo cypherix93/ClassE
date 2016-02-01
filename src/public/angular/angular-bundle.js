@@ -154,6 +154,47 @@ AngularApp.service("IdentitySvc", function ()
         return !!exports.currentUser;
     };
 });
+AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
+{
+    var exports = this;
+
+    var baseUrl = ConstantsSvc.apiBaseUrl;
+
+    var bindMethods = function ()
+    {
+        for (var i = 0; i < arguments.length; i++)
+        {
+            var arg = arguments[i];
+
+            exports[arg] = (function(method)
+            {
+                return function (apiUrl, config)
+                {
+                    return $http[method](baseUrl + apiUrl, config);
+                }
+            })(arg);
+        }
+    };
+
+    var bindMethodsWithData = function ()
+    {
+        for (var i = 0; i < arguments.length; i++)
+        {
+            var arg = arguments[i];
+
+            exports[arg] = (function(method)
+            {
+                return function (apiUrl, data, config)
+                {
+                    return $http[method](baseUrl + apiUrl, data, config);
+                }
+            })(arg);
+        }
+    };
+
+    bindMethods("get", "delete", "head", "jsonp");
+    bindMethodsWithData("post", "put", "patch");
+}]);
 AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
@@ -257,47 +298,12 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
             });
     };
 }]);
-AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
+AngularApp.service("ConstantsSvc", function ()
 {
     var exports = this;
 
-    var baseUrl = ConstantsSvc.apiBaseUrl;
-
-    var bindMethods = function ()
-    {
-        for (var i = 0; i < arguments.length; i++)
-        {
-            var arg = arguments[i];
-
-            exports[arg] = (function(method)
-            {
-                return function (apiUrl, config)
-                {
-                    return $http[method](baseUrl + apiUrl, config);
-                }
-            })(arg);
-        }
-    };
-
-    var bindMethodsWithData = function ()
-    {
-        for (var i = 0; i < arguments.length; i++)
-        {
-            var arg = arguments[i];
-
-            exports[arg] = (function(method)
-            {
-                return function (apiUrl, data, config)
-                {
-                    return $http[method](baseUrl + apiUrl, data, config);
-                }
-            })(arg);
-        }
-    };
-
-    bindMethods("get", "delete", "head", "jsonp");
-    bindMethodsWithData("post", "put", "patch");
-}]);
+    exports.apiBaseUrl = "http://localhost:3960";
+});
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
     var exports = this;
@@ -307,12 +313,6 @@ AngularApp.service("ConfigSvc", ["$http", function($http)
         return $http.get("angular/meta.json");
     };
 }]);
-AngularApp.service("ConstantsSvc", function ()
-{
-    var exports = this;
-
-    exports.apiBaseUrl = "http://localhost:3960";
-});
 AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     var loginModal;
