@@ -4,21 +4,10 @@ var routesConfig = function (app)
 {
     console.log("=> Setting up Routes...");
 
-    // Handle async errors
-    app.use(function (req, res, next)
-    {
-        process.on("unhandledRejection", function (err)
-        {
-            next(err);
-        });
-
-        next();
-    });
-
     // Dynamically setup controller routes
     require("./controllers")(app);
 
-    // Handle all other application errors
+    // Handle all application errors
     app.use(function (err, req, res, next)
     {
         //TODO: Send err.stack to elmah
