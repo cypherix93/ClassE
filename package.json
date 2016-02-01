@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "",
   "copyright": "Copyright © 2016",
-  "authors": "cypherix93, benjaminstrumeyer",
+  "authors": "cypherix93, benjaminstrumeyer, shakeeeb",
   "keywords": [],
   "dependencies": {
     "babel-preset-es2015": "^6.3.13",
