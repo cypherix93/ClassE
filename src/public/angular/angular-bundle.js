@@ -298,12 +298,6 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
             });
     };
 }]);
-AngularApp.service("ConstantsSvc", function ()
-{
-    var exports = this;
-
-    exports.apiBaseUrl = "http://localhost:3960";
-});
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
     var exports = this;
@@ -313,6 +307,12 @@ AngularApp.service("ConfigSvc", ["$http", function($http)
         return $http.get("angular/meta.json");
     };
 }]);
+AngularApp.service("ConstantsSvc", function ()
+{
+    var exports = this;
+
+    exports.apiBaseUrl = "http://localhost:3960";
+});
 AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     var loginModal;

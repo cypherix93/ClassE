@@ -257,7 +257,11 @@ gulp.task("bundle-ng-files",
             .pipe(gulp.dest(paths.public + "angular/"));
 
         var templates = gulp.src(paths.angular + "templates/**/*.html")
-            .pipe(plugins.htmlmin())
+            .pipe(plugins.debug({title: "angular app:"}))
+            .pipe(plugins.htmlmin({
+                collapseWhitespace: true,
+                removeComments: true
+            }))
             .pipe(gulp.dest(paths.public + "angular/templates/"));
 
         return merge(scripts, templates);
