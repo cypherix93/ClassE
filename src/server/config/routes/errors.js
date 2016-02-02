@@ -1,27 +1,34 @@
 "use strict";
 
-var winston = require("winston");
-var winstonMail = require("winston-mail").Mail;
+var email = require("emailjs");
+
+var MailHelper = require(ClassE.config.rootPath + "/helpers/MailHelper");
 
 var errorsConfig = function (app)
 {
-    winston
-        .remove(winston.transports.Console)
-        .add(winston.transports.Mail,
-        {
-            to: "errors@classe.com",
-            from: "errors@classe.com",
-            host: "127.0.0.1",
-            port: 25,
-            subject: "{{level}}: {{msg}}"
-        });
+    var server = email.server.connect({
+        host: "127.0.0.1",
+        port: 25
+    });
+
+    var message = {
+        from: "ClassE ErrorBot <errors@classe.com>",
+        to: "ClassE ErrorBot <errors@classe.com>"
+    };
 
     // Handle all application errors
     app.use(function (err, req, res, next)
     {
-        winston.error(err.stack);
+        var errorHtml = MailHelper.buildErrorMailMessage(err, req);
 
-        return res.status(err.status || 500).send(err.message);
+        message.subject = `${err.name}: ${err.message}`;
+        message.attachment = [
+            {data: errorHtml, alternative: true}
+        ];
+
+        server.send(message);
+
+        return res.status(500).send(err.message);
     });
 };
 
