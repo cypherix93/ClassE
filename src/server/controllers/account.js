@@ -51,7 +51,6 @@ var accountRouter = function (router)
 
             return res.json({success: true})
         })
-    ;
 };
 
 module.exports = accountRouter;
