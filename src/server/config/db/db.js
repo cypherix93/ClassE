@@ -10,6 +10,9 @@ var dbConfig = function ()
 
     // Hook up models
     require("./models")();
+
+    // Call DB model builder
+    require(ClassE.config.rootPath + "/database/ModelBuilder")(ClassE.models);
 };
 
 module.exports = dbConfig;
