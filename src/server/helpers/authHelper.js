@@ -3,7 +3,7 @@
 var jwt = require("jsonwebtoken");
 var moment = require("moment");
 
-var UsersHelper = require(ClassE.config.rootPath + "/helpers/usersHelper");
+var UsersHelper = require(ClassE.config.rootPath + "/helpers/UsersHelper");
 
 class AuthHelper {
 

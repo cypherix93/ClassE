@@ -1,5 +1,5 @@
-var RoutesHelper = require(ClassE.config.rootPath + "/helpers/routesHelper");
-var UsersHelper = require(ClassE.config.rootPath + "/helpers/usersHelper");
+var RoutesHelper = require(ClassE.config.rootPath + "/helpers/RoutesHelper");
+var UsersHelper = require(ClassE.config.rootPath + "/helpers/UsersHelper");
 
 // Endpoint "/account"
 var accountRouter = function (router)

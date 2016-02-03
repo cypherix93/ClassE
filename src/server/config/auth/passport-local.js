@@ -1,6 +1,6 @@
 var localStrategy = require("passport-local").Strategy;
 
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
 
 var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;

@@ -2,7 +2,7 @@
 
 var fs = require("fs");
 
-var errorMailStyle = fs.readFileSync(ClassE.config.rootPath + "/content/errorMail.css");
+const errorMailStyle = fs.readFileSync(ClassE.config.rootPath + "/content/errorMail.css");
 
 class MailHelper {
 

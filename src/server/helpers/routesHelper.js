@@ -1,9 +1,5 @@
 "use strict";
 
-var jwt = require("jsonwebtoken");
-
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
-
 class RoutesHelper {
     // Use this to make routes require authorization
     static authorize(roles)

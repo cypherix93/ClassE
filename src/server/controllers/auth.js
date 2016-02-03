@@ -1,8 +1,8 @@
 var passport = require("passport");
 
-var AuthWorker = require(ClassE.config.rootPath + "/workers/authWorker");
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
-var RoutesHelper = require(ClassE.config.rootPath + "/helpers/routesHelper");
+var AuthWorker = require(ClassE.config.rootPath + "/workers/AuthWorker");
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
+var RoutesHelper = require(ClassE.config.rootPath + "/helpers/RoutesHelper");
 
 var User = ClassE.models.User;
 var Passport = ClassE.models.Passport;

@@ -1,7 +1,7 @@
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
 
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/authHelper");
+var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
 
 var authConfig = function (app)
 {
