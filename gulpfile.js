@@ -19,6 +19,7 @@ paths.deploy = "./deploy/";
 paths.project = "./src/";
 paths.public = paths.project + "public/";
 paths.private = paths.project + "private/";
+paths.server = paths.project + "server/";
 paths.angular = paths.private + "angular/";
 paths.sass = paths.private + "sass/";
 
@@ -307,8 +308,19 @@ gulp.task("bower-install", ["bower-restore"],
  Development Specific Tasks
  ------------------------------------------------------------------------------*/
 
+// Watch server files for changes
+gulp.task("watch-server",
+    function ()
+    {
+        plugins.watch(paths.server + "**",
+            plugins.batch(function (events, done)
+            {
+                gulp.start("compile-server", done);
+            }));
+    });
+
 // Watch client files for changes
-gulp.task("watch",
+gulp.task("watch-client",
     function ()
     {
         plugins.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
