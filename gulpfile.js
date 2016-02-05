@@ -57,7 +57,14 @@ gulp.task("deploy", ["build"],
     });
 
 // Build App
-gulp.task("build", ["clean", "compile-server", "compile-client"]);
+gulp.task("build", function (callback)
+{
+    runSequence(
+        "clean",
+        ["compile-server", "compile-client"],
+        callback
+    );
+});
 
 // Clean Directories
 gulp.task("clean",
