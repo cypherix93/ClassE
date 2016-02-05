@@ -1,6 +1,9 @@
 // Global Package Info
 var meta = require("./meta.json");
 
+// Typescript
+var typescript = require("typescript");
+
 // Gulp
 var gulp = require("gulp");
 var bower = require("bower");
@@ -80,8 +83,10 @@ gulp.task("compile-server",
         return gulp.src(paths.project + "server/**")
             .pipe(tsFilter)
             .pipe(plugins.typescript({
+                typescript: typescript,
                 target: "ES6",
                 module: "commonjs",
+                moduleResolution: "node",
                 experimentalAsyncFunctions: true,
                 experimentalDecorators: true,
                 removeComments: true
