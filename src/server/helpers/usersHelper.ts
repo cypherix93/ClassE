@@ -1,8 +1,12 @@
 "use strict";
 
-var User = ClassE.models.User;
+var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
 
-class UsersHelper {
+var User = DbContext.getRepository("User").get();
+var Passport = DbContext.getRepository("Passport").get();
+
+class UsersHelper
+{
     static async getAllUsers()
     {
         return await User.getAll().run();

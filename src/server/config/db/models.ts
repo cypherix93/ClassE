@@ -7,9 +7,9 @@ var config = ClassE.config;
 
 var modelsConfig = function()
 {
-    // Dynamically load models and attach them to global 'models' namespace
-    global.ClassE.models = {};
+    var models = {};
 
+    // Dynamically load models
     var modelsDir = path.join(config.rootPath, "database/models");
 
     var files = recursiveReaddirSync(modelsDir);
@@ -19,8 +19,10 @@ var modelsConfig = function()
 
         let model = require(path.join(modelsDir, modelFile));
 
-        ClassE.models[modelFile] = model;
+        models[modelFile] = model;
     }
+
+    return models;
 };
 
 module.exports = modelsConfig;

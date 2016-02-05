@@ -1,9 +1,10 @@
 var localStrategy = require("passport-local").Strategy;
 
+var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
 var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
 
-var User = ClassE.models.User;
-var Passport = ClassE.models.Passport;
+var User = DbContext.getRepository("User").get();
+var Passport = DbContext.getRepository("Passport").get();
 
 var passportLocalConfig = function (passport)
 {
@@ -34,7 +35,7 @@ var passportLocalConfig = function (passport)
         }));
 
     // Login helper
-    var processLogin = async function(email, password)
+    var processLogin = async function (email, password)
     {
         // Check for empty email and password
         if (!email || !password)
@@ -42,18 +43,18 @@ var passportLocalConfig = function (passport)
 
         // Check if user exists
         var dbUser = await User
-        .filter({email: email})
-        .nth(0)
-        .run();
+            .filter({email: email})
+            .nth(0)
+            .run();
 
         if (!dbUser)
             return {error: "Email or Password is not valid."};
 
         // Now check password if it matches the user's associated Passport
         var dbPassport = await Passport
-        .filter({userId: dbUser.id, protocol: "local"})
-        .nth(0)
-        .run();
+            .filter({userId: dbUser.id, protocol: "local"})
+            .nth(0)
+            .run();
 
         if (!dbPassport)
             return {error: "Password has not been set for this account."};

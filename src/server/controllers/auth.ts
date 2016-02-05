@@ -4,8 +4,10 @@ var AuthWorker = require(ClassE.config.rootPath + "/workers/AuthWorker");
 var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
 var RoutesHelper = require(ClassE.config.rootPath + "/helpers/RoutesHelper");
 
-var User = ClassE.models.User;
-var Passport = ClassE.models.Passport;
+var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
+
+var User = DbContext.getRepository("User").get();
+var Passport = DbContext.getRepository("Passport").get();
 
 // Endpoint "/auth"
 var authRouter = function (router)

@@ -3,10 +3,11 @@
 var validator = require("validator");
 var passport = require("passport");
 
+var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
 var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
 
-var User = ClassE.models.User;
-var Passport = ClassE.models.Passport;
+var User = DbContext.getRepository("User").get();
+var Passport = DbContext.getRepository("Passport").get();
 
 class AuthWorker {
 

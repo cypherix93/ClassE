@@ -1,9 +1,19 @@
+var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
+
 var RoutesHelper = require(ClassE.config.rootPath + "/helpers/RoutesHelper");
 var UsersHelper = require(ClassE.config.rootPath + "/helpers/UsersHelper");
+
+var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
 
 // Endpoint "/account"
 var accountRouter = function (router)
 {
+    router.route("/users")
+        .get(async function (req, res, next)
+        {
+            res.send(await DbContext.getRepository("User").get().getJoin().run());
+        })
+
     // Force authorization across controller
     router.use(RoutesHelper.authorize());
 
