@@ -1,5 +1,4 @@
-require("babel-core/register");
-require("babel-polyfill");
+/// <reference path="./content/typings/typings/main.d.ts" />
 
 var express = require("express");
 
