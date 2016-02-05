@@ -74,13 +74,19 @@ gulp.task("clean",
 gulp.task("compile-server",
     function ()
     {
-        var jsFilter = plugins.filter("**/*.js", {restore: true});
+        var tsFilter = plugins.filter("**/*.ts", {restore: true});
 
         return gulp.src(paths.project + "server/**")
-            .pipe(jsFilter)
-            .pipe(plugins.babel())
+            .pipe(tsFilter)
+            .pipe(plugins.typescript({
+                target: "ES6",
+                module: "commonjs",
+                experimentalAsyncFunctions: true,
+                experimentalDecorators: true,
+                removeComments: true
+            }))
             .pipe(plugins.debug({title: "[server] compiled:"}))
-            .pipe(jsFilter.restore)
+            .pipe(tsFilter.restore)
             .pipe(gulp.dest(paths.build + "server/"));
     });
 
