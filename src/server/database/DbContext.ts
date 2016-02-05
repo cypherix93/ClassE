@@ -20,7 +20,13 @@ class DbContext
         models.User.hasMany(models.Passport, "passports", "id", "userId");
 
 
+
         // Init the repositories
+        this.initRepostories();
+    }
+
+    private static initRepostories()
+    {
         for (var model in this.models)
         {
             if (!this.models.hasOwnProperty(model))
