@@ -4,7 +4,6 @@ var shortid = require("shortid");
 
 var thinky = ClassE.thinky;
 var type = thinky.type;
-var models = ClassE.models;
 
 var User = thinky.createModel("User",
     {
