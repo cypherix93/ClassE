@@ -53,24 +53,7 @@ gulp.task("deploy", ["build"],
     });
 
 // Build App
-gulp.task("build", ["clean", "bundle-ng-files", "compile-sass"],
-    function ()
-    {
-        var server = gulp.src(paths.project + "server/**")
-            .pipe(plugins.babel())
-            .pipe(plugins.debug({title: "[server] copied:"}))
-            .pipe(gulp.dest(paths.build + "server/"));
-
-        var publicFilter = plugins.filter("**/+(!(*.js|*.css|*.map)|*(*.json|*.min.js|*.min.css))", {restore: true});
-
-        var clientWeb = gulp.src(paths.public + "**")
-            .pipe(publicFilter)
-            .pipe(plugins.debug({title: "[web] copied:"}))
-            .pipe(gulp.dest(paths.build + "client-web/"))
-            .pipe(publicFilter.restore);
-
-        return merge(server, clientWeb);
-    });
+gulp.task("build", ["clean", "compile-server", "compile-client"]);
 
 // Clean Directories
 gulp.task("clean",
@@ -81,6 +64,95 @@ gulp.task("clean",
                 paths.deploy + "**"
             ],
             {force: true}, callback);
+    });
+
+/*
+ Compile Tasks
+ ------------------------------------------------------------------------------*/
+
+// Compile Server files
+gulp.task("compile-server",
+    function ()
+    {
+        var jsFilter = plugins.filter("**/*.js", {restore: true});
+
+        return gulp.src(paths.project + "server/**")
+            .pipe(jsFilter)
+            .pipe(plugins.babel())
+            .pipe(plugins.debug({title: "[server] compiled:"}))
+            .pipe(jsFilter.restore)
+            .pipe(gulp.dest(paths.build + "server/"));
+    });
+
+// Compile Client files
+gulp.task("compile-client", ["bundle-ng-files", "compile-sass"],
+    function ()
+    {
+        var publicFilter = plugins.filter("**/+(!(*.js|*.css|*.map)|*(*.json|*.min.js|*.min.css))", {restore: true});
+
+        return gulp.src(paths.public + "**")
+            .pipe(publicFilter)
+            .pipe(plugins.debug({title: "[web] copied:"}))
+            .pipe(gulp.dest(paths.build + "client-web/"))
+            .pipe(publicFilter.restore);
+    });
+
+// Bundle AngularJS files
+gulp.task("bundle-ng-files",
+    function ()
+    {
+        var angularScripts = [
+            paths.angular + "angular-app.js",
+            paths.angular + "startup/**/*.js",
+            paths.angular + "services/**/*.js",
+            paths.angular + "directives/**/*.js",
+            paths.angular + "controllers/**/*.js"
+        ];
+
+        var scripts = gulp.src(angularScripts)
+            .pipe(plugins.debug({title: "angular app:"}))
+            .pipe(plugins.plumber())
+            .pipe(plugins.concat("angular-bundle.js"))
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.ngAnnotate())
+            .pipe(gulp.dest(paths.public + "angular/"))
+
+            .pipe(plugins.uglify())
+            .pipe(plugins.rename({
+                suffix: ".min"
+            }))
+            .pipe(plugins.sourcemaps.write("./"))
+            .pipe(gulp.dest(paths.public + "angular/"));
+
+        var templates = gulp.src(paths.angular + "templates/**/*.html")
+            .pipe(plugins.debug({title: "angular app:"}))
+            .pipe(plugins.htmlmin({
+                collapseWhitespace: true,
+                removeComments: true
+            }))
+            .pipe(gulp.dest(paths.public + "angular/templates/"));
+
+        return merge(scripts, templates);
+    });
+
+// Compile SASS files
+gulp.task("compile-sass",
+    function ()
+    {
+        var cssDir = paths.public + "css/";
+
+        return gulp.src(paths.sass + "main.scss")
+            .pipe(plugins.debug({title: "compiling sass:"}))
+            .pipe(plugins.plumber())
+            .pipe(plugins.sourcemaps.init())
+            .pipe(plugins.sassGlob())
+            .pipe(plugins.sass())
+            .pipe(gulp.dest(cssDir))
+
+            .pipe(plugins.cssnano())
+            .pipe(plugins.rename({suffix: ".min"}))
+            .pipe(plugins.sourcemaps.write("./"))
+            .pipe(gulp.dest(cssDir));
     });
 
 /*
@@ -223,68 +295,6 @@ gulp.task("bower-install", ["bower-restore"],
 
         // Return merged stream
         return merge(mainBower, bootstrapSass);
-    });
-
-/*
- Misc Tasks
- ------------------------------------------------------------------------------*/
-
-// Bundle AngularJS files
-gulp.task("bundle-ng-files",
-    function ()
-    {
-        var angularScripts = [
-            paths.angular + "angular-app.js",
-            paths.angular + "startup/**/*.js",
-            paths.angular + "services/**/*.js",
-            paths.angular + "directives/**/*.js",
-            paths.angular + "controllers/**/*.js"
-        ];
-
-        var scripts = gulp.src(angularScripts)
-            .pipe(plugins.debug({title: "angular app:"}))
-            .pipe(plugins.plumber())
-            .pipe(plugins.concat("angular-bundle.js"))
-            .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.ngAnnotate())
-            .pipe(gulp.dest(paths.public + "angular/"))
-
-            .pipe(plugins.uglify())
-            .pipe(plugins.rename({
-                suffix: ".min"
-            }))
-            .pipe(plugins.sourcemaps.write("./"))
-            .pipe(gulp.dest(paths.public + "angular/"));
-
-        var templates = gulp.src(paths.angular + "templates/**/*.html")
-            .pipe(plugins.debug({title: "angular app:"}))
-            .pipe(plugins.htmlmin({
-                collapseWhitespace: true,
-                removeComments: true
-            }))
-            .pipe(gulp.dest(paths.public + "angular/templates/"));
-
-        return merge(scripts, templates);
-    });
-
-// Compile SASS files
-gulp.task("compile-sass",
-    function ()
-    {
-        var cssDir = paths.public + "css/";
-
-        return gulp.src(paths.sass + "main.scss")
-            .pipe(plugins.debug({title: "compiling sass:"}))
-            .pipe(plugins.plumber())
-            .pipe(plugins.sourcemaps.init())
-            .pipe(plugins.sassGlob())
-            .pipe(plugins.sass())
-            .pipe(gulp.dest(cssDir))
-
-            .pipe(plugins.cssnano())
-            .pipe(plugins.rename({suffix: ".min"}))
-            .pipe(plugins.sourcemaps.write("./"))
-            .pipe(gulp.dest(cssDir));
     });
 
 /*
