@@ -1,6 +1,6 @@
 "use strict";
 
-var Repository = require("./Repository");
+import {Repository} from "./Repository";
 
 // Constructor
 export class DbContext

@@ -4,8 +4,8 @@ import bodyParser = require("body-parser");
 import lodash = require("lodash");
 import Q = require("q");
 
-import DbConfig from "./db/db";
-import AuthConfig = require("./auth/auth");
+import {DbConfig} from "./db/db";
+import {AuthConfig} from "./auth/auth";
 import RoutesConfig = require("./routes/routes");
 
 export class Bootstrap
@@ -26,7 +26,7 @@ export class Bootstrap
         DbConfig.init();
 
         // Setup authentication
-        AuthConfig(app);
+        AuthConfig.init(app);
 
         // Setup routes
         RoutesConfig(app);

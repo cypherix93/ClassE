@@ -8,7 +8,7 @@ import {DbContext} from "../../database/DbContext";
 
 var config = Config.current;
 
-export default class DbConfig
+export class DbConfig
 {
     public static init()
     {

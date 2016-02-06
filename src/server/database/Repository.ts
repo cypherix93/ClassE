@@ -1,6 +1,6 @@
 "use strict";
 
-class Repository
+export class Repository
 {
     private model;
 
@@ -34,5 +34,3 @@ class Repository
         }
     }
 }
-
-export = Repository;
