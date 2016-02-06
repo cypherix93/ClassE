@@ -4,34 +4,31 @@ import bodyParser = require("body-parser");
 import lodash = require("lodash");
 import Q = require("q");
 
-import dbConfig = require("./db/db");
-import authConfig = require("./auth/auth");
-import routesConfig = require("./routes/routes");
+import DbConfig from "./db/db";
+import AuthConfig = require("./auth/auth");
+import RoutesConfig = require("./routes/routes");
 
-namespace ClassE.config
+export class Bootstrap
 {
-    export class Bootstrap
+    public static init(app)
     {
-        public static init(app)
-        {
-            console.log("=> Bootstrapping application...");
+        console.log("=> Bootstrapping application...");
 
-            // Setup app global variables
-            global._ = lodash;
-            global.Q = Q;
+        // Setup app global variables
+        global._ = lodash;
+        global.Q = Q;
 
-            // Configure express middlewares
-            app.use(bodyParser.json());
-            app.use(bodyParser.urlencoded({ extended: true }));
+        // Configure express middlewares
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended: true}));
 
-            // Connect to RethinkDB
-            dbConfig();
+        // Connect to RethinkDB
+        DbConfig.init();
 
-            // Setup authentication
-            authConfig(app);
+        // Setup authentication
+        AuthConfig(app);
 
-            // Setup routes
-            routesConfig(app);
-        }
+        // Setup routes
+        RoutesConfig(app);
     }
 }

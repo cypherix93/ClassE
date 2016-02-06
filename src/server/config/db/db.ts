@@ -1,20 +1,25 @@
-var thinky = require("thinky");
+"use strict";
 
-var config = ClassE.config;
+import thinky = require("thinky");
 
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
+import {Config} from "../config";
+import {ModelsConfig} from "./models";
+import {DbContext} from "../../database/DbContext";
 
-var dbConfig = function ()
+var config = Config.current;
+
+export default class DbConfig
 {
-    console.log("=> Connecting to RethinkDB...");
+    public static init()
+    {
+        console.log("=> Connecting to RethinkDB...");
 
-    global.ClassE.thinky = thinky(config.thinky);
+        ClassE.thinky = thinky(config.thinky);
 
-    // Hook up models and set them to context
-    DbContext.models = require("./models")();
+        // Hook up models and set them to context
+        DbContext.models = ModelsConfig.loadModels();
 
-    // Call models created function
-    DbContext.onModelsCreated();
-};
-
-module.exports = dbConfig;
+        // Call models created function
+        DbContext.onModelsCreated();
+    }
+}

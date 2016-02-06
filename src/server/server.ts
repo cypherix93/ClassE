@@ -4,8 +4,8 @@
 
 import express = require("express");
 
-import Config from "./config/config";
-import Bootstrap from "./config/bootstrap";
+import {Config} from "./config/config";
+import {Bootstrap} from "./config/bootstrap";
 
 class Server
 {

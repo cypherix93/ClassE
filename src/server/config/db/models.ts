@@ -1,28 +1,31 @@
 "use strict";
 
-var path = require("path");
-var recursiveReaddirSync = require("recursive-readdir-sync");
+import path = require("path");
+import recursiveReaddirSync = require("recursive-readdir-sync");
 
-var config = ClassE.config;
+import {Config} from "../config";
 
-var modelsConfig = function()
+var config = Config.current;
+
+export class ModelsConfig
 {
-    var models = {};
-
-    // Dynamically load models
-    var modelsDir = path.join(config.rootPath, "database/models");
-
-    var files = recursiveReaddirSync(modelsDir);
-    for (let file of files)
+    public static loadModels()
     {
-        let modelFile = path.basename(file, ".js");
+        var models = {};
 
-        let model = require(path.join(modelsDir, modelFile));
+        // Dynamically load models
+        var modelsDir = path.join(config.rootPath, "database/models");
 
-        models[modelFile] = model;
+        var files = recursiveReaddirSync(modelsDir);
+        for (let file of files)
+        {
+            let modelFile = path.basename(file, ".js");
+
+            let model = require(path.join(modelsDir, modelFile));
+
+            models[modelFile] = model;
+        }
+
+        return models;
     }
-
-    return models;
-};
-
-module.exports = modelsConfig;
+}
