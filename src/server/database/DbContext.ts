@@ -3,10 +3,10 @@
 var Repository = require("./Repository");
 
 // Constructor
-class DbContext
+export class DbContext
 {
     // DbContext.models gets populated when app inits
-    private static models;
+    public static models;
 
     // DbContext.repositories gets populated when app inits
     private static repositories = {};
@@ -14,33 +14,31 @@ class DbContext
     // Called after all models have been initialized
     public static onModelsCreated()
     {
-        var models = this.models;
+        var models = DbContext.models;
 
         // User 1---* Passport
         models.User.hasMany(models.Passport, "passports", "id", "userId");
 
-
-
         // Init the repositories
-        this.initRepostories();
+        DbContext.initRepostories();
     }
 
     private static initRepostories()
     {
-        for (var model in this.models)
+        var models = DbContext.models;
+
+        for (var model in models)
         {
-            if (!this.models.hasOwnProperty(model))
+            if (!models.hasOwnProperty(model))
                 continue;
 
-            this.repositories[model] = new Repository(this.models[model]);
+            DbContext.repositories[model] = new Repository(models[model]);
         }
     }
 
     // Get a repository by its name
     public static getRepository(repositoryName)
     {
-        return this.repositories[repositoryName];
+        return DbContext.repositories[repositoryName];
     }
 }
-
-export = DbContext;

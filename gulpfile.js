@@ -87,7 +87,10 @@ gulp.task("compile-server",
     {
         var tsFilter = plugins.filter("**/*.ts", {restore: true});
 
+        var typingsFilter = plugins.filter(["**", "!content/typings/**"]);
+
         return gulp.src(paths.project + "server/**")
+            .pipe(typingsFilter)
             .pipe(tsFilter)
             .pipe(plugins.typescript({
                 typescript: typescript,
