@@ -1,11 +1,11 @@
-/// <reference path="./content/typings/typings/main.d.ts" />
+/// <reference path="../../typings/main.d.ts" />
 
 "use strict";
 
 import express = require("express");
 
-import {Config} from "./config/config";
-import {Bootstrap} from "./config/bootstrap";
+import {Config} from "./config/Config";
+import {Bootstrap} from "./config/Bootstrap";
 
 class Server
 {

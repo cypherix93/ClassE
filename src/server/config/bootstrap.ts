@@ -4,8 +4,8 @@ import bodyParser = require("body-parser");
 import lodash = require("lodash");
 import Q = require("q");
 
-import {DbConfig} from "./db/db";
-import {AuthConfig} from "./auth/auth";
+import {DbConfig} from "./db/DbConfig";
+import {AuthConfig} from "./auth/AuthConfig";
 import RoutesConfig = require("./routes/routes");
 
 export class Bootstrap

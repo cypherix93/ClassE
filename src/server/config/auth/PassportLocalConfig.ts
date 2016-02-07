@@ -6,36 +6,39 @@ var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
 var User = DbContext.getRepository("User").get();
 var Passport = DbContext.getRepository("Passport").get();
 
-var passportLocalConfig = function (passport)
+export class PassportLocalConfig
 {
-    passport.use(new localStrategy(
-        {
-            usernameField: "email",
-            passwordField: "password"
-        },
-        async function (identifier, password, next)
-        {
-            // Let's check if the user input was valid
-            var loginResult = await processLogin(identifier, password);
-            if (loginResult.error)
+    public static init(passport)
+    {
+        passport.use(new localStrategy(
             {
-                next(null, null, {message: loginResult.error});
-            }
+                usernameField: "email",
+                passwordField: "password"
+            },
+            async function (identifier, password, next)
+            {
+                // Let's check if the user input was valid
+                var loginResult = await PassportLocalConfig.processLogin(identifier, password);
+                if (loginResult.error)
+                {
+                    next(null, null, {message: loginResult.error});
+                }
 
-            // At this point, we are authenticated, so lets generate a JWT for the user
-            var token = AuthHelper.generateJWToken(loginResult.data);
+                // At this point, we are authenticated, so lets generate a JWT for the user
+                var token = AuthHelper.generateJWToken(loginResult.data);
 
-            var user = {
-                user: loginResult.data,
-                token: token
-            }
+                var user = {
+                    user: loginResult.data,
+                    token: token
+                }
 
-            // Login the user and give them a session
-            next(null, user);
-        }));
+                // Login the user and give them a session
+                next(null, user);
+            }));
+    }
 
     // Login helper
-    var processLogin = async function (email, password)
+    private static async processLogin(email, password)
     {
         // Check for empty email and password
         if (!email || !password)
@@ -69,6 +72,4 @@ var passportLocalConfig = function (passport)
             data: AuthHelper.getUserForSession(dbUser)
         };
     };
-};
-
-module.exports = passportLocalConfig;
+}

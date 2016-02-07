@@ -5,6 +5,9 @@ import {Repository} from "./Repository";
 // Constructor
 export class DbContext
 {
+    // Instance of rethinkdb context
+    public static thinky;
+
     // DbContext.models gets populated when app inits
     public static models;
 

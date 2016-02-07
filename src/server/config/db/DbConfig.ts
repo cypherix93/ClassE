@@ -2,8 +2,8 @@
 
 import thinky = require("thinky");
 
-import {Config} from "../config";
-import {ModelsConfig} from "./models";
+import {Config} from "../Config";
+import {ModelsConfig} from "./ModelsConfig";
 import {DbContext} from "../../database/DbContext";
 
 var config = Config.current;
@@ -14,10 +14,11 @@ export class DbConfig
     {
         console.log("=> Connecting to RethinkDB...");
 
-        ClassE.thinky = thinky(config.thinky);
+        // Open connection to RethinkDB
+        DbContext.thinky = thinky(config.thinky);
 
         // Hook up models and set them to context
-        DbContext.models = ModelsConfig.loadModels();
+        DbContext.models = ModelsConfig.init();
 
         // Call models created function
         DbContext.onModelsCreated();
