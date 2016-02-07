@@ -1,16 +1,18 @@
-var localStrategy = require("passport-local").Strategy;
+"use strict";
 
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
+import {Passport} from "passport";
+import {Strategy} from "passport-local";
+
+import {DbContext} from "../../database/DbContext"
 
 var User = DbContext.getRepository("User").get();
 var Passport = DbContext.getRepository("Passport").get();
 
 export class PassportLocalConfig
 {
-    public static init(passport)
+    public static init(passport:Passport)
     {
-        passport.use(new localStrategy(
+        passport.use(new Strategy(
             {
                 usernameField: "email",
                 passwordField: "password"

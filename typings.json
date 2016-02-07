@@ -1,9 +1,14 @@
 {
   "ambientDependencies": {
     "body-parser": "github:DefinitelyTyped/DefinitelyTyped/body-parser/body-parser.d.ts#9a2c50ea846ee6ae36feaea0accc77ae7b08a748",
+    "cookie-parser": "github:DefinitelyTyped/DefinitelyTyped/cookie-parser/cookie-parser.d.ts#e2001653ffbd99c2fc80a272ca80d8c958136de4",
+    "cors": "github:DefinitelyTyped/DefinitelyTyped/cors/cors.d.ts#ee872c633411d2524cafc68d339f016acbfa1fd6",
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#f743b7f4955076199e2252ace18b01e33280db69",
+    "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#ad1c4f411a9ad949c0c73de4d190be1b2bf08a6f",
+    "mime": "github:DefinitelyTyped/DefinitelyTyped/mime/mime.d.ts#cb5206a8ac1c9a3ddfd126f5ecea6729b2361452",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#aee0039a2d6686ec78352125010ebb38a7a7d743",
     "passport": "github:DefinitelyTyped/DefinitelyTyped/passport/passport.d.ts#432545c4d99dba86a5229bed0e500f66f43b1baa",
-    "passport-local": "github:DefinitelyTyped/DefinitelyTyped/passport-local/passport-local.d.ts#67e09fcdb1efacbb3abf964672b4b362f0e68b4b"
+    "passport-local": "github:DefinitelyTyped/DefinitelyTyped/passport-local/passport-local.d.ts#67e09fcdb1efacbb3abf964672b4b362f0e68b4b",
+    "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#0fa4e9e61385646ea6a4cba2aef357353d2ce77f"
   }
 }

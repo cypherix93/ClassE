@@ -6,7 +6,10 @@ import Q = require("q");
 
 import {DbConfig} from "./db/DbConfig";
 import {AuthConfig} from "./auth/AuthConfig";
-import RoutesConfig = require("./routes/routes");
+import {RoutesConfig} from "./routes/RoutesConfig";
+
+// Tell Typescript we have node's 'global' available
+declare var global;
 
 export class Bootstrap
 {
@@ -29,6 +32,6 @@ export class Bootstrap
         AuthConfig.init(app);
 
         // Setup routes
-        RoutesConfig(app);
+        RoutesConfig.init(app);
     }
 }

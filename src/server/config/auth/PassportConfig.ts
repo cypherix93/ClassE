@@ -2,11 +2,12 @@
 
 import passport = require("passport");
 
+import {Express} from "express";
 import {PassportLocalConfig} from "./PassportLocalConfig";
 
 export class PassportConfig
 {
-    public static init(app)
+    public static init(app:Express)
     {
         app.use(passport.initialize());
         app.use(passport.session());
