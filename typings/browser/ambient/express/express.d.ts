@@ -1,5 +1,5 @@
 // Compiled using typings@0.6.6
-// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/dd4626a4e23ce8d6d175e0fe8244a99771c8c3f2/express/express.d.ts
+// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/f743b7f4955076199e2252ace18b01e33280db69/express/express.d.ts
 // Type definitions for Express 4.x
 // Project: http://expressjs.com
 // Definitions by: Boris Yankov <https://github.com/borisyankov/>
@@ -407,9 +407,9 @@ declare module "express" {
             originalUrl: string;
 
             url: string;
-            
+
             baseUrl: string;
-            
+
             app: Application;
         }
 
@@ -796,18 +796,23 @@ declare module "express" {
             charset: string;
         }
 
+        interface NextFunction {
+            (): void;
+            (err: any): void;
+        }
+
         interface ErrorRequestHandler {
-            (err: any, req: Request, res: Response, next: Function): any;
+            (err: any, req: Request, res: Response, next: NextFunction): any;
         }
 
         interface RequestHandler {
-            (req: Request, res: Response, next: Function): any;
+            (req: Request, res: Response, next: NextFunction): any;
         }
 
         interface Handler extends RequestHandler {}
 
         interface RequestParamHandler {
-            (req: Request, res: Response, next: Function, param: any): any;
+            (req: Request, res: Response, next: NextFunction, param: any): any;
         }
 
         interface Application extends IRouter<Application>, Express.Application {
