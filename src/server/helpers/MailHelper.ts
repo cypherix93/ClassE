@@ -1,12 +1,14 @@
 "use strict";
 
-var fs = require("fs");
+import fs = require("fs");
 
-const errorMailStyle = fs.readFileSync(ClassE.config.rootPath + "/content/errorMail.css");
+import {Config} from "../config/Config";
 
-class MailHelper {
+const errorMailStyle = fs.readFileSync(Config.current.rootPath + "/content/errorMail.css");
 
-    static buildErrorMailMessage(err, req)
+export class MailHelper
+{
+    public static buildErrorMailMessage(err, req)
     {
         var writeTableRow = function (th, td)
         {
@@ -70,5 +72,3 @@ class MailHelper {
         return html;
     }
 }
-
-module.exports = MailHelper;

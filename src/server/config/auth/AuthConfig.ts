@@ -3,8 +3,9 @@
 import cookieParser = require("cookie-parser");
 import cors = require("cors");
 
-import {PassportConfig} from "./PassportConfig";
 import {Config} from "../Config";
+import {PassportConfig} from "./PassportConfig";
+import {AuthHelper} from "../../helpers/AuthHelper";
 
 export class AuthConfig
 {

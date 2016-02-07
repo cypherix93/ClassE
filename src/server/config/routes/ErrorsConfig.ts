@@ -3,8 +3,7 @@
 import email = require("emailjs");
 
 import {Express} from "express";
-
-var MailHelper = require(ClassE.config.rootPath + "/helpers/MailHelper");
+import {MailHelper} from "../../helpers/MailHelper";
 
 export class ErrorsConfig
 {

@@ -1,8 +1,9 @@
 "use strict";
 
-class RoutesHelper {
+export class RoutesHelper
+{
     // Use this to make routes require authorization
-    static authorize(roles)
+    public static authorize(roles)
     {
         return function (req, res, next)
         {
@@ -27,5 +28,3 @@ class RoutesHelper {
         };
     };
 }
-
-module.exports = RoutesHelper;

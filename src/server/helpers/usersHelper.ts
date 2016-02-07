@@ -1,18 +1,18 @@
 "use strict";
 
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
+import {DbContext} from "../database/DbContext";
 
 var User = DbContext.getRepository("User").get();
 var Passport = DbContext.getRepository("Passport").get();
 
-class UsersHelper
+export class UsersHelper
 {
-    static async getAllUsers()
+    public static async getAllUsers()
     {
         return await User.getAll().run();
     }
 
-    static async getUser(userId, isCurrentUser)
+    public static async getUser(userId, isCurrentUser)
     {
         try
         {
@@ -24,7 +24,7 @@ class UsersHelper
         }
     }
 
-    static async updateUser(userId, updatedUser)
+    public static async updateUser(userId, updatedUser)
     {
         var dbUser = await UsersHelper.getUser(userId, true);
 
@@ -37,5 +37,3 @@ class UsersHelper
         return {};
     }
 }
-
-module.exports = UsersHelper;

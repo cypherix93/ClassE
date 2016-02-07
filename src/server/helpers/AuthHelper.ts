@@ -1,14 +1,15 @@
 "use strict";
 
-var jwt = require("jsonwebtoken");
-var moment = require("moment");
+import jwt = require("jsonwebtoken");
+import moment = require("moment");
 
-var UsersHelper = require(ClassE.config.rootPath + "/helpers/UsersHelper");
+import {Config} from "../config/Config";
+import {UsersHelper} from "./UsersHelper"
 
-class AuthHelper {
-
+export class AuthHelper
+{
     // Helper that sets a user to session
-    static getUserForSession(user)
+    public static getUserForSession(user)
     {
         return {
             id: user.id,
@@ -18,12 +19,12 @@ class AuthHelper {
         };
     }
 
-    static generateJWToken(user, options)
+    public static generateJWToken(user, options)
     {
-        return jwt.sign(user, ClassE.config.jwt.secret, options || {});
+        return jwt.sign(user, Config.current.jwt.secret, options || {});
     }
 
-    static initJWTokenMiddleware(req, res, next)
+    public static initJWTokenMiddleware(req, res, next)
     {
         // check cookies or url parameters or post parameters for token
         var token = req.body.token || req.query.token || req.cookies["classe.presence"];
@@ -32,7 +33,7 @@ class AuthHelper {
             return next();
 
         // Verifies secret and checks expiry
-        jwt.verify(token, ClassE.config.jwt.secret, function (err, decoded)
+        jwt.verify(token, Config.current.jwt.secret, function (err, decoded)
         {
             if (err)
                 return res.sendStatus(403);
@@ -66,12 +67,12 @@ class AuthHelper {
         });
     }
 
-    static async refreshTokenIfExpired(decoded)
+    private static async refreshTokenIfExpired(decoded)
     {
         var issuedAt = decoded.iat;
         var now = moment().unix().valueOf();
 
-        var expiryDuration = ClassE.config.jwt.expiryInMinutes * 60;
+        var expiryDuration = Config.current.jwt.expiryInMinutes * 60;
 
         // If not expired just return the previous decoded token
         if ((now - issuedAt) <= expiryDuration)
@@ -97,17 +98,15 @@ class AuthHelper {
         }
     }
 
-    static setAuthCookie(token, res)
+    public static setAuthCookie(token, res)
     {
-        var cookieConfig = ClassE.config.jwt.cookie;
+        var cookieConfig = Config.current.jwt.cookie;
 
         return res.cookie(cookieConfig.name, token, cookieConfig.options);
     }
 
-    static clearAuthCookie(res)
+    public static clearAuthCookie(res)
     {
-        return res.clearCookie(ClassE.config.jwt.cookie.name);
+        return res.clearCookie(Config.current.jwt.cookie.name);
     }
 }
-
-module.exports = AuthHelper;
