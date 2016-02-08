@@ -1,5 +1,3 @@
-"use strict";
-
 import jwt = require("jsonwebtoken");
 import moment = require("moment");
 

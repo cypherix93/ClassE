@@ -1,5 +1,3 @@
-"use strict";
-
 import thinky = require("thinky");
 
 import {Config} from "../Config";

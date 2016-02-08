@@ -1,5 +1,3 @@
-"use strict";
-
 import cookieParser = require("cookie-parser");
 import cors = require("cors");
 

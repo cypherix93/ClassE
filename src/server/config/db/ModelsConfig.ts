@@ -1,5 +1,3 @@
-"use strict";
-
 import path = require("path");
 import recursiveReaddirSync = require("recursive-readdir-sync");
 

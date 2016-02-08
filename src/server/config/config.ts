@@ -1,5 +1,3 @@
-"use strict";
-
 import path = require("path");
 
 export class Config

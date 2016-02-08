@@ -1,7 +1,5 @@
 /// <reference path="../../typings/main.d.ts" />
 
-"use strict";
-
 import express = require("express");
 
 import {Config} from "./config/Config";

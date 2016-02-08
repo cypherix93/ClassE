@@ -1,5 +1,3 @@
-"use strict";
-
 import passport = require("passport");
 
 import {Express} from "express";

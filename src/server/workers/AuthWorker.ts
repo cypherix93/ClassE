@@ -1,17 +1,15 @@
-"use strict";
+import validator = require("validator");
+import passport = require("passport");
 
-var validator = require("validator");
-var passport = require("passport");
-
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
+import {DbContext} from "../database/DbContext";
+import {AuthHelper} from "../helpers/AuthHelper";
 
 var User = DbContext.getRepository("User").get();
 var Passport = DbContext.getRepository("Passport").get();
 
-class AuthWorker {
-
-    static doLogin(req, res, next)
+export class AuthWorker
+{
+    public static doLogin(req, res, next)
     {
         var def = Q.defer();
 
@@ -49,7 +47,7 @@ class AuthWorker {
         return def.promise;
     }
 
-    static async doRegister(req, res, next)
+    public static async doRegister(req, res, next)
     {
         var def = Q.defer();
 
@@ -96,7 +94,7 @@ class AuthWorker {
     }
 
     // New User validation on Register
-    static async validateNewUser(input)
+    public static async validateNewUser(input)
     {
         // Check for empty email and password
         if (!input.email || !input.password)

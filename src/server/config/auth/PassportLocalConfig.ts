@@ -1,9 +1,8 @@
-"use strict";
-
 import {Passport} from "passport";
 import {Strategy} from "passport-local";
 
 import {DbContext} from "../../database/DbContext"
+import {AuthHelper} from "../../helpers/AuthHelper";
 
 var User = DbContext.getRepository("User").get();
 var Passport = DbContext.getRepository("Passport").get();

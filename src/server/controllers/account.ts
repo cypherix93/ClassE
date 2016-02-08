@@ -1,9 +1,6 @@
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
-
-var RoutesHelper = require(ClassE.config.rootPath + "/helpers/RoutesHelper");
-var UsersHelper = require(ClassE.config.rootPath + "/helpers/UsersHelper");
-
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
+import {DbContext} from "../database/DbContext";
+import {RoutesHelper} from "../helpers/RoutesHelper";
+import {UsersHelper} from "../helpers/UsersHelper";
 
 // Endpoint "/account"
 var accountRouter = function (router)
@@ -63,4 +60,4 @@ var accountRouter = function (router)
         })
 };
 
-module.exports = accountRouter;
+export = accountRouter;

@@ -1,5 +1,3 @@
-"use strict";
-
 import {DbContext} from "../database/DbContext";
 
 var User = DbContext.getRepository("User").get();

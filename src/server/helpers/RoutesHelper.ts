@@ -1,5 +1,3 @@
-"use strict";
-
 export class RoutesHelper
 {
     // Use this to make routes require authorization

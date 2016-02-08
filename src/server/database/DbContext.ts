@@ -1,5 +1,3 @@
-"use strict";
-
 import {Repository} from "./Repository";
 
 // Constructor

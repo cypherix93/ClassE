@@ -1,5 +1,3 @@
-"use strict";
-
 import {Express} from "express";
 
 import path = require("path");
@@ -23,6 +21,9 @@ export class ControllersConfig
             // Build the base route that the controller will be mounted on
             let ctrlRouteBase = !!parsed.dir ? "/" + parsed.dir + "/" : "/";
             ctrlRouteBase += parsed.name;
+
+            // The route path should always be in lower case
+            ctrlRouteBase = ctrlRouteBase.toLowerCase();
 
             // Let's get the controller instance and hook the router up
             let routerInstance = router();

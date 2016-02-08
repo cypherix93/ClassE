@@ -1,10 +1,9 @@
-var passport = require("passport");
+import passport = require("passport");
 
-var AuthWorker = require(ClassE.config.rootPath + "/workers/AuthWorker");
-var AuthHelper = require(ClassE.config.rootPath + "/helpers/AuthHelper");
-var RoutesHelper = require(ClassE.config.rootPath + "/helpers/RoutesHelper");
-
-var DbContext = require(ClassE.config.rootPath + "/database/DbContext");
+import {DbContext} from "../database/DbContext";
+import {AuthWorker} from "../workers/AuthWorker";
+import {AuthHelper} from "../helpers/AuthHelper";
+import {RoutesHelper} from "../helpers/RoutesHelper";
 
 var User = DbContext.getRepository("User").get();
 var Passport = DbContext.getRepository("Passport").get();
@@ -61,4 +60,4 @@ var authRouter = function (router)
         })
 };
 
-module.exports = authRouter;
+export = authRouter;

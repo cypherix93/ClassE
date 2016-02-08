@@ -1,8 +1,8 @@
-"use strict";
+import shortid = require("shortid");
 
-var shortid = require("shortid");
+import {DbContext} from "../DbContext";
 
-var thinky = ClassE.thinky;
+var thinky = DbContext.thinky;
 var type = thinky.type;
 
 var User = thinky.createModel("User",
@@ -24,4 +24,4 @@ var User = thinky.createModel("User",
 
 User.ensureIndex("email");
 
-module.exports = User;
+export = User;

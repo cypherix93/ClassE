@@ -1,8 +1,6 @@
-"use strict";
-
 import email = require("emailjs");
 
-import {Express} from "express";
+import {Express, ErrorRequestHandler} from "express";
 import {MailHelper} from "../../helpers/MailHelper";
 
 export class ErrorsConfig
@@ -15,7 +13,7 @@ export class ErrorsConfig
             ErrorsConfig.sendErrorMail(err, req);
 
             return res.status(500).send(err.message);
-        });
+        } as ErrorRequestHandler);
     }
 
     private static sendErrorMail(err, req)

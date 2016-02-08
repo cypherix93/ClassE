@@ -1,8 +1,8 @@
-"use strict";
+import bcrypt = require("bcryptjs");
 
-var bcrypt = require("bcryptjs");
+import {DbContext} from "../DbContext";
 
-var thinky = ClassE.thinky;
+var thinky = DbContext.thinky;
 var type = thinky.type;
 
 var passwordMinLength = 8;
@@ -50,4 +50,4 @@ Passport.define("validatePassword", function (password)
     return bcrypt.compareSync(password, this.password);
 });
 
-module.exports = Passport;
+export = Passport;
