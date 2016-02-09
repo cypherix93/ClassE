@@ -50,6 +50,9 @@ export class AuthWorker
 
         var input = req.body;
 
+        var userModel = DbContext.repositories.User.get();
+        var passportModel = DbContext.repositories.Passport.get();
+
         // Let's check if the user input was valid
         var validateUser = await AuthWorker.validateNewUser(input);
         if (validateUser.error)
@@ -61,7 +64,7 @@ export class AuthWorker
         }
 
         // User input was valid, so let's create an account for them
-        var newUser = new DbContext.repositories.User.get()
+        var newUser = new userModel()
         ({
             email: input.email
         });
@@ -69,11 +72,11 @@ export class AuthWorker
         newUser = await newUser.save();
 
         // Make new passport for the new user
-        var userPassport = new DbContext.repositories.Passport.get()
+        var userPassport = new passportModel()
         ({
             protocol: "local",
-            password: Passport.hashPassword(input.password),
-            accessToken: Passport.generateAccessToken(),
+            password: passportModel.hashPassword(input.password),
+            accessToken: passportModel.generateAccessToken(),
             userId: newUser.id
         });
 
@@ -95,6 +98,9 @@ export class AuthWorker
     // New User validation on Register
     public static async validateNewUser(input)
     {
+        var userModel = DbContext.repositories.User.get();
+        var passportModel = DbContext.repositories.Passport.get();
+
         // Check for empty email and password
         if (!input.email || !input.password)
             return {error: "Email and Password must be specified."};
@@ -104,13 +110,13 @@ export class AuthWorker
             return {error: "Entered email is not a valid email address."};
 
         // Validate password constraints
-        var passwordMinLength = Passport.getPasswordMinLength();
+        var passwordMinLength = passportModel.getPasswordMinLength();
 
         if (input.password.length < passwordMinLength)
             return {error: "Password must be at least " + passwordMinLength + " characters long."};
 
         // Check if user already exists
-        var userCount = await User
+        var userCount = await userModel
             .filter({email: input.email})
             .count()
             .execute();
@@ -122,5 +128,3 @@ export class AuthWorker
         return {};
     }
 }
-
-module.exports = AuthWorker;

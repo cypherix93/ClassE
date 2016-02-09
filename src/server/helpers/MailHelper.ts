@@ -14,12 +14,18 @@ export class MailHelper
         }
         var writeRequestHeaderRows = function ()
         {
-            return writeTableRow("Request URL", req.url) +
+            var result =
+                writeTableRow("Request URL", req.url) +
                 writeTableRow("Request Method", req.method) +
-                writeTableRow("Version", req.httpVersion) +
-                writeTableRow("User ID", req.user.id) +
-                writeTableRow("User Email", req.user.email) +
-                writeTableRow("User Roles", req.user.roles);
+                writeTableRow("Version", req.httpVersion);
+
+            if(req.user)
+                result +=
+                    writeTableRow("User ID", req.user.id) +
+                    writeTableRow("User Email", req.user.email) +
+                    writeTableRow("User Roles", req.user.roles);
+
+            return result;
         }
         var writeHttpHeaderRows = function ()
         {
