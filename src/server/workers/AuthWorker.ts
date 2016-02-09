@@ -4,9 +4,6 @@ import passport = require("passport");
 import {DbContext} from "../database/DbContext";
 import {AuthHelper} from "../helpers/AuthHelper";
 
-var User = DbContext.getRepository("User").get();
-var Passport = DbContext.getRepository("Passport").get();
-
 export class AuthWorker
 {
     public static doLogin(req, res, next)
@@ -64,14 +61,16 @@ export class AuthWorker
         }
 
         // User input was valid, so let's create an account for them
-        var newUser = new User({
+        var newUser = new DbContext.repositories.User.get()
+        ({
             email: input.email
         });
 
         newUser = await newUser.save();
 
         // Make new passport for the new user
-        var userPassport = new Passport({
+        var userPassport = new DbContext.repositories.Passport.get()
+        ({
             protocol: "local",
             password: Passport.hashPassword(input.password),
             accessToken: Passport.generateAccessToken(),

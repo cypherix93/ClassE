@@ -2,7 +2,7 @@ import jwt = require("jsonwebtoken");
 import moment = require("moment");
 
 import {Config} from "../config/Config";
-import {UsersHelper} from "./UsersHelper"
+import {DbContext} from "../database/DbContext";
 
 export class AuthHelper
 {
@@ -77,7 +77,7 @@ export class AuthHelper
             return {decoded: decoded};
 
         // Otherwise, let's recheck the database and make sure User claims the correct stuff
-        var dbUser = await UsersHelper.getUser(decoded.id);
+        var dbUser = await DbContext.repositories.User.getById(decoded.id);
 
         // If user does not exist anymore, invalidate the session user
         if (!dbUser)

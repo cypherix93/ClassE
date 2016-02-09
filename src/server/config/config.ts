@@ -2,7 +2,7 @@ import path = require("path");
 
 export class Config
 {
-    private static rootPath = path.normalize("..");
+    private static rootPath = path.normalize(__dirname + "/..");
     private static appSecret = process.env.SECRET || "asdfghjkl";
     private static authCookieName = "classe.presence";
 

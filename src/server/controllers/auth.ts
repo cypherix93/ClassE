@@ -1,15 +1,13 @@
 import passport = require("passport");
 
+import {Router} from "express";
 import {DbContext} from "../database/DbContext";
 import {AuthWorker} from "../workers/AuthWorker";
 import {AuthHelper} from "../helpers/AuthHelper";
 import {RoutesHelper} from "../helpers/RoutesHelper";
 
-var User = DbContext.getRepository("User").get();
-var Passport = DbContext.getRepository("Passport").get();
-
 // Endpoint "/auth"
-var authRouter = function (router)
+var authRouter = function (router:Router)
 {
     // Register endpoint
     router.route("/register")

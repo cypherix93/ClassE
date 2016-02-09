@@ -34,12 +34,29 @@ export class DbConfig
         // Hook up the repositories around the models
         var models = DbContext.models;
 
-        for (var model in models)
+        for (let model in models)
         {
             if (!models.hasOwnProperty(model))
                 continue;
 
-            DbContext.repositories[model] = new Repository(models[model]);
+            // Check if a model-specific repository exists, if not make default one
+            let repoName = model + "Repository";
+
+            let modelRepo;
+            try
+            {
+                let repoModule = require("../../database/repositories/" + repoName);
+
+                if(repoModule[repoName])
+                    modelRepo = repoModule[repoName];
+            }
+            catch(err)
+            {
+                modelRepo = Repository;
+            }
+
+            // Set it to DbContext
+            DbContext.repositories[model] = new modelRepo(models[model]);
         }
     }
 }

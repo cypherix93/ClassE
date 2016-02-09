@@ -4,9 +4,6 @@ import {Strategy} from "passport-local";
 import {DbContext} from "../../database/DbContext"
 import {AuthHelper} from "../../helpers/AuthHelper";
 
-var User = DbContext.getRepository("User").get();
-var Passport = DbContext.getRepository("Passport").get();
-
 export class PassportLocalConfig
 {
     public static init(passport:Passport)
@@ -46,7 +43,7 @@ export class PassportLocalConfig
             return {error: "Email and Password must be specified."};
 
         // Check if user exists
-        var dbUser = await User
+        var dbUser = await DbContext.repositories.User.get()
             .filter({email: email})
             .nth(0)
             .run();
@@ -55,7 +52,7 @@ export class PassportLocalConfig
             return {error: "Email or Password is not valid."};
 
         // Now check password if it matches the user's associated Passport
-        var dbPassport = await Passport
+        var dbPassport = await DbContext.repositories.Passport.get()
             .filter({userId: dbUser.id, protocol: "local"})
             .nth(0)
             .run();

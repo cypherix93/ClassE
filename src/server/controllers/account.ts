@@ -1,14 +1,14 @@
+import {Router} from "express";
 import {DbContext} from "../database/DbContext";
 import {RoutesHelper} from "../helpers/RoutesHelper";
-import {UsersHelper} from "../helpers/UsersHelper";
 
 // Endpoint "/account"
-var accountRouter = function (router)
+var accountRouter = function (router:Router)
 {
     router.route("/users")
         .get(async function (req, res, next)
         {
-            res.send(await DbContext.getRepository("User").get().getJoin().run());
+            res.send(await DbContext.repositories.User.get().getJoin().run());
         })
 
     // Force authorization across controller
@@ -26,7 +26,7 @@ var accountRouter = function (router)
             var isCurrentUser = userId === req.user.id;
 
             // Get the requested user from the db
-            var user = await UsersHelper.getUser(userId, isCurrentUser);
+            var user = await DbContext.repositories.User.getById(userId, isCurrentUser);
 
             if (!user)
                 return res.sendStatus(404);
@@ -47,7 +47,7 @@ var accountRouter = function (router)
                 return res.sendStatus(403);
 
             // User checked out, let's update the user's data
-            var updateUser = await UsersHelper.updateUser(userId, req.body);
+            var updateUser = await DbContext.repositories.User.updateUser(userId, req.body);
             if(updateUser.error)
             {
                 return res.json({
