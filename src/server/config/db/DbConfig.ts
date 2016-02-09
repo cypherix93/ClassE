@@ -33,6 +33,7 @@ export class DbConfig
     {
         // Hook up the repositories around the models
         var models = DbContext.models;
+        DbContext.repositories = {};
 
         for (let model in models)
         {

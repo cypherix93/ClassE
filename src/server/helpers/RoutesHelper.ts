@@ -3,7 +3,7 @@ import {RequestHandler} from "express";
 export class RoutesHelper
 {
     // Use this to make routes require authorization
-    public static authorize(roles = null) : RequestHandler
+    public static authorize(roles?) : RequestHandler
     {
         return function (req, res, next)
         {
