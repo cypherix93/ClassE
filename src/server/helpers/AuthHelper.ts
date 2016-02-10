@@ -17,7 +17,7 @@ export class AuthHelper
         };
     }
 
-    public static generateJWToken(user, options)
+    public static generateJWToken(user, options?)
     {
         return jwt.sign(user, Config.current.jwt.secret, options || {});
     }

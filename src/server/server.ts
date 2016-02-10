@@ -9,9 +9,9 @@ Config.init(process.env.NODE_ENV = process.env.NODE_ENV || "development");
 
 import {Bootstrap} from "./config/Bootstrap";
 
-class Server
+export class Server
 {
-    constructor()
+    public static main()
     {
         var app = express();
 
@@ -28,4 +28,5 @@ class Server
         });
     }
 }
-export = new Server();
+// Start app
+Server.main();

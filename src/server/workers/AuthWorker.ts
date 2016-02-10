@@ -3,6 +3,7 @@ import passport = require("passport");
 
 import {DbContext} from "../database/DbContext";
 import {AuthHelper} from "../helpers/AuthHelper";
+import {Q} from "../helpers/Globals";
 
 export class AuthWorker
 {

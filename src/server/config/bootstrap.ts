@@ -1,23 +1,14 @@
 import bodyParser = require("body-parser");
-import lodash = require("lodash");
-import Q = require("q");
 
 import {DbConfig} from "./db/DbConfig";
 import {AuthConfig} from "./auth/AuthConfig";
 import {RoutesConfig} from "./routes/RoutesConfig";
-
-// Tell Typescript we have node's 'global' available and it's dynamic
-declare var global:any;
 
 export class Bootstrap
 {
     public static init(app)
     {
         console.log("=> Bootstrapping application...");
-
-        // Setup app global variables
-        global._ = lodash;
-        global.Q = Q;
 
         // Configure express middlewares
         app.use(bodyParser.json());
