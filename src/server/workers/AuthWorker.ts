@@ -4,6 +4,8 @@ import passport = require("passport");
 import {DbContext} from "../database/DbContext";
 import {AuthHelper} from "../helpers/AuthHelper";
 import {Q} from "../helpers/Globals";
+import {UserRepository} from "../database/repositories/UserRepository";
+import {Repository} from "../database/Repository";
 
 export class AuthWorker
 {
@@ -51,8 +53,8 @@ export class AuthWorker
 
         var input = req.body;
 
-        var userModel = DbContext.repositories.User.get();
-        var passportModel = DbContext.repositories.Passport.get();
+        var userRepo = DbContext.repositories.User as UserRepository;
+        var passportRepo = DbContext.repositories.Passport as Repository;
 
         // Let's check if the user input was valid
         var validateUser = await AuthWorker.validateNewUser(input);
@@ -65,19 +67,17 @@ export class AuthWorker
         }
 
         // User input was valid, so let's create an account for them
-        var newUser = new userModel()
-        ({
+        var newUser = userRepo.create({
             email: input.email
         });
 
         newUser = await newUser.save();
 
         // Make new passport for the new user
-        var userPassport = new passportModel()
-        ({
+        var userPassport = passportRepo.create({
             protocol: "local",
-            password: passportModel.hashPassword(input.password),
-            accessToken: passportModel.generateAccessToken(),
+            password: passportRepo.getModel().hashPassword(input.password),
+            accessToken: passportRepo.getModel().generateAccessToken(),
             userId: newUser.id
         });
 
@@ -99,8 +99,8 @@ export class AuthWorker
     // New User validation on Register
     public static async validateNewUser(input)
     {
-        var userModel = DbContext.repositories.User.get();
-        var passportModel = DbContext.repositories.Passport.get();
+        var userRepo = DbContext.repositories.User as UserRepository;
+        var passportRepo = DbContext.repositories.Passport as Repository;
 
         // Check for empty email and password
         if (!input.email || !input.password)
@@ -111,18 +111,15 @@ export class AuthWorker
             return {error: "Entered email is not a valid email address."};
 
         // Validate password constraints
-        var passwordMinLength = passportModel.getPasswordMinLength();
+        var passwordMinLength = passportRepo.getModel().getPasswordMinLength();
 
         if (input.password.length < passwordMinLength)
             return {error: "Password must be at least " + passwordMinLength + " characters long."};
 
         // Check if user already exists
-        var userCount = await userModel
-            .filter({email: input.email})
-            .count()
-            .execute();
+        var user = await userRepo.getByEmail(input.email);
 
-        if (userCount > 0)
+        if (user)
             return {error: "A user with the same email already exists."};
 
         // All checks passed

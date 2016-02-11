@@ -9787,7 +9787,7 @@ function $HttpProvider() {
      *
      * Complete list of shortcut methods:
      *
-     * - {@link ng.$http#get $http.get}
+     * - {@link ng.$http#getModel $http.get}
      * - {@link ng.$http#head $http.head}
      * - {@link ng.$http#post $http.post}
      * - {@link ng.$http#put $http.put}

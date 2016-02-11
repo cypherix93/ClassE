@@ -2,16 +2,18 @@ import {Repository} from "../Repository";
 
 export class UserRepository extends Repository
 {
-    public async updateUser(userId, updatedUser)
+    public async getByEmail(email)
     {
-        var dbUser = await this.getById(userId);
-
-        // Update changes that the user wants to make
-        dbUser.preferences = updatedUser.preferences;
-
-        await dbUser.save();
-
-        // Everything went smoothly
-        return {};
+        try
+        {
+            return await this.model
+                .filter({email: email})
+                .nth(0)
+                .run();
+        }
+        catch(err)
+        {
+            return null;
+        }
     }
 }

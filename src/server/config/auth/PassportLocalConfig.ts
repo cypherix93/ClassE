@@ -3,6 +3,8 @@ import {Strategy} from "passport-local";
 
 import {DbContext} from "../../database/DbContext"
 import {AuthHelper} from "../../helpers/AuthHelper";
+import {UserRepository} from "../../database/repositories/UserRepository";
+import {Repository} from "../../database/Repository";
 
 export class PassportLocalConfig
 {
@@ -42,17 +44,17 @@ export class PassportLocalConfig
         if (!email || !password)
             return {error: "Email and Password must be specified."};
 
+        var userRepo = DbContext.repositories.User as UserRepository;
+        var passportRepo = DbContext.repositories.Passport as Repository;
+
         // Check if user exists
-        var dbUser = await DbContext.repositories.User.get()
-            .filter({email: email})
-            .nth(0)
-            .run();
+        var dbUser = await userRepo.getByEmail(email);
 
         if (!dbUser)
             return {error: "Email or Password is not valid."};
 
         // Now check password if it matches the user's associated Passport
-        var dbPassport = await DbContext.repositories.Passport.get()
+        var dbPassport = await passportRepo.getModel()
             .filter({userId: dbUser.id, protocol: "local"})
             .nth(0)
             .run();

@@ -5,12 +5,6 @@ import {RoutesHelper} from "../helpers/RoutesHelper";
 // Endpoint "/account"
 var accountRouter = function (router:Router)
 {
-    router.route("/users")
-        .get(async function (req, res, next)
-        {
-            res.send(await DbContext.repositories.User.get().getJoin().run());
-        })
-
     // Force authorization across controller
     router.use(RoutesHelper.authorize());
 
@@ -47,16 +41,14 @@ var accountRouter = function (router:Router)
                 return res.sendStatus(403);
 
             // User checked out, let's update the user's data
-            var updateUser = await DbContext.repositories.User.updateUser(userId, req.body);
-            if(updateUser.error)
-            {
-                return res.json({
-                    success: false,
-                    error: updateUser.error
-                });
-            }
+            var updatedUser = await DbContext.repositories.User.update(userId, req.body);
 
-            return res.json({success: true})
+            await updatedUser.save();
+
+            return res.json({
+                success: true,
+                data: updatedUser
+            })
         })
 };
 
