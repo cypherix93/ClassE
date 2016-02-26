@@ -2,14 +2,12 @@ import shortid = require("shortid");
 
 import {DbContext} from "../DbContext";
 
-// import Course from "../course";
-
-//var Course = course.getCourse();
 var thinky = DbContext.thinky;
 var type = thinky.type;
 
 var Section = thinky.createModel("Section",
     {
+      // unique ID
       id: type.string()
           .default(shortid.generate),
 
@@ -22,8 +20,14 @@ var Section = thinky.createModel("Section",
         startTime: type.number(), // i wasnt sure how to save an actual time, there appears to eb a date object but not a time
         endTime: type.number()
       }],
-
+      // ID referencing the cooresponding course object
       courseID: type.string()
     }
-    // realtion here to the course class, or can all that be done in the course class itself? probably
+    //realtions set in DbContext
+    // many sections belong to a course
+    // many sections belong to many teachers
+    // many sections belong to many loading docks
+
 );
+
+export = Section;

@@ -13,6 +13,7 @@ export class DbContext
     public static repositories;
 
     // Called after all models have been initialized
+    // all relations go here?
     public static onModelsCreated()
     {
         var models = DbContext.models;
