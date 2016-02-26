@@ -21,7 +21,7 @@ var Section = thinky.createModel("Section",
         endTime: type.number()
       }],
       // ID referencing the cooresponding course object
-      courseID: type.string()
+      courseId: type.string()
     }
     //realtions set in DbContext
     // many sections belong to a course

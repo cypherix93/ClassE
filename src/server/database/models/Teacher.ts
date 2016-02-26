@@ -12,10 +12,10 @@ var Teacher = thinky.createModel("Teacher",
       //teachers have names
       name: type.string(),
       // a ratemyprofessor ID
-      RMPID: type.string(),
+      RMPId: type.string(),
 
     }
     // many teachers belong to many sections
     // many sections also belong to many teachers
 
-)
+);

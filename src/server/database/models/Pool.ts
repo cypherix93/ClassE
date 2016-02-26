@@ -10,7 +10,7 @@ var Pool = thinky.createModel("Pool",
       id: type.string()
           .default(shortid.generate),
 
-      studentID: type.string()
+      studentId: type.string()
 
     }
 

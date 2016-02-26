@@ -22,7 +22,7 @@ var Course = thinky.createModel("Course",
       // prereqs
       requirements: type.array()
           .schema({
-            CourseID: type.string(),
+            CourseId: type.string(),
             CourseDepartments: type.array().schema(type.string()),
             CourseNumber: type.number()
           }),
@@ -31,7 +31,7 @@ var Course = thinky.createModel("Course",
       // any associated recitations?
       recitations: type.array().
           .schema({
-            sectionID: type.string()
+            sectionId: type.string()
           }) // idk what the point f an object with a signle value is but it makes it clear
           // that we store ID's for reference rather than just plain strings
 

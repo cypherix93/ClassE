@@ -11,7 +11,7 @@ var Student = thinky.createModel("Student",
       id: type.string()
           .default(shortid.generate),
       // id with which to reference associated user
-      userID: type.string(),
+      userId: type.string(),
       // a student has majors
       majors: [type.string()],
       // a student has minors
@@ -23,9 +23,9 @@ var Student = thinky.createModel("Student",
 
       standing: type.string(),
       // to reference the loading dock
-      dockID: type.string(),
+      dockId: type.string(),
       // to reference the pool
-      poolID: type.string()
+      poolId: type.string()
 
     }
     // a single student belongs to a user
