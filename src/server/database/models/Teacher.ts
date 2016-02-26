@@ -19,3 +19,5 @@ var Teacher = thinky.createModel("Teacher",
     // many sections also belong to many teachers
 
 );
+
+export = Teacher;
