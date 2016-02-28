@@ -33,7 +33,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li ng-hide="IdentitySvc.isAuthenticated()">
-                    <a ng-click="ModalSvc.modals.login.open()">
+                    <a ui-sref="login">
                         <span class="fa fa-sign-in"></span>
                         Login
                     </a>

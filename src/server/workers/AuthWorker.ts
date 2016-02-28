@@ -62,7 +62,7 @@ export class AuthWorker
         {
             return {
                 success: false,
-                error: validateUser.error
+                message: validateUser.error
             };
         }
 
