@@ -26,4 +26,9 @@ AngularApp.config(function ($stateProvider, $urlRouterProvider, $locationProvide
             url: "/login",
             templateUrl: "views/auth/login.html"
         });
+    $stateProvider.state("register",
+        {
+            url: "/register",
+            templateUrl: "views/auth/register.html"
+        });
 });

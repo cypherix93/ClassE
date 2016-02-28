@@ -12,6 +12,19 @@ AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
             });
     };
 
+    exports.registerUser = function (user)
+    {
+        var def = $q.defer();
+
+        ApiSvc.post("/auth/register", user)
+            .success(function (response)
+            {
+                def.resolve(response);
+            });
+
+        return def.promise;
+    };
+
     exports.loginUser = function (email, password)
     {
         var def = $q.defer();

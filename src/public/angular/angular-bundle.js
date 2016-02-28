@@ -61,6 +61,11 @@ AngularApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", 
             url: "/login",
             templateUrl: "views/auth/login.html"
         });
+    $stateProvider.state("register",
+        {
+            url: "/register",
+            templateUrl: "views/auth/register.html"
+        });
 }]);
 // Configure Angular App Initialization
 AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
@@ -103,6 +108,19 @@ AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", functio
                 if (response.success)
                     IdentitySvc.currentUser = response.data;
             });
+    };
+
+    exports.registerUser = function (user)
+    {
+        var def = $q.defer();
+
+        ApiSvc.post("/auth/register", user)
+            .success(function (response)
+            {
+                def.resolve(response);
+            });
+
+        return def.promise;
     };
 
     exports.loginUser = function (email, password)
@@ -338,6 +356,35 @@ AngularApp.controller("LoginCtrl", ["$scope", "$state", "AuthSvc", "IdentitySvc"
 
                 // Display toast message
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);
+            });
+    };
+}]);
+AngularApp.controller("RegisterCtrl", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+{
+    $scope.user = {};
+
+    $scope.register = function ()
+    {
+        if (!$scope.user.email || !$scope.user.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
+            return;
+        }
+
+        AuthSvc.registerUser($scope.user)
+            .then(function (response)
+            {
+                if (!response.success)
+                {
+                    toastr.error(response.message);
+                    return;
+                }
+
+                // Redirect to login
+                $state.go("login");
+
+                // Display toast message
+                toastr.success("Thanks for signing up " + IdentitySvc.currentUser.email);
             });
     };
 }]);
