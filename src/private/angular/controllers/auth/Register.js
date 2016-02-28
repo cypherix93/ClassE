@@ -23,7 +23,7 @@ AngularApp.controller("RegisterCtrl", function ($scope, $state, AuthSvc, Identit
                 $state.go("login");
 
                 // Display toast message
-                toastr.success("Thanks for signing up " + IdentitySvc.currentUser.email);
+                toastr.success("Thanks for signing up " + $scope.user.email);
             });
     };
 });

@@ -384,7 +384,7 @@ AngularApp.controller("RegisterCtrl", ["$scope", "$state", "AuthSvc", "IdentityS
                 $state.go("login");
 
                 // Display toast message
-                toastr.success("Thanks for signing up " + IdentitySvc.currentUser.email);
+                toastr.success("Thanks for signing up " + $scope.user.email);
             });
     };
 }]);
