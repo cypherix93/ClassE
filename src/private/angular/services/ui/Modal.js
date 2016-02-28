@@ -93,11 +93,5 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
     // Global modals init function
     exports.initGlobalModals = function ()
     {
-        // Login Modal
-        exports.createModal("views/_shared/auth/login.html")
-            .then(function (modalInstance)
-            {
-                exports.modals.login = modalInstance;
-            });
     };
 });

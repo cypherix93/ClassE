@@ -54,6 +54,13 @@ AngularApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", 
                 return "views/error/" + urlattr.status + ".html";
             }
         });
+
+    // Auth routes
+    $stateProvider.state("login",
+        {
+            url: "/login",
+            templateUrl: "views/auth/login.html"
+        });
 }]);
 // Configure Angular App Initialization
 AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
@@ -290,12 +297,6 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
     // Global modals init function
     exports.initGlobalModals = function ()
     {
-        // Login Modal
-        exports.createModal("views/_shared/auth/login.html")
-            .then(function (modalInstance)
-            {
-                exports.modals.login = modalInstance;
-            });
     };
 }]);
 AngularApp.service("ConfigSvc", ["$http", function($http)
@@ -313,23 +314,8 @@ AngularApp.service("ConstantsSvc", function ()
 
     exports.apiBaseUrl = "http://localhost:3960";
 });
-AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.controller("LoginCtrl", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
-    var loginModal;
-
-    ModalSvc.waitUntilReady("login")
-        .then(function(modal)
-        {
-            loginModal = modal;
-
-            // Reset the form when the modal closes
-            loginModal.onClose = function()
-            {
-                delete $scope.email;
-                delete $scope.password;
-            };
-        })
-
     $scope.login = function ()
     {
         if (!$scope.email || !$scope.password)
@@ -347,8 +333,8 @@ AngularApp.controller("LoginModalCtrl", ["$scope", "AuthSvc", "IdentitySvc", "Mo
                     return;
                 }
 
-                // Close the login modal
-                loginModal.close();
+                // Redirect to home page
+                $state.go("home");
 
                 // Display toast message
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);
