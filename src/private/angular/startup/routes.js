@@ -19,16 +19,4 @@ AngularApp.config(function ($stateProvider, $urlRouterProvider, $locationProvide
                 return "views/error/" + urlattr.status + ".html";
             }
         });
-
-    // Auth routes
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login.html"
-        });
-    $stateProvider.state("register",
-        {
-            url: "/register",
-            templateUrl: "views/auth/register.html"
-        });
 });

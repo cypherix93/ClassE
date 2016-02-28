@@ -124,7 +124,7 @@ gulp.task("bundle-ng-files",
             paths.angular + "startup/**/*.js",
             paths.angular + "services/**/*.js",
             paths.angular + "directives/**/*.js",
-            paths.angular + "controllers/**/*.js"
+            paths.angular + "states/**/*.js"
         ];
 
         var scripts = gulp.src(angularScripts)

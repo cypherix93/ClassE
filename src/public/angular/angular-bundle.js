@@ -54,18 +54,6 @@ AngularApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", 
                 return "views/error/" + urlattr.status + ".html";
             }
         });
-
-    // Auth routes
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login.html"
-        });
-    $stateProvider.state("register",
-        {
-            url: "/register",
-            templateUrl: "views/auth/register.html"
-        });
 }]);
 // Configure Angular App Initialization
 AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
@@ -332,59 +320,75 @@ AngularApp.service("ConstantsSvc", function ()
 
     exports.apiBaseUrl = "http://localhost:3960";
 });
-AngularApp.controller("LoginCtrl", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.config(["$stateProvider", function($stateProvider)
 {
-    $scope.login = function ()
-    {
-        if (!$scope.email || !$scope.password)
+    $stateProvider.state("login",
         {
-            toastr.error("Both email and password needs to be provided.");
-            return;
-        }
-
-        AuthSvc.loginUser($scope.email, $scope.password)
-            .then(function (response)
+            url: "/login",
+            templateUrl: "views/auth/login.html",
+            controller: ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
             {
-                if (!response.success)
+                $scope.login = function ()
                 {
-                    toastr.error(response.message);
-                    return;
-                }
+                    if (!$scope.email || !$scope.password)
+                    {
+                        toastr.error("Both email and password needs to be provided.");
+                        return;
+                    }
 
-                // Redirect to home page
-                $state.go("home");
+                    AuthSvc.loginUser($scope.email, $scope.password)
+                        .then(function (response)
+                        {
+                            if (!response.success)
+                            {
+                                toastr.error(response.message);
+                                return;
+                            }
 
-                // Display toast message
-                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
-            });
-    };
+                            // Redirect to home page
+                            $state.go("home");
+
+                            // Display toast message
+                            toastr.success("Welcome back " + IdentitySvc.currentUser.email);
+                        });
+                };
+            }]
+        });
 }]);
-AngularApp.controller("RegisterCtrl", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.config(["$stateProvider", function ($stateProvider)
 {
-    $scope.user = {};
-
-    $scope.register = function ()
-    {
-        if (!$scope.user.email || !$scope.user.password)
+    $stateProvider.state("register",
         {
-            toastr.error("Both email and password needs to be provided.");
-            return;
-        }
-
-        AuthSvc.registerUser($scope.user)
-            .then(function (response)
+            url: "/register",
+            templateUrl: "views/auth/register.html",
+            controller: ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
             {
-                if (!response.success)
+                $scope.user = {};
+
+                $scope.register = function ()
                 {
-                    toastr.error(response.message);
-                    return;
-                }
+                    if (!$scope.user.email || !$scope.user.password)
+                    {
+                        toastr.error("Both email and password needs to be provided.");
+                        return;
+                    }
 
-                // Redirect to login
-                $state.go("login");
+                    AuthSvc.registerUser($scope.user)
+                        .then(function (response)
+                        {
+                            if (!response.success)
+                            {
+                                toastr.error(response.message);
+                                return;
+                            }
 
-                // Display toast message
-                toastr.success("Thanks for signing up " + $scope.user.email);
-            });
-    };
+                            // Redirect to login
+                            $state.go("login");
+
+                            // Display toast message
+                            toastr.success("Thanks for signing up " + $scope.user.email);
+                        });
+                };
+            }]
+        });
 }]);
