@@ -18,7 +18,8 @@ var Course = thinky.createModel("Course",
       // short description
       description: type.string(),
       // SBC requirement
-      SBC: type.string(),
+      SBC: type.array()
+          .schema(type.string()),
       // prereqs
       requirements: type.array()
           .schema({
@@ -29,7 +30,7 @@ var Course = thinky.createModel("Course",
           // reference ID's instead of actual objects
 
       // any associated recitations?
-      recitations: type.array().
+      recitations: type.array()
           .schema({
             sectionId: type.string()
           }) // idk what the point f an object with a signle value is but it makes it clear
