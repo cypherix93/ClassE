@@ -32,7 +32,9 @@
     "bower": "^1.7.2",
     "del": "^2.2.0",
     "gulp": "^3.9.0",
+    "gulp-angular-templatecache": "^2.0.0",
     "gulp-batch": "^1.0.5",
+    "gulp-clean-css": "^2.0.10",
     "gulp-concat": "^2.6.0",
     "gulp-cssnano": "^2.1.0",
     "gulp-debug": "^2.1.2",
@@ -54,6 +56,7 @@
     "main-bower-files": "^2.11.1",
     "merge-stream": "^1.0.0",
     "run-sequence": "^1.1.5",
+    "streamqueue": "^1.1.1",
     "typescript": "^1.7.5"
   }
 }

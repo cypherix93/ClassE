@@ -305,6 +305,12 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
     {
     };
 }]);
+AngularApp.service("ConstantsSvc", function ()
+{
+    var exports = this;
+
+    exports.apiBaseUrl = "http://localhost:3960";
+});
 AngularApp.service("ConfigSvc", ["$http", function($http)
 {
     var exports = this;
@@ -314,81 +320,4 @@ AngularApp.service("ConfigSvc", ["$http", function($http)
         return $http.get("angular/meta.json");
     };
 }]);
-AngularApp.service("ConstantsSvc", function ()
-{
-    var exports = this;
-
-    exports.apiBaseUrl = "http://localhost:3960";
-});
-AngularApp.config(["$stateProvider", function($stateProvider)
-{
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login.html",
-            controller: ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
-            {
-                $scope.login = function ()
-                {
-                    if (!$scope.email || !$scope.password)
-                    {
-                        toastr.error("Both email and password needs to be provided.");
-                        return;
-                    }
-
-                    AuthSvc.loginUser($scope.email, $scope.password)
-                        .then(function (response)
-                        {
-                            if (!response.success)
-                            {
-                                toastr.error(response.message);
-                                return;
-                            }
-
-                            // Redirect to home page
-                            $state.go("home");
-
-                            // Display toast message
-                            toastr.success("Welcome back " + IdentitySvc.currentUser.email);
-                        });
-                };
-            }]
-        });
-}]);
-AngularApp.config(["$stateProvider", function ($stateProvider)
-{
-    $stateProvider.state("register",
-        {
-            url: "/register",
-            templateUrl: "views/auth/register.html",
-            controller: ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function ($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
-            {
-                $scope.user = {};
-
-                $scope.register = function ()
-                {
-                    if (!$scope.user.email || !$scope.user.password)
-                    {
-                        toastr.error("Both email and password needs to be provided.");
-                        return;
-                    }
-
-                    AuthSvc.registerUser($scope.user)
-                        .then(function (response)
-                        {
-                            if (!response.success)
-                            {
-                                toastr.error(response.message);
-                                return;
-                            }
-
-                            // Redirect to login
-                            $state.go("login");
-
-                            // Display toast message
-                            toastr.success("Thanks for signing up " + $scope.user.email);
-                        });
-                };
-            }]
-        });
-}]);
+angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/modal-template.html','<div class="modal fade">\r\n    <div class="modal-header">\r\n        <button type="button" class="close pull-right" data-dismiss="modal">\r\n            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>\r\n        </button>\r\n\r\n        <h4 ng-transclude transclude-from="modal-title">\r\n            Modal Title\r\n        </h4>\r\n    </div>\r\n    <div class="modal-body" ng-transclude transclude-from="modal-body">\r\n        Modal Body\r\n    </div>\r\n</div>');}]);
