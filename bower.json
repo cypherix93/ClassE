@@ -10,7 +10,7 @@
     "angular-bootstrap": "1.x.x",
     "bootstrap-sass-official": "3.x.x",
     "fontawesome": "4.x.x",
-    "jquery": "3.x.x",
+    "jquery": "2.x.x",
     "angular-toastr": "1.x.x",
     "angular-ui-router": "0.3.x"
   },

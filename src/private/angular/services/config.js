@@ -4,6 +4,6 @@ AngularApp.service("ConfigSvc", function($http)
 
     exports.getAppMeta = function()
     {
-        return $http.get("angular/meta.json");
+        return $http.get("js/angular/meta.json");
     };
 });

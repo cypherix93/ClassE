@@ -11,11 +11,11 @@ var AngularApp = angular.module("AngularApp",
 // Configure Angular App Preferences
 
 // HTTP Configuration, like cookie, JWT and error handling
-AngularApp.config(function ($httpProvider)
+AngularApp.config(["$httpProvider", function ($httpProvider)
 {
     $httpProvider.defaults.withCredentials = true;
 
-    $httpProvider.interceptors.push(function ($location)
+    $httpProvider.interceptors.push(["$location", function ($location)
     {
         return {
             "responseError": function (error)
@@ -24,17 +24,17 @@ AngularApp.config(function ($httpProvider)
                     $location.path("/error/404");
             }
         };
-    });
-});
+    }]);
+}]);
 
-AngularApp.config(function (toastrConfig)
+AngularApp.config(["toastrConfig", function (toastrConfig)
 {
     toastrConfig.autoDismiss = true;
     toastrConfig.positionClass = "toast-bottom-center";
     toastrConfig.preventOpenDuplicates = true;
-});
+}]);
 // Configure Angular App Routes
-AngularApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider)
+AngularApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", function ($stateProvider, $urlRouterProvider, $locationProvider)
 {
     $locationProvider.html5Mode(false);
 
@@ -54,9 +54,9 @@ AngularApp.config(function ($stateProvider, $urlRouterProvider, $locationProvide
                 return "views/error/" + urlattr.status + ".html";
             }
         });
-});
+}]);
 // Configure Angular App Initialization
-AngularApp.run(function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
+AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
 {
     // App Metadata setup
     ConfigSvc.getAppMeta()
@@ -83,8 +83,8 @@ AngularApp.run(function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
 
     // Init Global Modals
     ModalSvc.initGlobalModals();
-});
-AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
+}]);
+AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", function ($q, $window, ApiSvc, IdentitySvc)
 {
     var exports = this;
 
@@ -153,7 +153,7 @@ AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
 
         return def.promise;
     };
-});
+}]);
 AngularApp.service("IdentitySvc", function ()
 {
     var exports = this;
@@ -167,7 +167,7 @@ AngularApp.service("IdentitySvc", function ()
         return !!exports.currentUser;
     };
 });
-AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
+AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
 {
     var exports = this;
 
@@ -207,8 +207,8 @@ AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
 
     bindMethods("get", "delete", "head", "jsonp");
     bindMethodsWithData("post", "put", "patch");
-});
-AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
+}]);
+AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
 
@@ -304,20 +304,98 @@ AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
     exports.initGlobalModals = function ()
     {
     };
-});
-AngularApp.service("ConfigSvc", function($http)
+}]);
+AngularApp.service("ConfigSvc", ["$http", function($http)
 {
     var exports = this;
 
     exports.getAppMeta = function()
     {
-        return $http.get("angular/meta.json");
+        return $http.get("js/angular/meta.json");
     };
-});
+}]);
 AngularApp.service("ConstantsSvc", function ()
 {
     var exports = this;
 
     exports.apiBaseUrl = "http://localhost:3960";
 });
+AngularApp.config(["$stateProvider", function ($stateProvider)
+{
+    $stateProvider.state("login",
+        {
+            url: "/login",
+            templateUrl: "views/auth/login.html",
+            controller: "LoginController as Login"
+        });
+}]);
+AngularApp.controller("LoginController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function LoginController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+{
+    var self = this;
+    
+    self.login = function ()
+    {
+        if (!self.email || !self.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
+            return;
+        }
+        
+        AuthSvc.loginUser(self.email, self.password)
+            .then(function (response)
+            {
+                if (!response.success)
+                {
+                    toastr.error(response.message);
+                    return;
+                }
+                
+                // Redirect to home page
+                $state.go("home");
+                
+                // Display toast message
+                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
+            });
+    };
+}])
+AngularApp.config(["$stateProvider", function ($stateProvider)
+{
+    $stateProvider.state("register",
+        {
+            url: "/register",
+            templateUrl: "views/auth/register.html",
+            controller: "RegisterController as Register"
+        });
+}]);
+AngularApp.controller("RegisterController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function RegisterController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+{
+    var self = this;
+
+    self.user = {};
+
+    self.register = function ()
+    {
+        if (!self.user.email || !self.user.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
+            return;
+        }
+
+        AuthSvc.registerUser(self.user)
+            .then(function (response)
+            {
+                if (!response.success)
+                {
+                    toastr.error(response.message);
+                    return;
+                }
+
+                // Redirect to login
+                $state.go("login");
+
+                // Display toast message
+                toastr.success("Thanks for signing up " + self.user.email);
+            });
+    };
+}])
 angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/modal-template.html','<div class="modal fade">\r\n    <div class="modal-header">\r\n        <button type="button" class="close pull-right" data-dismiss="modal">\r\n            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>\r\n        </button>\r\n\r\n        <h4 ng-transclude transclude-from="modal-title">\r\n            Modal Title\r\n        </h4>\r\n    </div>\r\n    <div class="modal-body" ng-transclude transclude-from="modal-body">\r\n        Modal Body\r\n    </div>\r\n</div>');}]);
