@@ -1,12 +1,3 @@
-AngularApp.config(function ($stateProvider)
-{
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login.html",
-            controller: "LoginController as Login"
-        });
-});
 AngularApp.controller("LoginController", function LoginController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     var self = this;
@@ -35,4 +26,4 @@ AngularApp.controller("LoginController", function LoginController($scope, $state
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);
             });
     };
-})
+});

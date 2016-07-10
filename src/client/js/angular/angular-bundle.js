@@ -320,15 +320,10 @@ AngularApp.service("ConstantsSvc", function ()
 
     exports.apiBaseUrl = "http://localhost:3960";
 });
-AngularApp.config(["$stateProvider", function ($stateProvider)
-{
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login.html",
-            controller: "LoginController as Login"
-        });
-}]);
+AngularApp.component("loginComponent", {
+    controller: "LoginController as Login",
+    templateUrl: "views/auth/login.html"
+});
 AngularApp.controller("LoginController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function LoginController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     var self = this;
@@ -357,16 +352,19 @@ AngularApp.controller("LoginController", ["$scope", "$state", "AuthSvc", "Identi
                 toastr.success("Welcome back " + IdentitySvc.currentUser.email);
             });
     };
-}])
+}]);
 AngularApp.config(["$stateProvider", function ($stateProvider)
 {
-    $stateProvider.state("register",
+    $stateProvider.state("login",
         {
-            url: "/register",
-            templateUrl: "views/auth/register.html",
-            controller: "RegisterController as Register"
+            url: "/login",
+            template: "<login-component></login-component>"
         });
 }]);
+AngularApp.component("registerComponent", {
+    controller: "RegisterController as Login",
+    templateUrl: "views/auth/register.html"
+});
 AngularApp.controller("RegisterController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function RegisterController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     var self = this;
@@ -397,5 +395,13 @@ AngularApp.controller("RegisterController", ["$scope", "$state", "AuthSvc", "Ide
                 toastr.success("Thanks for signing up " + self.user.email);
             });
     };
-}])
+}]);
+AngularApp.config(["$stateProvider", function ($stateProvider)
+{
+    $stateProvider.state("register",
+        {
+            url: "/register",
+            template: "<register-component></register-component>"
+        });
+}]);
 angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/modal-template.html','<div class="modal fade">\r\n    <div class="modal-header">\r\n        <button type="button" class="close pull-right" data-dismiss="modal">\r\n            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>\r\n        </button>\r\n\r\n        <h4 ng-transclude transclude-from="modal-title">\r\n            Modal Title\r\n        </h4>\r\n    </div>\r\n    <div class="modal-body" ng-transclude transclude-from="modal-body">\r\n        Modal Body\r\n    </div>\r\n</div>');}]);

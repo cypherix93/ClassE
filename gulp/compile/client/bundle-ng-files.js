@@ -13,7 +13,7 @@ module.exports = function (gulp, plugins, paths)
             paths.angular + "services/**/*.js",
             paths.angular + "filters/**/*.js",
             paths.angular + "directives/**/*.js",
-            paths.angular + "states/**/*.js"
+            paths.angular + "components/**/*.js"
         ];
         
         var angularTemplates = paths.angular + "templates/**/*.html";

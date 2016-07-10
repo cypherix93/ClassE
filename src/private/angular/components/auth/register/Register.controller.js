@@ -1,12 +1,3 @@
-AngularApp.config(function ($stateProvider)
-{
-    $stateProvider.state("register",
-        {
-            url: "/register",
-            templateUrl: "views/auth/register.html",
-            controller: "RegisterController as Register"
-        });
-});
 AngularApp.controller("RegisterController", function RegisterController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
     var self = this;
@@ -37,4 +28,4 @@ AngularApp.controller("RegisterController", function RegisterController($scope, 
                 toastr.success("Thanks for signing up " + self.user.email);
             });
     };
-})
+});
