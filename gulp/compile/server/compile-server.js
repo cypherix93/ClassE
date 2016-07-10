@@ -9,7 +9,7 @@ module.exports = function (gulp, plugins, paths)
     {
         var tsFilter = plugins.filter("**/*.ts", {restore: true});
 
-        return gulp.src(paths.app + "**")
+        return gulp.src(paths.server + "**")
             .pipe(tsFilter)
             .pipe(plugins.typescript({
                 typescript: typescript,

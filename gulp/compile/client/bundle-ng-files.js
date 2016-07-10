@@ -18,7 +18,7 @@ module.exports = function (gulp, plugins, paths)
         
         var angularTemplates = paths.angular + "templates/**/*.html";
         
-        var angularDest = paths.client + "js/angular/";
+        var angularDest = paths.assets + "js/angular/";
         
         var scripts = gulp.src(angularScripts)
             .pipe(plugins.debug({title: "angular app:"}))

@@ -18,12 +18,13 @@ paths.build = "./build/";
 paths.deploy = "./deploy/";
 paths.project = "./src/";
 
-paths.private = paths.project + "private/";
 paths.client = paths.project + "client/";
-paths.app = paths.project + "server/";
+paths.server = paths.project + "server/";
 
-paths.angular = paths.private + "angular/";
-paths.sass = paths.private + "sass/";
+paths.assets = paths.client + "assets/";
+paths.lib = paths.assets + "lib/";
+paths.angular = paths.client + "angular/";
+paths.sass = paths.client + "sass/";
 
 // Default Task
 gulp.task("default", function (callback)
