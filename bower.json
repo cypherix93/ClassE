@@ -8,11 +8,11 @@
     "angular-animate": "1.x.x",
     "angular-messages": "1.x.x",
     "angular-bootstrap": "1.x.x",
-    "bootstrap-sass-official": "3.3.x",
+    "bootstrap-sass-official": "3.x.x",
     "fontawesome": "4.x.x",
-    "jquery": "1.11.2",
-    "angular-toastr": "~1.6.0",
-    "angular-ui-router": "~0.2.17"
+    "jquery": "2.x.x",
+    "angular-toastr": "1.x.x",
+    "angular-ui-router": "0.3.x"
   },
   "overrides": {
     "bootstrap-sass-official": {
@@ -27,9 +27,5 @@
         "fonts/*"
       ]
     }
-  },
-  "devDependencies": {},
-  "resolutions": {
-    "angular": "1.4.7"
   }
 }

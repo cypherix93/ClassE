@@ -1,0 +1,65 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" ui-sref="home">
+                <span class="fa fa-code"></span>
+                {{ AppMeta.Name }}
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="top-navbar">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a ui-sref="home">
+                        Link 1
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="home">
+                        Link 2
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="home">
+                        Link 3
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="IdentityService.isAuthenticated()">
+                    <a ui-sref="login">
+                        <span class="fa fa-sign-in"></span>
+                        Login
+                    </a>
+                </li>
+                <li class="dropdown" ng-show="IdentityService.isAuthenticated()">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="fa fa-user"></span>
+                        {{IdentityService.currentUser.name}} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a>Profile</a>
+                        </li>
+                        <li>
+                            <a>Preferences</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a ng-click="AuthService.logoutUser()">
+                                <span class="fa fa-sign-out"></span>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
