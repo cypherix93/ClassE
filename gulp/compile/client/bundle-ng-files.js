@@ -9,11 +9,11 @@ module.exports = function (gulp, plugins, paths)
     {
         var angularScripts = [
             paths.angular + "AngularApp.js",
-            paths.angular + "startup/**/*.js",
-            paths.angular + "services/**/*.js",
-            paths.angular + "filters/**/*.js",
-            paths.angular + "directives/**/*.js",
-            paths.angular + "components/**/*.js"
+            paths.angular + "core/startup/**/*.js",
+            paths.angular + "core/services/**/*.js",
+            paths.angular + "core/filters/**/*.js",
+            paths.angular + "core/directives/**/*.js",
+            paths.angular + "app/**/*.js"
         ];
         
         var angularTemplates = paths.angular + "templates/**/*.html";

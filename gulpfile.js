@@ -29,8 +29,7 @@ paths.sass = paths.private + "sass/";
 gulp.task("default", function (callback)
 {
     runSequence(
-        "update-package-info",
-        "bower-install",
+        "install-packages",
         "deploy",
         callback
     );
