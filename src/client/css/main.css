@@ -5864,11 +5864,6 @@ hr {
 #content-container {
   background: white;
   padding: 65px 30px 30px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 90px;
   overflow: hidden;
   -webkit-box-shadow: #b3b3b3 0 0 3px;
   box-shadow: #b3b3b3 0 0 3px; }
@@ -5879,10 +5874,6 @@ div[ng-view] {
   position: relative; }
 
 #footer-container {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
   padding: 15px; }
 
 /*

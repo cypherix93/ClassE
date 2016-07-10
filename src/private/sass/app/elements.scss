@@ -41,11 +41,6 @@ h1, h2, h3, h4, h5, h6
 {
     background: white;
     padding: 65px 30px 30px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 90px;
 
     overflow: hidden;
 
@@ -59,11 +54,6 @@ div[ng-view]
 }
 #footer-container
 {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
     padding: 15px;
 }
 /*

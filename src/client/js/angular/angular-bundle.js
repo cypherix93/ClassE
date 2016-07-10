@@ -322,7 +322,7 @@ AngularApp.service("ConstantsSvc", function ()
 });
 AngularApp.component("loginComponent", {
     controller: "LoginController as Login",
-    templateUrl: "views/auth/login.html"
+    templateUrl: "views/auth/login/index.html"
 });
 AngularApp.controller("LoginController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function LoginController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
@@ -363,7 +363,7 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
 }]);
 AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
-    templateUrl: "views/auth/register.html"
+    templateUrl: "views/auth/register/index.html"
 });
 AngularApp.controller("RegisterController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function RegisterController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
 {
