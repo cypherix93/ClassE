@@ -1,4 +1,4 @@
-AngularApp.controller("RegisterController", function RegisterController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.controller("RegisterController", function RegisterController($scope, $state, AuthService, IdentityService, ModalService, toastr)
 {
     var self = this;
 
@@ -12,7 +12,7 @@ AngularApp.controller("RegisterController", function RegisterController($scope, 
             return;
         }
 
-        AuthSvc.registerUser(self.user)
+        AuthService.registerUser(self.user)
             .then(function (response)
             {
                 if (!response.success)

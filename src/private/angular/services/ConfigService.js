@@ -1,4 +1,4 @@
-AngularApp.service("ConfigSvc", function($http)
+AngularApp.service("ConfigService", function($http)
 {
     var exports = this;
 

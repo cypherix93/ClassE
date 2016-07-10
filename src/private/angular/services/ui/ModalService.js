@@ -1,4 +1,4 @@
-AngularApp.service("ModalSvc", function ($q, $http, $compile, $rootScope)
+AngularApp.service("ModalService", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
 

@@ -32,16 +32,16 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li ng-hide="IdentitySvc.isAuthenticated()">
+                <li ng-hide="IdentityService.isAuthenticated()">
                     <a ui-sref="login">
                         <span class="fa fa-sign-in"></span>
                         Login
                     </a>
                 </li>
-                <li class="dropdown" ng-show="IdentitySvc.isAuthenticated()">
+                <li class="dropdown" ng-show="IdentityService.isAuthenticated()">
                     <a class="dropdown-toggle" data-toggle="dropdown">
                         <span class="fa fa-user"></span>
-                        {{IdentitySvc.currentUser.name}} <span class="caret"></span>
+                        {{IdentityService.currentUser.name}} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
@@ -52,7 +52,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a ng-click="AuthSvc.logoutUser()">
+                            <a ng-click="AuthService.logoutUser()">
                                 <span class="fa fa-sign-out"></span>
                                 Logout
                             </a>

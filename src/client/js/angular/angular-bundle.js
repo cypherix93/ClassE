@@ -56,10 +56,10 @@ AngularApp.config(["$stateProvider", "$urlRouterProvider", "$locationProvider", 
         });
 }]);
 // Configure Angular App Initialization
-AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc", function ($rootScope, ConfigSvc, IdentitySvc, AuthSvc, ModalSvc)
+AngularApp.run(["$rootScope", "ConfigService", "IdentityService", "AuthService", "ModalService", function ($rootScope, ConfigService, IdentityService, AuthService, ModalService)
 {
     // App Metadata setup
-    ConfigSvc.getAppMeta()
+    ConfigService.getAppMeta()
         .then(function (response)
         {
             $rootScope.AppMeta = {
@@ -73,36 +73,31 @@ AngularApp.run(["$rootScope", "ConfigSvc", "IdentitySvc", "AuthSvc", "ModalSvc",
 
     $rootScope.PageName = "Home";
 
-    // Global services
-    $rootScope.IdentitySvc = IdentitySvc;
-    $rootScope.AuthSvc = AuthSvc;
-    $rootScope.ModalSvc = ModalSvc;
-
     // Setup user in session if any
-    AuthSvc.bootstrapSessionUser();
+    AuthService.bootstrapSessionUser();
 
     // Init Global Modals
-    ModalSvc.initGlobalModals();
+    ModalService.initGlobalModals();
 }]);
-AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", function ($q, $window, ApiSvc, IdentitySvc)
+AngularApp.service("AuthService", ["$q", "$window", "ApiService", "IdentityService", function ($q, $window, ApiService, IdentityService)
 {
-    var exports = this;
+    var self = this;
 
-    exports.bootstrapSessionUser = function ()
+    self.bootstrapSessionUser = function ()
     {
-        ApiSvc.get("/auth/me")
+        ApiService.get("/auth/me")
             .success(function (response)
             {
                 if (response.success)
-                    IdentitySvc.currentUser = response.data;
+                    IdentityService.currentUser = response.data;
             });
     };
 
-    exports.registerUser = function (user)
+    self.registerUser = function (user)
     {
         var def = $q.defer();
 
-        ApiSvc.post("/auth/register", user)
+        ApiService.post("/auth/register", user)
             .success(function (response)
             {
                 def.resolve(response);
@@ -111,18 +106,18 @@ AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", functio
         return def.promise;
     };
 
-    exports.loginUser = function (email, password)
+    self.loginUser = function (email, password)
     {
         var def = $q.defer();
 
-        ApiSvc.post("/auth/login", {email: email, password: password})
+        ApiService.post("/auth/login", {email: email, password: password})
             .success(function (response)
             {
                 if (response.success)
                 {
-                    IdentitySvc.currentUser = response.data;
+                    IdentityService.currentUser = response.data;
 
-                    $window.sessionStorage.token = IdentitySvc.currentUser.token;
+                    $window.sessionStorage.token = IdentityService.currentUser.token;
                 }
                 else
                 {
@@ -135,16 +130,16 @@ AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", functio
         return def.promise;
     };
 
-    exports.logoutUser = function ()
+    self.logoutUser = function ()
     {
         var def = $q.defer();
 
-        ApiSvc.post("/auth/logout", {logout: true})
+        ApiService.post("/auth/logout", {logout: true})
             .success(function (response)
             {
                 if (response.success)
                 {
-                    delete IdentitySvc.currentUser;
+                    delete IdentityService.currentUser;
                     delete $window.sessionStorage.token;
                 }
 
@@ -154,24 +149,24 @@ AngularApp.service("AuthSvc", ["$q", "$window", "ApiSvc", "IdentitySvc", functio
         return def.promise;
     };
 }]);
-AngularApp.service("IdentitySvc", function ()
+AngularApp.service("IdentityService", function ()
 {
-    var exports = this;
+    var self = this;
 
     // Current User Identity
-    exports.currentUser = undefined;
+    self.currentUser = undefined;
 
     // Function to check if the current user is authenticated
-    exports.isAuthenticated = function ()
+    self.isAuthenticated = function ()
     {
-        return !!exports.currentUser;
+        return !!self.currentUser;
     };
 });
-AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, ConstantsSvc)
+AngularApp.service("ApiService", ["$http", "ConstantsService", function ($http, ConstantsService)
 {
-    var exports = this;
+    var self = this;
 
-    var baseUrl = ConstantsSvc.apiBaseUrl;
+    var baseUrl = ConstantsService.apiBaseUrl;
 
     var bindMethods = function ()
     {
@@ -179,7 +174,7 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
         {
             var arg = arguments[i];
 
-            exports[arg] = (function(method)
+            self[arg] = (function(method)
             {
                 return function (apiUrl, config)
                 {
@@ -195,7 +190,7 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
         {
             var arg = arguments[i];
 
-            exports[arg] = (function(method)
+            self[arg] = (function(method)
             {
                 return function (apiUrl, data, config)
                 {
@@ -208,7 +203,7 @@ AngularApp.service("ApiSvc", ["$http", "ConstantsSvc", function ($http, Constant
     bindMethods("get", "delete", "head", "jsonp");
     bindMethodsWithData("post", "put", "patch");
 }]);
-AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
+AngularApp.service("ModalService", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
 
@@ -305,7 +300,7 @@ AngularApp.service("ModalSvc", ["$q", "$http", "$compile", "$rootScope", functio
     {
     };
 }]);
-AngularApp.service("ConfigSvc", ["$http", function($http)
+AngularApp.service("ConfigService", ["$http", function($http)
 {
     var exports = this;
 
@@ -314,17 +309,17 @@ AngularApp.service("ConfigSvc", ["$http", function($http)
         return $http.get("js/angular/meta.json");
     };
 }]);
-AngularApp.service("ConstantsSvc", function ()
+AngularApp.service("ConstantsService", function ()
 {
-    var exports = this;
+    var self = this;
 
-    exports.apiBaseUrl = "http://localhost:3960";
+    self.apiBaseUrl = "http://localhost:3960";
 });
 AngularApp.component("loginComponent", {
     controller: "LoginController as Login",
     templateUrl: "views/auth/login/index.html"
 });
-AngularApp.controller("LoginController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function LoginController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.controller("LoginController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
 {
     var self = this;
     
@@ -336,7 +331,7 @@ AngularApp.controller("LoginController", ["$scope", "$state", "AuthSvc", "Identi
             return;
         }
         
-        AuthSvc.loginUser(self.email, self.password)
+        AuthService.loginUser(self.email, self.password)
             .then(function (response)
             {
                 if (!response.success)
@@ -365,7 +360,7 @@ AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
     templateUrl: "views/auth/register/index.html"
 });
-AngularApp.controller("RegisterController", ["$scope", "$state", "AuthSvc", "IdentitySvc", "ModalSvc", "toastr", function RegisterController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.controller("RegisterController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function RegisterController($scope, $state, AuthService, IdentityService, ModalService, toastr)
 {
     var self = this;
 
@@ -379,7 +374,7 @@ AngularApp.controller("RegisterController", ["$scope", "$state", "AuthSvc", "Ide
             return;
         }
 
-        AuthSvc.registerUser(self.user)
+        AuthService.registerUser(self.user)
             .then(function (response)
             {
                 if (!response.success)

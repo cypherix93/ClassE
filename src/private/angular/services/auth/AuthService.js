@@ -1,22 +1,22 @@
-AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
+AngularApp.service("AuthService", function ($q, $window, ApiService, IdentityService)
 {
-    var exports = this;
+    var self = this;
 
-    exports.bootstrapSessionUser = function ()
+    self.bootstrapSessionUser = function ()
     {
-        ApiSvc.get("/auth/me")
+        ApiService.get("/auth/me")
             .success(function (response)
             {
                 if (response.success)
-                    IdentitySvc.currentUser = response.data;
+                    IdentityService.currentUser = response.data;
             });
     };
 
-    exports.registerUser = function (user)
+    self.registerUser = function (user)
     {
         var def = $q.defer();
 
-        ApiSvc.post("/auth/register", user)
+        ApiService.post("/auth/register", user)
             .success(function (response)
             {
                 def.resolve(response);
@@ -25,18 +25,18 @@ AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
         return def.promise;
     };
 
-    exports.loginUser = function (email, password)
+    self.loginUser = function (email, password)
     {
         var def = $q.defer();
 
-        ApiSvc.post("/auth/login", {email: email, password: password})
+        ApiService.post("/auth/login", {email: email, password: password})
             .success(function (response)
             {
                 if (response.success)
                 {
-                    IdentitySvc.currentUser = response.data;
+                    IdentityService.currentUser = response.data;
 
-                    $window.sessionStorage.token = IdentitySvc.currentUser.token;
+                    $window.sessionStorage.token = IdentityService.currentUser.token;
                 }
                 else
                 {
@@ -49,16 +49,16 @@ AngularApp.service("AuthSvc", function ($q, $window, ApiSvc, IdentitySvc)
         return def.promise;
     };
 
-    exports.logoutUser = function ()
+    self.logoutUser = function ()
     {
         var def = $q.defer();
 
-        ApiSvc.post("/auth/logout", {logout: true})
+        ApiService.post("/auth/logout", {logout: true})
             .success(function (response)
             {
                 if (response.success)
                 {
-                    delete IdentitySvc.currentUser;
+                    delete IdentityService.currentUser;
                     delete $window.sessionStorage.token;
                 }
 

@@ -1,4 +1,4 @@
-AngularApp.controller("LoginController", function LoginController($scope, $state, AuthSvc, IdentitySvc, ModalSvc, toastr)
+AngularApp.controller("LoginController", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
 {
     var self = this;
     
@@ -10,7 +10,7 @@ AngularApp.controller("LoginController", function LoginController($scope, $state
             return;
         }
         
-        AuthSvc.loginUser(self.email, self.password)
+        AuthService.loginUser(self.email, self.password)
             .then(function (response)
             {
                 if (!response.success)

@@ -8,7 +8,7 @@ module.exports = function (gulp, plugins, paths)
     gulp.task("bundle-ng-files", function ()
     {
         var angularScripts = [
-            paths.angular + "angular-app.js",
+            paths.angular + "AngularApp.js",
             paths.angular + "startup/**/*.js",
             paths.angular + "services/**/*.js",
             paths.angular + "filters/**/*.js",

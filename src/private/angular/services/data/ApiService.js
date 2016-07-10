@@ -1,8 +1,8 @@
-AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
+AngularApp.service("ApiService", function ($http, ConstantsService)
 {
-    var exports = this;
+    var self = this;
 
-    var baseUrl = ConstantsSvc.apiBaseUrl;
+    var baseUrl = ConstantsService.apiBaseUrl;
 
     var bindMethods = function ()
     {
@@ -10,7 +10,7 @@ AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
         {
             var arg = arguments[i];
 
-            exports[arg] = (function(method)
+            self[arg] = (function(method)
             {
                 return function (apiUrl, config)
                 {
@@ -26,7 +26,7 @@ AngularApp.service("ApiSvc", function ($http, ConstantsSvc)
         {
             var arg = arguments[i];
 
-            exports[arg] = (function(method)
+            self[arg] = (function(method)
             {
                 return function (apiUrl, data, config)
                 {
