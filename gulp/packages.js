@@ -1,5 +1,7 @@
 "use strict";
 
+var runSequence = require("run-sequence");
+
 module.exports = function (gulp, plugins, paths, meta)
 {
     require("./packages/update-package-info")(gulp, plugins, paths, meta);
