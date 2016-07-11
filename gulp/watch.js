@@ -14,9 +14,7 @@ module.exports = function (gulp, plugins, paths)
         });
 
     // Watch client files for changes
-    gulp.task("watch-client", ["watch-public", "watch-angular", "watch-sass"]);
-
-    gulp.task("watch-public",
+    gulp.task("watch-client",
         function ()
         {
             plugins.watch(paths.client + "**",
