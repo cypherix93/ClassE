@@ -2,6 +2,8 @@
 
 module.exports = function (gulp, plugins, paths)
 {
+    gulp.task("run", ["run-server", "run-client"]);
+
     gulp.task("run-server", ["compile-server"], function ()
     {
         return plugins.nodemon({

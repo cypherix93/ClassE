@@ -4,6 +4,6 @@ AngularApp.service("ConfigService", function($http)
 
     exports.getAppMeta = function()
     {
-        return $http.get("js/angular/meta.json");
+        return $http.get("assets/js/angular/meta.json");
     };
 });

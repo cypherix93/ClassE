@@ -24,8 +24,6 @@ module.exports = function (gulp, plugins, paths)
             paths.client + "index.html"
         ];
 
-        console.log(filesToCopy);
-
         return gulp.src(filesToCopy, {base: paths.client})
             .pipe(plugins.debug({title: "[client] copied:"}))
             .pipe(gulp.dest(paths.build + "client/"));

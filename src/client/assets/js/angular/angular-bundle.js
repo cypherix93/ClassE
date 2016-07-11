@@ -30,7 +30,7 @@ AngularApp.config(["$httpProvider", function ($httpProvider)
 AngularApp.config(["toastrConfig", function (toastrConfig)
 {
     toastrConfig.autoDismiss = true;
-    toastrConfig.positionClass = "toast-bottom-center";
+    toastrConfig.positionClass = "toast-bottom-center"; 
     toastrConfig.preventOpenDuplicates = true;
 }]);
 // Configure Angular App Routes
@@ -306,7 +306,7 @@ AngularApp.service("ConfigService", ["$http", function($http)
 
     exports.getAppMeta = function()
     {
-        return $http.get("js/angular/meta.json");
+        return $http.get("assets/js/angular/meta.json");
     };
 }]);
 AngularApp.service("ConstantsService", function ()
