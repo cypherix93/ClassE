@@ -1,4 +1,4 @@
 AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
-    templateUrl: "views/auth/register/index.html"
+    templateUrl: "templates/app/auth/register/Register.template.html"
 });

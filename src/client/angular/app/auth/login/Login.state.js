@@ -3,6 +3,6 @@ AngularApp.config(function ($stateProvider)
     $stateProvider.state("login",
         {
             url: "/login",
-            template: "<login-component></login-component>"
+            templateUrl: "views/auth/login/index.html" 
         });
 });

@@ -79,21 +79,6 @@ AngularApp.run(["$rootScope", "ConfigService", "IdentityService", "AuthService",
     // Init Global Modals
     ModalService.initGlobalModals();
 }]);
-AngularApp.service("ConfigService", ["$http", function($http)
-{
-    var exports = this;
-
-    exports.getAppMeta = function()
-    {
-        return $http.get("assets/js/angular/meta.json");
-    };
-}]);
-AngularApp.service("ConstantsService", function ()
-{
-    var self = this;
-
-    self.apiBaseUrl = "http://localhost:3960";
-});
 AngularApp.service("AuthService", ["$q", "$window", "ApiService", "IdentityService", function ($q, $window, ApiService, IdentityService)
 {
     var self = this;
@@ -315,9 +300,24 @@ AngularApp.service("ModalService", ["$q", "$http", "$compile", "$rootScope", fun
     {
     };
 }]);
+AngularApp.service("ConfigService", ["$http", function($http)
+{
+    var exports = this;
+
+    exports.getAppMeta = function()
+    {
+        return $http.get("assets/js/angular/meta.json");
+    };
+}]);
+AngularApp.service("ConstantsService", function ()
+{
+    var self = this;
+
+    self.apiBaseUrl = "http://localhost:3960";
+});
 AngularApp.component("loginComponent", {
     controller: "LoginController as Login",
-    templateUrl: "views/auth/login/index.html"
+    templateUrl: "templates/app/auth/login/Login.template.html"
 });
 AngularApp.controller("LoginController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
 {
@@ -353,12 +353,20 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
     $stateProvider.state("login",
         {
             url: "/login",
-            template: "<login-component></login-component>"
+            templateUrl: "views/auth/login/index.html" 
         });
+}]);
+AngularApp.component("loadingDockComponent", {
+    controller: "LoadingDockController as LoadingDock",
+    templateUrl: "views/schedule/loading-dock.html"
+});
+AngularApp.controller("LoadingDockController", ["$scope", function LoginController($scope)
+{
+    var self = this;
 }]);
 AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
-    templateUrl: "views/auth/register/index.html"
+    templateUrl: "templates/app/auth/register/Register.template.html"
 });
 AngularApp.controller("RegisterController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function RegisterController($scope, $state, AuthService, IdentityService, ModalService, toastr)
 {
@@ -396,7 +404,16 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
     $stateProvider.state("register",
         {
             url: "/register",
-            template: "<register-component></register-component>"
+            templateUrl: "views/auth/register/index.html"
         });
 }]);
-angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/modal-template.html','<div class="modal fade">\r\n    <div class="modal-header">\r\n        <button type="button" class="close pull-right" data-dismiss="modal">\r\n            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>\r\n        </button>\r\n\r\n        <h4 ng-transclude transclude-from="modal-title">\r\n            Modal Title\r\n        </h4>\r\n    </div>\r\n    <div class="modal-body" ng-transclude transclude-from="modal-body">\r\n        Modal Body\r\n    </div>\r\n</div>');}]);
+AngularApp.config(["$stateProvider", function ($stateProvider)
+{
+    $stateProvider.state("schedule",
+        {
+            url: "/schedule",
+            templateUrl: "views/schedule/index.html"
+        });
+}]);
+angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/app/auth/register/Register.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Sign Up</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Sign Up\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="login">Already have an account? Log in.</a>\r\n                </h4>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');
+$templateCache.put('templates/app/auth/login/Login.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Log In</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Login.login()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Login.email" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Login.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Login\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="register">Don\'t have an account? Sign up.</a>\r\n                </h4>\r\n            </div>\r\n            <div class="text-center">\r\n                <a>Forgot Password?</a>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');}]);
