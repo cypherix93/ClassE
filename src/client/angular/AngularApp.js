@@ -7,4 +7,4 @@ var AngularApp = angular.module("AngularApp",
         "ui.router",
         "ui.bootstrap",
         "toastr"
-    ]); 
+    ]);
