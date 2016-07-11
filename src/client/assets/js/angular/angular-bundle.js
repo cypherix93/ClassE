@@ -79,6 +79,21 @@ AngularApp.run(["$rootScope", "ConfigService", "IdentityService", "AuthService",
     // Init Global Modals
     ModalService.initGlobalModals();
 }]);
+AngularApp.service("ConfigService", ["$http", function($http)
+{
+    var exports = this;
+
+    exports.getAppMeta = function()
+    {
+        return $http.get("assets/js/angular/meta.json");
+    };
+}]);
+AngularApp.service("ConstantsService", function ()
+{
+    var self = this;
+
+    self.apiBaseUrl = "http://localhost:3960";
+});
 AngularApp.service("AuthService", ["$q", "$window", "ApiService", "IdentityService", function ($q, $window, ApiService, IdentityService)
 {
     var self = this;
@@ -300,21 +315,6 @@ AngularApp.service("ModalService", ["$q", "$http", "$compile", "$rootScope", fun
     {
     };
 }]);
-AngularApp.service("ConfigService", ["$http", function($http)
-{
-    var exports = this;
-
-    exports.getAppMeta = function()
-    {
-        return $http.get("js/angular/meta.json");
-    };
-}]);
-AngularApp.service("ConstantsService", function ()
-{
-    var self = this;
-
-    self.apiBaseUrl = "http://localhost:3960";
-});
 AngularApp.component("loginComponent", {
     controller: "LoginController as Login",
     templateUrl: "views/auth/login/index.html"

@@ -8,7 +8,7 @@ module.exports = function (gulp, plugins, paths)
     // Install Bower Packages
     gulp.task("bower-install", ["bower-restore"], function ()
     {
-        var libDir = paths.client + "lib/";
+        var libDir = paths.lib;
         
         var jsFilter = plugins.filter(["**/*.js", "!**/*.min.js"], {restore: true});
         var cssFilter = plugins.filter(["**/*.css", "!**/*.min.css"], {restore: true});
@@ -84,7 +84,7 @@ module.exports = function (gulp, plugins, paths)
         
         // Bootstrap SASS files
         var bootstrapSass = gulp.src("./bower_components/bootstrap-sass-official/assets/stylesheets/**/*.scss")
-            .pipe(gulp.dest(paths.private + "sass/bootstrap/"));
+            .pipe(gulp.dest(paths.sass + "bootstrap/"));
         
         // Return merged stream
         return merge(mainBower, bootstrapSass);
