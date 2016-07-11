@@ -50,3 +50,6 @@ require("./gulp/build")(gulp, plugins, paths, meta);
 // Watch Tasks
 require("./gulp/watch")(gulp, plugins, paths, meta);
 
+// Run Tasks
+require("./gulp/run")(gulp, plugins, paths, meta);
+

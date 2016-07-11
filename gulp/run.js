@@ -13,10 +13,10 @@ module.exports = function (gulp, plugins, paths)
 
     gulp.task("run-client", ["compile-client"], function ()
     {
-        var server = plugins.liveServer("./build/client/", 3970);
+        var server = plugins.liveServer.static("./build/client", 3970);
         server.start();
 
-        gulp.watch("./build/client/", function (file)
+        gulp.watch("./build/client/**", function (file)
         {
             server.notify.apply(server, [file]);
         });
