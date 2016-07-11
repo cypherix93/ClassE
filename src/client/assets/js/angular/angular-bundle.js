@@ -7,7 +7,7 @@ var AngularApp = angular.module("AngularApp",
         "ui.router",
         "ui.bootstrap",
         "toastr"
-    ]);
+    ]); 
 // Configure Angular App Preferences
 
 // HTTP Configuration, like cookie, JWT and error handling
@@ -30,7 +30,7 @@ AngularApp.config(["$httpProvider", function ($httpProvider)
 AngularApp.config(["toastrConfig", function (toastrConfig)
 {
     toastrConfig.autoDismiss = true;
-    toastrConfig.positionClass = "toast-bottom-center"; 
+    toastrConfig.positionClass = "toast-bottom-center";
     toastrConfig.preventOpenDuplicates = true;
 }]);
 // Configure Angular App Routes
