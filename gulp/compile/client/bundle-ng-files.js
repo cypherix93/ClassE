@@ -16,7 +16,7 @@ module.exports = function (gulp, plugins, paths)
             paths.angular + "app/**/*.js"
         ];
         
-        var angularTemplates = paths.angular + "templates/**/*.html";
+        var angularTemplates = paths.angular + "**/*.html";
         
         var angularDest = paths.assets + "js/angular/";
         

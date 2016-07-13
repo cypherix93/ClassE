@@ -1,0 +1,28 @@
+<div class="clearfix">
+    <h2 class="page-header">Sign Up</h2>
+
+    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>
+        <div class="form-group">
+            <label for="email" class="required">Email</label>
+            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="password" class="required">Password</label>
+            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-block btn-primary">
+                <span class="fa fa-sign-in"></span>
+                Sign Up
+            </button>
+        </div>
+        <div class="form-group">
+            <div class="text-center">
+                <h4>
+                    <a ui-sref="login">Already have an account? Log in.</a>
+                </h4>
+            </div>
+        </div>
+        <br>
+    </form>
+</div>

@@ -356,14 +356,6 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
             templateUrl: "views/auth/login/index.html" 
         });
 }]);
-AngularApp.component("loadingDockComponent", {
-    controller: "LoadingDockController as LoadingDock",
-    templateUrl: "views/schedule/loading-dock.html"
-});
-AngularApp.controller("LoadingDockController", ["$scope", function LoginController($scope)
-{
-    var self = this;
-}]);
 AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
     templateUrl: "templates/app/auth/register/Register.template.html"
@@ -407,6 +399,14 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
             templateUrl: "views/auth/register/index.html"
         });
 }]);
+AngularApp.component("loadingDockComponent", {
+    controller: "LoadingDockController as LoadingDock",
+    templateUrl: "templates/app/schedule/loading-dock/LoadingDock.template.html"
+});
+AngularApp.controller("LoadingDockController", ["$scope", function LoginController($scope)
+{
+    var self = this;
+}]);
 AngularApp.config(["$stateProvider", function ($stateProvider)
 {
     $stateProvider.state("schedule",
@@ -416,4 +416,5 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
         });
 }]);
 angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/app/auth/register/Register.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Sign Up</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Sign Up\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="login">Already have an account? Log in.</a>\r\n                </h4>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');
-$templateCache.put('templates/app/auth/login/Login.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Log In</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Login.login()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Login.email" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Login.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Login\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="register">Don\'t have an account? Sign up.</a>\r\n                </h4>\r\n            </div>\r\n            <div class="text-center">\r\n                <a>Forgot Password?</a>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');}]);
+$templateCache.put('templates/app/auth/login/Login.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Log In</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Login.login()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Login.email" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Login.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Login\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="register">Don\'t have an account? Sign up.</a>\r\n                </h4>\r\n            </div>\r\n            <div class="text-center">\r\n                <a>Forgot Password?</a>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');
+$templateCache.put('templates/app/schedule/loading-dock/LoadingDock.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Sign Up</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Sign Up\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="login">Already have an account? Log in.</a>\r\n                </h4>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');}]);

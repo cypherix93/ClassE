@@ -6,11 +6,11 @@
         <base href="/">
 
         <!-- Main Theme -->
-        <link rel="stylesheet" href="assets/css/main.min.css" />
+        <link rel="stylesheet" href="assets/css/main.min.css"/>
 
         <!-- Additional Styles -->
-        <link rel="stylesheet" href="assets/lib/fontawesome/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="assets/lib/angular/css/angular-toastr.min.css" />
+        <link rel="stylesheet" href="assets/lib/fontawesome/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="assets/lib/angular/css/angular-toastr.min.css"/>
 
         <!-- JQuery Libraries -->
         <script src="assets/lib/jquery/js/jquery.min.js"></script>
@@ -35,8 +35,10 @@
     <body ng-cloak>
         <div ng-include="'views/_shared/navigation.html'"></div>
 
-        <div id="content-container" class="container-fluid">
-            <div ui-view></div>
+        <div class="container-fluid">
+            <div id="content-container">
+                <div ui-view></div>
+            </div>
         </div>
 
         <div ng-include="'views/_shared/footer.html'"></div>

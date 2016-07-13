@@ -46,6 +46,33 @@ h1, h2, h3, h4, h5, h6
 
     @include box-shadow($gray-light 0 0 3px);
 }
+.container-fluid
+{
+    padding: 0;
+}
+@media (min-width: $screen-xs-min)
+{
+    .container-fluid
+    {
+        padding: 0;
+        margin: 0;
+    }
+}
+@media (min-width: $screen-md-min)
+{
+    .container-fluid
+    {
+        margin: 0 2.5%;
+    }
+}
+@media (min-width: $screen-lg-min)
+{
+    .container-fluid
+    {
+        margin: 0 5%;
+    }
+}
+
 div[ng-view]
 {
     width: 100%;
