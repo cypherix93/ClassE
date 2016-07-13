@@ -10,6 +10,4 @@ module.exports = function (gulp, plugins, paths)
     
     // Client
     require("./compile/client/compile-client")(gulp, plugins, paths);
-    require("./compile/client/bundle-ng-files")(gulp, plugins, paths);
-    require("./compile/client/preprocess-sass")(gulp, plugins, paths);
 };

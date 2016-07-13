@@ -28,4 +28,7 @@ module.exports = function (gulp, plugins, paths)
             .pipe(plugins.debug({title: "[client] copied:"}))
             .pipe(gulp.dest(paths.build + "client/"));
     });
+
+    require("./bundle-ng-files")(gulp, plugins, paths);
+    require("./preprocess-sass")(gulp, plugins, paths);
 };

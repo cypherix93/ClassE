@@ -17,7 +17,13 @@ module.exports = function (gulp, plugins, paths)
     gulp.task("watch-client",
         function ()
         {
-            plugins.watch(paths.client + "**",
+            var filesToWatch = [
+                paths.client + "assets/**",
+                paths.client + "views/**",
+                paths.client + "index.html"
+            ];
+
+            plugins.watch(filesToWatch,
                 function ()
                 {
                     gulp.start("copy-client-files");
