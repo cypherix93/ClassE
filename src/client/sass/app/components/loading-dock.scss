@@ -1,0 +1,20 @@
+.loading-dock-container
+{
+    .card
+    {
+        cursor: pointer;
+        margin: 10px;
+
+        @include transitions();
+
+        &:hover
+        {
+            background: $gray-lighter;
+        }
+
+        .panel-body
+        {
+            padding: 10px 15px;
+        }
+    }
+}

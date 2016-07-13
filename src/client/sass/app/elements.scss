@@ -23,6 +23,10 @@ a, .btn, button
     @include transitions();
     outline: none !important;
 }
+.btn:hover
+{
+    color: $link-color;
+}
 hr
 {
     float: none;
@@ -50,29 +54,25 @@ h1, h2, h3, h4, h5, h6
 {
     padding: 0;
 }
-@media (min-width: $screen-xs-min)
-{
+@media (min-width: $screen-xs-min) {
     .container-fluid
     {
         padding: 0;
         margin: 0;
     }
 }
-@media (min-width: $screen-md-min)
-{
+@media (min-width: $screen-md-min) {
     .container-fluid
     {
         margin: 0 2.5%;
     }
 }
-@media (min-width: $screen-lg-min)
-{
+@media (min-width: $screen-lg-min) {
     .container-fluid
     {
         margin: 0 5%;
     }
 }
-
 div[ng-view]
 {
     width: 100%;
@@ -127,5 +127,13 @@ textarea
 {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+}
+.no-padding
+{
+    padding: 0;
+}
+.no-margin
+{
+    margin: 0;
 }
 

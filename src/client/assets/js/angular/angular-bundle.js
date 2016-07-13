@@ -203,6 +203,82 @@ AngularApp.service("ApiService", ["$http", "ConstantsService", function ($http, 
     bindMethods("get", "delete", "head", "jsonp");
     bindMethodsWithData("post", "put", "patch");
 }]);
+AngularApp.service("SemesterService", function ()
+{
+    var self = this;
+
+    var semesters = {
+        spring: "SPRING",
+        summer: "SUMMER",
+        fall: "FALL",
+        winter: "WINTER"
+    };
+    var semestersOrder = [
+        semesters.spring,
+        semesters.summer,
+        semesters.fall,
+        semesters.winter
+    ];
+
+    self.getCurrentSemester = function ()
+    {
+        return self.getSemesterFromDate();
+    };
+
+    self.getNextSemester = function (currentSem)
+    {
+        var index = getCurrentSemesterIndex(currentSem);
+
+        // If last, loop back
+        if (index === semestersOrder.length - 1)
+            return semestersOrder[0];
+
+        return semestersOrder[index + 1];
+    };
+
+    self.getPrevSemester = function (currentSem)
+    {
+        var index = getCurrentSemesterIndex(currentSem);
+
+        // If last, loop back
+        if (index === 0)
+            return semestersOrder[semestersOrder.length - 1];
+
+        return semestersOrder[index - 1];
+    };
+
+    self.getSemesterFromDate = function (date)
+    {
+        date = date || new Date();
+
+        // TODO: Gotta get real data about semester begin and end. This code is only here for mocking.
+        var month = date.getMonth();
+
+        if (month === 0)
+            return semesters.winter;
+
+        if (month >= 1 && month <= 4)
+            return semesters.spring;
+
+        if (month >= 5 && month <= 7)
+            return semesters.summer;
+
+        if (month >= 8 && month <= 11)
+            return semesters.summer;
+    };
+
+    function getCurrentSemesterIndex(currentSem)
+    {
+        currentSem = currentSem || self.getCurrentSemester();
+
+        var index = semestersOrder.indexOf(currentSem);
+
+        if (index < 0)
+            throw new Errors("Current semester provided is invalid.");
+
+        return index;
+    }
+});
 AngularApp.service("ModalService", ["$q", "$http", "$compile", "$rootScope", function ($q, $http, $compile, $rootScope)
 {
     var exports = this;
@@ -315,51 +391,6 @@ AngularApp.service("ConstantsService", function ()
 
     self.apiBaseUrl = "http://localhost:3960";
 });
-AngularApp.component("loginComponent", {
-    controller: "LoginController as Login",
-    templateUrl: "templates/app/auth/login/Login.template.html"
-});
-AngularApp.controller("LoginController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
-{
-    var self = this;
-    
-    self.login = function ()
-    {
-        if (!self.email || !self.password)
-        {
-            toastr.error("Both email and password needs to be provided.");
-            return;
-        }
-        
-        AuthService.loginUser(self.email, self.password)
-            .then(function (response)
-            {
-                if (!response.success)
-                {
-                    toastr.error(response.message);
-                    return;
-                }
-                
-                // Redirect to home page
-                $state.go("home");
-                
-                // Display toast message
-                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
-            });
-    };
-}]);
-AngularApp.config(["$stateProvider", function ($stateProvider)
-{
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login/index.html",
-            onEnter: ["$rootScope", function($rootScope)
-            {
-                $rootScope.PageName = "Login"
-            }]
-        });
-}]);
 AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
     templateUrl: "templates/app/auth/register/Register.template.html"
@@ -407,6 +438,51 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
             }]
         });
 }]);
+AngularApp.component("loginComponent", {
+    controller: "LoginController as Login",
+    templateUrl: "templates/app/auth/login/Login.template.html"
+});
+AngularApp.controller("LoginController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
+{
+    var self = this;
+    
+    self.login = function ()
+    {
+        if (!self.email || !self.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
+            return;
+        }
+        
+        AuthService.loginUser(self.email, self.password)
+            .then(function (response)
+            {
+                if (!response.success)
+                {
+                    toastr.error(response.message);
+                    return;
+                }
+                
+                // Redirect to home page
+                $state.go("home");
+                
+                // Display toast message
+                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
+            });
+    };
+}]);
+AngularApp.config(["$stateProvider", function ($stateProvider)
+{
+    $stateProvider.state("login",
+        {
+            url: "/login",
+            templateUrl: "views/auth/login/index.html",
+            onEnter: ["$rootScope", function($rootScope)
+            {
+                $rootScope.PageName = "Login"
+            }]
+        });
+}]);
 AngularApp.component("loadingDockComponent", {
     controller: "LoadingDockController as LoadingDock",
     templateUrl: "templates/app/schedule/loading-dock/LoadingDock.template.html"
@@ -414,6 +490,22 @@ AngularApp.component("loadingDockComponent", {
 AngularApp.controller("LoadingDockController", ["$scope", function LoginController($scope)
 {
     var self = this;
+}]);
+AngularApp.controller("ScheduleController", ["$scope", "SemesterService", function ScheduleController($scope, SemesterService)
+{
+    var self = this;
+
+    self.currentSemester = SemesterService.getCurrentSemester();
+
+    self.getNextSemester = function()
+    {
+        self.currentSemester = SemesterService.getNextSemester(self.currentSemester);
+    };
+
+    self.getPrevSemester = function()
+    {
+        self.currentSemester = SemesterService.getPrevSemester(self.currentSemester);
+    };
 }]);
 AngularApp.config(["$stateProvider", function ($stateProvider)
 {
@@ -425,8 +517,8 @@ AngularApp.config(["$stateProvider", function ($stateProvider)
             {
                 $rootScope.PageName = "Schedule"
             }]
-        });
+        }); 
 }]);
 angular.module("AngularApp").run(["$templateCache", function($templateCache) {$templateCache.put('templates/app/auth/login/Login.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Log In</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Login.login()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Login.email" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Login.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Login\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="register">Don\'t have an account? Sign up.</a>\r\n                </h4>\r\n            </div>\r\n            <div class="text-center">\r\n                <a>Forgot Password?</a>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');
-$templateCache.put('templates/app/schedule/loading-dock/LoadingDock.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Sign Up</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Sign Up\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="login">Already have an account? Log in.</a>\r\n                </h4>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');
-$templateCache.put('templates/app/auth/register/Register.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Sign Up</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Sign Up\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="login">Already have an account? Log in.</a>\r\n                </h4>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');}]);
+$templateCache.put('templates/app/auth/register/Register.template.html','<div class="clearfix">\r\n    <h2 class="page-header">Sign Up</h2>\r\n\r\n    <form class="form-horizontal clearfix col-xs-10 col-xs-offset-1" ng-submit="Register.register()" novalidate>\r\n        <div class="form-group">\r\n            <label for="email" class="required">Email</label>\r\n            <input type="email" class="form-control" id="email" ng-model="Register.user.email" required autofocus>\r\n        </div>\r\n        <div class="form-group">\r\n            <label for="password" class="required">Password</label>\r\n            <input type="password" class="form-control" id="password" ng-model="Register.user.password" required>\r\n        </div>\r\n        <div class="form-group">\r\n            <button type="submit" class="btn btn-block btn-primary">\r\n                <span class="fa fa-sign-in"></span>\r\n                Sign Up\r\n            </button>\r\n        </div>\r\n        <div class="form-group">\r\n            <div class="text-center">\r\n                <h4>\r\n                    <a ui-sref="login">Already have an account? Log in.</a>\r\n                </h4>\r\n            </div>\r\n        </div>\r\n        <br>\r\n    </form>\r\n</div>');
+$templateCache.put('templates/app/schedule/loading-dock/LoadingDock.template.html','<div class="loading-dock-container clearfix">\r\n    <div class="panel panel-default card" ng-repeat="i in [].constructor(10) track by $index">\r\n        <div class="panel-body">\r\n            <span class="panel-title">Class {{$index}}</span>\r\n        </div>\r\n    </div>\r\n</div>');}]);

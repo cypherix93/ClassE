@@ -1,5 +1,7 @@
 "use strict";
 
+var runSequence = require("run-sequence");
+
 module.exports = function (gulp, plugins, paths)
 {
     // Watch server files for changes
@@ -9,7 +11,9 @@ module.exports = function (gulp, plugins, paths)
             plugins.watch(paths.server + "**",
                 function ()
                 {
-                    gulp.start("compile-server");
+                    runSequence(
+                        "compile-server"
+                    );
                 });
         });
 
@@ -26,17 +30,22 @@ module.exports = function (gulp, plugins, paths)
             plugins.watch(filesToWatch,
                 function ()
                 {
-                    gulp.start("copy-client-files");
+                    runSequence(
+                        "copy-client-files"
+                    );
                 });
         });
 
     gulp.task("watch-angular",
         function ()
         {
-            plugins.watch([paths.angular + "**/*.js", paths.angular + "templates/**/*.html"],
+            plugins.watch(paths.angular + "**/*",
                 function ()
                 {
-                    gulp.start("bundle-ng-files");
+                    runSequence(
+                        "bundle-ng-files",
+                        "copy-client-files"
+                    );
                 });
         });
 
@@ -46,7 +55,10 @@ module.exports = function (gulp, plugins, paths)
             plugins.watch(paths.sass + "**/*.scss",
                 function ()
                 {
-                    gulp.start("preprocess-sass");
+                    runSequence(
+                        "preprocess-sass",
+                        "copy-client-files"
+                    );
                 });
         });
 };

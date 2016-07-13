@@ -8,5 +8,5 @@ AngularApp.config(function ($stateProvider)
             {
                 $rootScope.PageName = "Schedule"
             }
-        });
+        }); 
 });
