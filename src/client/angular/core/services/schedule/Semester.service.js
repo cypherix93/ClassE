@@ -22,50 +22,67 @@ AngularApp.service("SemesterService", function ()
 
     self.getNextSemester = function (currentSem)
     {
-        var index = getCurrentSemesterIndex(currentSem);
+        var index = getCurrentSemesterIndex(currentSem.semester);
 
         // If last, loop back
         if (index === semestersOrder.length - 1)
-            return semestersOrder[0];
+            return {
+                semester: semestersOrder[0],
+                year: currentSem.year + 1
+            };
 
-        return semestersOrder[index + 1];
+        return {
+            semester: semestersOrder[index + 1],
+            year: currentSem.year
+        };
     };
 
     self.getPrevSemester = function (currentSem)
     {
-        var index = getCurrentSemesterIndex(currentSem);
+        var index = getCurrentSemesterIndex(currentSem.semester);
 
         // If last, loop back
         if (index === 0)
-            return semestersOrder[semestersOrder.length - 1];
+            return {
+                semester: semestersOrder[semestersOrder.length - 1],
+                year: currentSem.year - 1
+            };
 
-        return semestersOrder[index - 1];
+        return {
+            semester: semestersOrder[index - 1],
+            year: currentSem.year
+        };
     };
 
     self.getSemesterFromDate = function (date)
     {
         date = date || new Date();
 
+        var semester;
+        
         // TODO: Gotta get real data about semester begin and end. This code is only here for mocking.
         var month = date.getMonth();
-
+        
         if (month === 0)
-            return semesters.winter;
+            semester = semesters.winter;
 
-        if (month >= 1 && month <= 4)
-            return semesters.spring;
+        else if (month >= 1 && month <= 4)
+            semester = semesters.spring;
 
-        if (month >= 5 && month <= 7)
-            return semesters.summer;
+        else if (month >= 5 && month <= 7)
+            semester = semesters.summer;
 
-        if (month >= 8 && month <= 11)
-            return semesters.summer;
+        else if (month >= 8 && month <= 11)
+            semester = semesters.summer;
+        
+        return {
+            semester: semester,
+            year: date.getFullYear()
+        }
     };
 
     function getCurrentSemesterIndex(currentSem)
     {
-        currentSem = currentSem || self.getCurrentSemester();
-
         var index = semestersOrder.indexOf(currentSem);
 
         if (index < 0)
