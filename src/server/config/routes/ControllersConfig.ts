@@ -1,8 +1,8 @@
 import {Express} from "express";
 
 import path = require("path");
-import recursiveReaddirSync = require("recursive-readdir-sync");
-import router = require("express-promise-router");
+const recursiveReaddirSync = require("recursive-readdir-sync");
+const router = require("express-promise-router");
 
 import {Config} from "../Config";
 

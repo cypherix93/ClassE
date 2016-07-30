@@ -1,5 +1,5 @@
 import path = require("path");
-import recursiveReaddirSync = require("recursive-readdir-sync");
+const recursiveReaddirSync = require("recursive-readdir-sync");
 
 import {Config} from "../Config";
 

@@ -1,4 +1,4 @@
-import thinky = require("thinky");
+const thinky = require("thinky");
 
 import {Config} from "../Config";
 import {ModelsConfig} from "./ModelsConfig";

@@ -1,9 +1,9 @@
 import validator = require("validator");
 import passport = require("passport");
+import q = require("q");
 
 import {DbContext} from "../database/DbContext";
 import {AuthHelper} from "../helpers/AuthHelper";
-import {Q} from "../helpers/Globals";
 import {UserRepository} from "../database/repositories/UserRepository";
 import {Repository} from "../database/Repository";
 
@@ -11,7 +11,7 @@ export class AuthWorker
 {
     public static doLogin(req, res, next)
     {
-        var def = Q.defer();
+        var def = q.defer();
 
         // Do authentication against passport
         passport.authenticate("local", function (err, user, info)
@@ -49,7 +49,7 @@ export class AuthWorker
 
     public static async doRegister(req, res, next)
     {
-        var def = Q.defer();
+        var def = q.defer();
 
         var input = req.body;
 

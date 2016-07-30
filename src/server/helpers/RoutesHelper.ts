@@ -1,4 +1,5 @@
 import {RequestHandler} from "express";
+import _ = require("lodash");
 
 export class RoutesHelper
 {

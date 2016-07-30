@@ -38,7 +38,7 @@ export class AuthHelper
 
             // Let's refresh the token if it has expired
             AuthHelper.refreshTokenIfExpired(decoded)
-                .then(function (response)
+                .then((response) =>
                 {
                     // If new token was provided, update cookie
                     if (response.token)

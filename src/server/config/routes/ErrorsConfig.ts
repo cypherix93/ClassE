@@ -1,4 +1,4 @@
-import email = require("emailjs");
+const email = require("emailjs");
 
 import {Express, ErrorRequestHandler} from "express";
 import {MailHelper} from "../../helpers/MailHelper";
