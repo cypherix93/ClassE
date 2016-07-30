@@ -65,6 +65,6 @@
   "scripts": {
     "build": "./node_modules/.bin/gulp",
     "serve-app": "./node_modules/.bin/nodemon ./build/app/Server.js --watch ./build/app/",
-    "serve-client": "./node_modules/.bin/live-server --port=3970 --no-browser ./src/client/"
+    "serve-client": "./node_modules/.bin/live-server --port=3970 --no-browser ./build/ui/"
   }
 }
