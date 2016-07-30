@@ -1,6 +1,6 @@
 import path = require("path");
 
-const rootPath = path.normalize(__dirname + "/../..");
+const rootPath = path.normalize(__dirname + "/..");
 const authCookieName = "classe.presence";
 
 const config = {
