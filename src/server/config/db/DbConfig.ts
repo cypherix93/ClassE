@@ -4,6 +4,7 @@ import {Config} from "../Config";
 import {ModelsConfig} from "./ModelsConfig";
 import {DbContext} from "../../database/DbContext";
 import {Repository} from "../../database/Repository";
+import {Logger} from "../../helpers/Logger";
 
 var config = Config.current;
 
@@ -11,7 +12,7 @@ export class DbConfig
 {
     public static init()
     {
-        console.log("=> Connecting to RethinkDB...");
+        Logger.info("Connecting to RethinkDB...");
 
         // Open connection to RethinkDB
         DbContext.thinky = thinky(config.thinky);

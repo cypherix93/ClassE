@@ -4,12 +4,13 @@ import cors = require("cors");
 import {Config} from "../Config";
 import {PassportConfig} from "./PassportConfig";
 import {AuthHelper} from "../../helpers/AuthHelper";
+import {Logger} from "../../helpers/Logger";
 
 export class AuthConfig
 {
     public static init(app)
     {
-        console.log("=> Setting up Auth...");
+        Logger.info("Setting up Auth...");
 
         //Hook up the auth related middlewares
         app.use(cookieParser());

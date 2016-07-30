@@ -15,7 +15,7 @@ export class PassportLocalConfig
                 usernameField: "email",
                 passwordField: "password"
             },
-            async function (identifier, password, next)
+            async (identifier, password, next) =>
             {
                 // Let's check if the user input was valid
                 var loginResult = await PassportLocalConfig.processLogin(identifier, password);

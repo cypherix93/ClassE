@@ -3,11 +3,8 @@
 import express = require("express");
 
 import {Config} from "./config/Config";
-
-// Initialize Config for the current environment
-Config.init(process.env.NODE_ENV = process.env.NODE_ENV || "development");
-
 import {Bootstrap} from "./config/Bootstrap";
+import {Logger} from "./helpers/Logger";
 
 export class Server
 {
@@ -19,12 +16,12 @@ export class Server
         Bootstrap.init(app);
 
         // Start up the server
-        console.log("=> Starting Server...");
+        Logger.info("Starting Server...");
 
         var port = Config.current.port;
         app.listen(port, function ()
         {
-            console.log("\nMagic is happening at http://localhost:" + port);
+            Logger.info("Magic is happening at http://localhost:" + port);
         });
     }
 }

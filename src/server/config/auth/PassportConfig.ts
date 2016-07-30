@@ -10,11 +10,11 @@ export class PassportConfig
         app.use(passport.initialize());
         app.use(passport.session());
 
-        passport.serializeUser(function(user, callback)
+        passport.serializeUser((user, callback) =>
         {
             callback(null, user);
         });
-        passport.deserializeUser(function(user, callback)
+        passport.deserializeUser((user, callback) =>
         {
             callback(null, user);
         });

@@ -3,12 +3,13 @@ import bodyParser = require("body-parser");
 import {DbConfig} from "./db/DbConfig";
 import {AuthConfig} from "./auth/AuthConfig";
 import {RoutesConfig} from "./routes/RoutesConfig";
+import {Logger} from "../helpers/Logger";
 
 export class Bootstrap
 {
     public static init(app)
     {
-        console.log("=> Bootstrapping application...");
+        Logger.info("Bootstrapping application...");
 
         // Configure express middlewares
         app.use(bodyParser.json());
