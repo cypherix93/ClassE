@@ -5,6 +5,7 @@ import {DbContext} from "../../database/DbContext"
 import {AuthHelper} from "../../helpers/AuthHelper";
 import {UserRepository} from "../../database/repositories/UserRepository";
 import {Repository} from "../../database/Repository";
+import {IPayload} from "../../interfaces/IPayload";
 
 export class PassportLocalConfig
 {
@@ -38,7 +39,7 @@ export class PassportLocalConfig
     }
 
     // Login helper
-    private static async processLogin(email, password)
+    private static async processLogin(email, password):Promise<IPayload>
     {
         // Check for empty email and password
         if (!email || !password)

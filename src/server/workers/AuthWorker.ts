@@ -6,10 +6,11 @@ import {DbContext} from "../database/DbContext";
 import {AuthHelper} from "../helpers/AuthHelper";
 import {UserRepository} from "../database/repositories/UserRepository";
 import {Repository} from "../database/Repository";
+import {IPayload} from "../interfaces/IPayload";
 
 export class AuthWorker
 {
-    public static doLogin(req, res, next)
+    public static async doLogin(req, res, next):Promise<IPayload>
     {
         var def = q.defer();
 
@@ -44,10 +45,10 @@ export class AuthWorker
             });
         })(req, res, next);
 
-        return def.promise;
+        return await def.promise;
     }
 
-    public static async doRegister(req, res, next)
+    public static async doRegister(req, res, next):Promise<IPayload>
     {
         var def = q.defer();
 
@@ -97,7 +98,7 @@ export class AuthWorker
     }
 
     // New User validation on Register
-    public static async validateNewUser(input)
+    public static async validateNewUser(input):Promise<IPayload>
     {
         var userRepo = DbContext.repositories.User as UserRepository;
         var passportRepo = DbContext.repositories.Passport as Repository;

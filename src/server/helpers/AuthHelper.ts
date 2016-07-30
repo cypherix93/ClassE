@@ -38,22 +38,24 @@ export class AuthHelper
 
             // Let's refresh the token if it has expired
             AuthHelper.refreshTokenIfExpired(decoded)
-                .then((response) =>
+                .then(response =>
                 {
+                    var data = response.data as any;
+
                     // If new token was provided, update cookie
-                    if (response.token)
+                    if (data.token)
                     {
-                        AuthHelper.setAuthCookie(response.token, res);
+                        AuthHelper.setAuthCookie(data.token, res);
                     }
 
                     // If user was removed, clear cookie
-                    if (!response.decoded)
+                    if (!data.decoded)
                     {
                         AuthHelper.clearAuthCookie(res);
                     }
 
                     // Save to req.user whatever is the new decoded, refreshed or not
-                    req.user = response.decoded;
+                    req.user = data.decoded;
 
                     // Carry on
                     return next();
@@ -74,14 +76,22 @@ export class AuthHelper
 
         // If not expired just return the previous decoded token
         if ((now - issuedAt) <= expiryDuration)
-            return {decoded: decoded};
+        {
+            return {
+                data: {decoded: decoded}
+            };
+        }
 
         // Otherwise, let's recheck the database and make sure User claims the correct stuff
         var dbUser = await DbContext.repositories.User.getById(decoded.id);
 
         // If user does not exist anymore, invalidate the session user
         if (!dbUser)
-            return {decoded: null};
+        {
+            return {
+                data: {decoded: null}
+            };
+        }
 
         // Update the session user with stuff from the DB
         decoded = AuthHelper.getUserForSession(dbUser);
@@ -91,8 +101,10 @@ export class AuthHelper
 
         // Generate new token
         return {
-            decoded: decoded,
-            token: AuthHelper.generateJWToken(decoded)
+            data: {
+                decoded: decoded,
+                token: AuthHelper.generateJWToken(decoded)
+            }
         }
     }
 
