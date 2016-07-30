@@ -79,6 +79,89 @@ AngularApp.run(["$rootScope", "ConfigService", "IdentityService", "AuthService",
     // Init Global Modals
     ModalService.initGlobalModals();
 }]);
+AngularApp.service("AuthService", ["$q", "$window", "ApiService", "IdentityService", function ($q, $window, ApiService, IdentityService)
+{
+    var self = this;
+
+    self.bootstrapSessionUser = function ()
+    {
+        ApiService.get("/auth/me")
+            .success(function (response)
+            {
+                if (response.success)
+                    IdentityService.currentUser = response.data;
+            });
+    };
+
+    self.registerUser = function (user)
+    {
+        var def = $q.defer();
+
+        ApiService.post("/auth/register", user)
+            .success(function (response)
+            {
+                def.resolve(response);
+            });
+
+        return def.promise;
+    };
+
+    self.loginUser = function (email, password)
+    {
+        var def = $q.defer();
+
+        ApiService.post("/auth/login", {email: email, password: password})
+            .success(function (response)
+            {
+                if (response.success)
+                {
+                    IdentityService.currentUser = response.data;
+
+                    $window.sessionStorage.token = IdentityService.currentUser.token;
+                }
+                else
+                {
+                    delete $window.sessionStorage.token;
+                }
+
+                def.resolve(response);
+            });
+
+        return def.promise;
+    };
+
+    self.logoutUser = function ()
+    {
+        var def = $q.defer();
+
+        ApiService.post("/auth/logout", {logout: true})
+            .success(function (response)
+            {
+                if (response.success)
+                {
+                    delete IdentityService.currentUser;
+                    delete $window.sessionStorage.token;
+                }
+
+                def.resolve(response);
+            });
+
+        return def.promise;
+    };
+}]);
+AngularApp.service("IdentityService", function ()
+{
+    var self = this;
+
+    // Current User Identity
+    self.currentUser = undefined;
+
+    // Function to check if the current user is authenticated
+    self.isAuthenticated = function ()
+    {
+        return !!self.currentUser;
+    };
+});
 AngularApp.service("ApiService", ["$http", "ConstantsService", function ($http, ConstantsService)
 {
     var self = this;
@@ -310,89 +393,6 @@ AngularApp.service("ModalService", ["$q", "$http", "$compile", "$rootScope", fun
     {
     };
 }]);
-AngularApp.service("AuthService", ["$q", "$window", "ApiService", "IdentityService", function ($q, $window, ApiService, IdentityService)
-{
-    var self = this;
-
-    self.bootstrapSessionUser = function ()
-    {
-        ApiService.get("/auth/me")
-            .success(function (response)
-            {
-                if (response.success)
-                    IdentityService.currentUser = response.data;
-            });
-    };
-
-    self.registerUser = function (user)
-    {
-        var def = $q.defer();
-
-        ApiService.post("/auth/register", user)
-            .success(function (response)
-            {
-                def.resolve(response);
-            });
-
-        return def.promise;
-    };
-
-    self.loginUser = function (email, password)
-    {
-        var def = $q.defer();
-
-        ApiService.post("/auth/login", {email: email, password: password})
-            .success(function (response)
-            {
-                if (response.success)
-                {
-                    IdentityService.currentUser = response.data;
-
-                    $window.sessionStorage.token = IdentityService.currentUser.token;
-                }
-                else
-                {
-                    delete $window.sessionStorage.token;
-                }
-
-                def.resolve(response);
-            });
-
-        return def.promise;
-    };
-
-    self.logoutUser = function ()
-    {
-        var def = $q.defer();
-
-        ApiService.post("/auth/logout", {logout: true})
-            .success(function (response)
-            {
-                if (response.success)
-                {
-                    delete IdentityService.currentUser;
-                    delete $window.sessionStorage.token;
-                }
-
-                def.resolve(response);
-            });
-
-        return def.promise;
-    };
-}]);
-AngularApp.service("IdentityService", function ()
-{
-    var self = this;
-
-    // Current User Identity
-    self.currentUser = undefined;
-
-    // Function to check if the current user is authenticated
-    self.isAuthenticated = function ()
-    {
-        return !!self.currentUser;
-    };
-});
 AngularApp.service("ConfigService", ["$http", function($http)
 {
     var exports = this;
@@ -408,6 +408,51 @@ AngularApp.service("ConstantsService", function ()
 
     self.apiBaseUrl = "http://localhost:3960";
 });
+AngularApp.component("loginComponent", {
+    controller: "LoginController as Login",
+    templateUrl: "templates/app/auth/login/Login.template.html"
+});
+AngularApp.controller("LoginController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
+{
+    var self = this;
+    
+    self.login = function ()
+    {
+        if (!self.email || !self.password)
+        {
+            toastr.error("Both email and password needs to be provided.");
+            return;
+        }
+        
+        AuthService.loginUser(self.email, self.password)
+            .then(function (response)
+            {
+                if (!response.success)
+                {
+                    toastr.error(response.message);
+                    return;
+                }
+                
+                // Redirect to home page
+                $state.go("home");
+                
+                // Display toast message
+                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
+            });
+    };
+}]);
+AngularApp.config(["$stateProvider", function ($stateProvider)
+{
+    $stateProvider.state("login",
+        {
+            url: "/login",
+            templateUrl: "views/auth/login/index.html",
+            onEnter: ["$rootScope", function($rootScope)
+            {
+                $rootScope.PageName = "Login"
+            }]
+        });
+}]);
 AngularApp.component("registerComponent", {
     controller: "RegisterController as Login",
     templateUrl: "templates/app/auth/register/Register.template.html"
@@ -462,51 +507,6 @@ AngularApp.component("loadingDockComponent", {
 AngularApp.controller("LoadingDockController", ["$scope", function LoginController($scope)
 {
     var self = this;
-}]);
-AngularApp.component("loginComponent", {
-    controller: "LoginController as Login",
-    templateUrl: "templates/app/auth/login/Login.template.html"
-});
-AngularApp.controller("LoginController", ["$scope", "$state", "AuthService", "IdentityService", "ModalService", "toastr", function LoginController($scope, $state, AuthService, IdentityService, ModalService, toastr)
-{
-    var self = this;
-    
-    self.login = function ()
-    {
-        if (!self.email || !self.password)
-        {
-            toastr.error("Both email and password needs to be provided.");
-            return;
-        }
-        
-        AuthService.loginUser(self.email, self.password)
-            .then(function (response)
-            {
-                if (!response.success)
-                {
-                    toastr.error(response.message);
-                    return;
-                }
-                
-                // Redirect to home page
-                $state.go("home");
-                
-                // Display toast message
-                toastr.success("Welcome back " + IdentitySvc.currentUser.email);
-            });
-    };
-}]);
-AngularApp.config(["$stateProvider", function ($stateProvider)
-{
-    $stateProvider.state("login",
-        {
-            url: "/login",
-            templateUrl: "views/auth/login/index.html",
-            onEnter: ["$rootScope", function($rootScope)
-            {
-                $rootScope.PageName = "Login"
-            }]
-        });
 }]);
 AngularApp.controller("ScheduleController", ["$scope", "SemesterService", function ScheduleController($scope, SemesterService)
 {
